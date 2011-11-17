@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+	  <name>cow</name>
+	  <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>45</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>46</start>
+        <end>110</end>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>111</start>
+        <end>130</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>131</start>
+        <end>155</end>
+      </animation>
+	  </animations>
+  </monster>
+</Root>
