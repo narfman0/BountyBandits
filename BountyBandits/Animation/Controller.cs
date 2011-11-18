@@ -40,6 +40,8 @@ namespace BountyBandits.Animation
                                     anim.start = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("end"))
                                     anim.end = int.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("keyframe"))
+                                    anim.keyframe = int.Parse(subnode.FirstChild.Value);
                             animations.Add(anim);
                         }
 
@@ -90,7 +92,6 @@ namespace BountyBandits.Animation
     public struct AnimationInfo
     {
         public string name;
-        public int start;
-        public int end;
+        public int start, end, keyframe;
     }
 }

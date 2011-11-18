@@ -19,7 +19,7 @@ namespace BountyBandits
         public BountyBandits.Stats.Stats myStats = new BountyBandits.Stats.Stats();
         private BountyBandits.Inventory.Manager itemManager = new BountyBandits.Inventory.Manager();
         public int currenthealth = 5, maxspecial = 5, currentspecial = 5;
-        int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, framesUntilReady = 0, directionMoving = 0;
+        int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
         public int xp = 0, level = 1, xpOfNextLevel = 100, unusedAttr = 0;
         bool isFacingLeft = false, attackComputed = true;
         public bool isDead = false;
@@ -41,6 +41,7 @@ namespace BountyBandits
             this.name = name;
             this.currenthealth = maxhealth;
             this.controller = controller;
+            changeAnimation("idle");
             myStats.setStatValue(BountyBandits.Stats.Type.Strength, 5);
             myStats.setStatValue(BountyBandits.Stats.Type.Speed, 5);
             myStats.setStatValue(BountyBandits.Stats.Type.Agility, 5);
@@ -56,10 +57,9 @@ namespace BountyBandits
         }
         public void attack(string attackName)
         {
-            if (framesUntilReady.Equals(0) && !isDead)
+            if (!isDead)
             {
                 changeAnimation(attackName);
-                framesUntilReady = currAnimation.end - currAnimation.start;
                 attackComputed = false;
             }
         }
@@ -77,8 +77,12 @@ namespace BountyBandits
             ++currFrame;
             if (currFrame >= currAnimation.end)
             {
-                if (isDead) currFrame = currAnimation.end - 1;
-                else currFrame = currAnimation.start;
+                if (isDead) 
+                    currFrame = currAnimation.end - 1;
+                else if (currAnimation.name.Contains("attack"))
+                    changeAnimation("idle");
+                else
+                    currFrame = currAnimation.start;
             }
 
             if (Environment.TickCount - timeOfLastDepthChange < timeToChangeDepths)
@@ -204,7 +208,6 @@ namespace BountyBandits
         }
         public void update(GameTime gameTime)
         {
-            if(framesUntilReady > 0) --framesUntilReady;
             if (!isDead)
             {
                 #region Dead
@@ -218,7 +221,7 @@ namespace BountyBandits
                 }
                 #endregion
                 #region Change animation to idle/walk
-                else if (framesUntilReady == 0)  //only change animations if done attacking
+                else if (!currAnimation.name.Contains("attack"))  //only change animations if done attacking
                 {
                     if (Math.Abs(body.LinearVelocity.X) < 5)
                         changeAnimation("idle");
@@ -227,38 +230,31 @@ namespace BountyBandits
                 }
                 #endregion
                 #region Compute attack
-                else if (!attackComputed)
+                else if (!attackComputed && currAnimation.keyframe <= currFrame)
                 {
-                    #region get target(s)
-                    Being target = null;
+                    attackComputed = true;
                     List<Being> enemies = gameref.spawnManager.enemies;
-                    if (targetPlayer != -1) enemies = gameref.players;  //if being is an enemy
+                    if (targetPlayer != -1) 
+                        enemies = gameref.players;  //if being is an enemy
                     foreach (Being enemy in enemies)
                         if ((!enemy.isDead &&
                             (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None) &&
                             enemy.geom.Collide(geom))
-                            target = enemy;
-                    #endregion
-                    #region attack target
-                    if (target != null)
-                    {
-                        int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
-                        bool criticalHit = (getStat(BountyBandits.Stats.Type.Agility) - target.getStat(BountyBandits.Stats.Type.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
-                        if (currAnimation.name.Equals("attack1") &&
-                            (framesUntilReady == (currAnimation.end - currAnimation.start) / 2))
                         {
-                            attackComputed = true;
-                            float damage = (float)getStat(BountyBandits.Stats.Type.Agility) / 8f + (float)getStat(BountyBandits.Stats.Type.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
-                            if (criticalHit) damage *= 2;
-
-                            if(damage>0)
-                                target.currenthealth -= (int)damage;
-                            if (target.currenthealth <= 0 && targetPlayer == -1)
-                                foreach (Being being in gameref.players)
-                                    being.giveXP(gameref.xpManager.getKillXPPerLevel(target.level));
+                            int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
+                            bool criticalHit = (getStat(BountyBandits.Stats.Type.Agility) - enemy.getStat(BountyBandits.Stats.Type.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
+                            if (currAnimation.name.Contains("attack"))
+                            {
+                                float damage = (float)getStat(BountyBandits.Stats.Type.Agility) / 8f + (float)getStat(BountyBandits.Stats.Type.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
+                                if (criticalHit) 
+                                    damage *= 2;
+                                if (damage > 0)
+                                    enemy.currenthealth -= (int)damage;
+                                if (enemy.currenthealth <= 0 && targetPlayer == -1)
+                                    foreach (Being being in gameref.players)
+                                        being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                            }
                         }
-                    }
-                    #endregion
                 }
                 #endregion
                 #region Health regen

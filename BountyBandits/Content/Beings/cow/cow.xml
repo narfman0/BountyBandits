@@ -12,6 +12,7 @@
         <name>attack1</name>
         <start>46</start>
         <end>110</end>
+        <keyframe>80</keyframe>
       </animation>
       <animation>
         <name>idle</name>
