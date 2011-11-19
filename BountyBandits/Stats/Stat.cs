@@ -7,21 +7,21 @@ namespace BountyBandits.Stats
 {
     public class Stat
     {
-        Type type;
+        StatType type;
         int value = 0;
-        public Stat(Type type, int value)
+        public Stat(StatType type, int value)
         {
             this.type = type;
             this.value = value;
         }
         public int getValue() { return value; }
         public void setValue(int value) { this.value = value; }
-        public Type getType() { return type; }
+        public StatType getType() { return type; }
     }
     public class Buff : Stat
     {
         int timeOfExpire;
-        public Buff(Type type, int value, int timeOfExpire)
+        public Buff(StatType type, int value, int timeOfExpire)
             : base(type, value)
         {
             this.timeOfExpire = timeOfExpire;
@@ -30,7 +30,7 @@ namespace BountyBandits.Stats
     public class Aura : Stat
     {
         int radius;
-        public Aura(Type type, int value, int radius)
+        public Aura(StatType type, int value, int radius)
             : base(type, value)
         {
             this.radius = radius;
@@ -40,7 +40,7 @@ namespace BountyBandits.Stats
     {
         int radius;
         int timeOfExpire;
-        public BuffAura(Type type, int value, int timeOfExpire, int radius)
+        public BuffAura(StatType type, int value, int timeOfExpire, int radius)
             : base(type, value)
         {
             this.radius = radius;

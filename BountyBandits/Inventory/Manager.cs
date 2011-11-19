@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BountyBandits.Inventory
 {
-    public class Manager
+    public class InventoryManager
     {
-        Dictionary<Type, Item> items = new Dictionary<Type, Item>();
+        Dictionary<ItemType, Item> items = new Dictionary<ItemType, Item>();
 
         /// <summary>Gets an Item from the item dictionary.</summary>
         /// <param name="type">The type of item to retrieve</param>
-        public Item getItem(Type type) { 
+        public Item getItem(ItemType type) { 
             if(items.ContainsKey(type))
                 return items[type];
             return null;
@@ -22,19 +22,19 @@ namespace BountyBandits.Inventory
         public Item putItem(Item item)
         {
             Item old = null;
-            if (items.ContainsKey(item.getType()))
+            if (items.ContainsKey(item.getItemType()))
             {
-                old = items[item.getType()];
-                items.Remove(item.getType());
+                old = items[item.getItemType()];
+                items.Remove(item.getItemType());
             }
-            items.Add(item.getType(), item);
+            items.Add(item.getItemType(), item);
             return old;
         }
 
         /// <summary>Return the integer sum of a stat.</summary>
         /// <param name="type">The type of stat to acquire</param>
         /// <returns>The total value of the stat</returns>
-        public int getStatBonus(BountyBandits.Stats.Type type)
+        public int getStatBonus(BountyBandits.Stats.StatType type)
         {
             int total = 0;
             foreach (Item item in items.Values)

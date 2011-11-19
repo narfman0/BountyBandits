@@ -31,11 +31,11 @@ namespace BountyBandits
                 if (type.Contains("cow"))
                 {
                     enemy.level = (int)weight / 5;
-                    enemy.myStats.setStatValue(BountyBandits.Stats.Type.Magic, 1);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.Type.Agility, 2);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.Type.Strength, (int)weight);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.Type.Speed, 3);
-                    enemy.currenthealth = enemy.myStats.getStatValue(BountyBandits.Stats.Type.Life);
+                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Magic, 1);
+                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Agility, 2);
+                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Strength, (int)weight);
+                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Speed, 3);
+                    enemy.currenthealth = enemy.myStats.getStatValue(BountyBandits.Stats.StatType.Life);
                     enemy.currentspecial = enemy.maxspecial;
                 }
 

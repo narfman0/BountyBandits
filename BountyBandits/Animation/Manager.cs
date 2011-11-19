@@ -9,21 +9,21 @@ namespace BountyBandits.Animation
 {
     public class Manager
     {
-        public List<Controller> controllers = new List<Controller>();
+        public List<AnimationController> controllers = new List<AnimationController>();
 
         public Manager(ContentManager content)
         {
             string[] dirEntries = Directory.GetDirectories(@"Content\Beings");
             foreach (string dirName in dirEntries)
             {
-                Controller controller = new Controller();
+                AnimationController controller = new AnimationController();
                 controller.fromXML(content, dirName.Split('\\')[dirName.Split('\\').Length-1]);
                 controllers.Add(controller);
             }
         }
-        public Controller getController(string controllerName)
+        public AnimationController getController(string controllerName)
         {
-            foreach (Controller contr in controllers)
+            foreach (AnimationController contr in controllers)
                 if (contr.name.Equals(controllerName))
                     return contr;
             return null;

@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BountyBandits.Animation
 {
-    public class Controller
+    public class AnimationController
     {
         public string name;
         public List<Texture2D> frames = new List<Texture2D>();

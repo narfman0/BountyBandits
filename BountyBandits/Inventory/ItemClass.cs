@@ -5,5 +5,5 @@ using System.Text;
 
 namespace BountyBandits.Inventory
 {
-    public enum Type { Head, Chest, MainHand, OffHand, Legs };
+    public enum ItemClass { Normal, Magic, Rare, Unique };
 }

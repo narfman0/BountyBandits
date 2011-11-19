@@ -92,10 +92,10 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameItem.cs" />
     <Compile Include="Input.cs" />
-    <Compile Include="Inventory\Class.cs" />
+    <Compile Include="Inventory\ItemClass.cs" />
     <Compile Include="Inventory\Item.cs" />
     <Compile Include="Inventory\Manager.cs" />
-    <Compile Include="Inventory\Type.cs" />
+    <Compile Include="Inventory\ItemType.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Menu.cs" />
@@ -104,9 +104,9 @@
     <Compile Include="SpawnManager.cs" />
     <Compile Include="SpawnPoint.cs" />
     <Compile Include="Stats\Stat.cs" />
-    <Compile Include="Stats\Stats.cs" />
+    <Compile Include="Stats\StatSet.cs" />
     <Compile Include="StateManager.cs" />
-    <Compile Include="Stats\Type.cs" />
+    <Compile Include="Stats\StatType.cs" />
     <Compile Include="TextureManager.cs" />
     <Compile Include="XPManager.cs" />
   </ItemGroup>

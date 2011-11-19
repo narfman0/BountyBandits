@@ -107,10 +107,10 @@ namespace BountyBandits
                                 {
                                     if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                                     {
-                                        if (currentplayer.menu.getMenuItem() == 0) currentplayer.myStats.addStatValue(BountyBandits.Stats.Type.Agility, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 1) currentplayer.myStats.addStatValue(BountyBandits.Stats.Type.Magic, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 2) currentplayer.myStats.addStatValue(BountyBandits.Stats.Type.Speed, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 3) currentplayer.myStats.addStatValue(BountyBandits.Stats.Type.Strength, 1);
+                                        if (currentplayer.menu.getMenuItem() == 0) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Agility, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 1) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Magic, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 2) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Speed, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 3) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Strength, 1);
                                         currentplayer.unusedAttr--;
                                     }
                                     currentplayer.jump();
@@ -140,7 +140,7 @@ namespace BountyBandits
                                     DropItem dropItem = getClosestDropItem(currentplayer);
                                     if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
                                     {
-                                        BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getType());
+                                        BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
                                         currentplayer.getItemManager().putItem(dropItem.getItem());
                                         if (playerItem != null)
                                         {
@@ -287,10 +287,10 @@ namespace BountyBandits
                                     spriteBatch.DrawString(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, 67), Color.Black);
                                     spriteBatch.DrawString(vademecumFont18, "Current XP:     " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
                                     spriteBatch.DrawString(vademecumFont18, "XP to Level:     " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
-                                    spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.Type.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
-                                    spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.Type.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
-                                    spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.Type.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
-                                    spriteBatch.DrawString(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.Type.Strength), new Vector2(48 + pIndex * 320, 223), currPlayer.menu.getMenuColor(3));
+                                    spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
+                                    spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
+                                    spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
+                                    spriteBatch.DrawString(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, 223), currPlayer.menu.getMenuColor(3));
                                     spriteBatch.DrawString(vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, 249), currPlayer.menu.getMenuColor(4));
                                 }
                                 if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Inv)
@@ -305,7 +305,7 @@ namespace BountyBandits
 
                             for (int healthIndex = 0; healthIndex < currPlayer.currenthealth; ++healthIndex)
                                 spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
-                            spriteBatch.DrawString(vademecumFont12, currPlayer.currenthealth + "/" + currPlayer.getStat(BountyBandits.Stats.Type.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
+                            spriteBatch.DrawString(vademecumFont12, currPlayer.currenthealth + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
 
                             for (int specialIndex = 0; specialIndex < currPlayer.currentspecial; ++specialIndex)
                                 spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
@@ -352,9 +352,9 @@ namespace BountyBandits
             const int BUFFER_WIDTH = 36;
             #region Get color for item class
             Color nameColor = Color.White;
-            if (item.getItem().getClass() == BountyBandits.Inventory.Class.Magic)   nameColor = Color.Yellow;
-            if (item.getItem().getClass() == BountyBandits.Inventory.Class.Rare)    nameColor = Color.Orange;
-            if (item.getItem().getClass() == BountyBandits.Inventory.Class.Unique)  nameColor = Color.Blue;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Magic)   nameColor = Color.Yellow;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Rare)    nameColor = Color.Orange;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Unique)  nameColor = Color.Blue;
             #endregion
             #region Get name string
             String name = item.getItem().getName();
@@ -365,14 +365,14 @@ namespace BountyBandits
             #region Get stats string
             int i = 0;
             String stats = "";
-            foreach (BountyBandits.Stats.Type type in Enum.GetValues(typeof(BountyBandits.Stats.Type)))
+            foreach (BountyBandits.Stats.StatType type in Enum.GetValues(typeof(BountyBandits.Stats.StatType)))
             {
                 if (item.getItem().getStats().getStat(type).getValue() > 0)
                 {
-                    stats += Enum.GetNames(typeof(BountyBandits.Stats.Type))[i] + " " + item.getItem().getStats().getStat(type).getValue() + "\n";
+                    stats += Enum.GetNames(typeof(BountyBandits.Stats.StatType))[i] + " " + item.getItem().getStats().getStat(type).getValue() + "\n";
                     numNewLines++;
-                    if (maxWidth < BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.Type))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length)
-                        maxWidth = BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.Type))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length;
+                    if (maxWidth < BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.StatType))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length)
+                        maxWidth = BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.StatType))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length;
                 }
                 i++; 
             }
@@ -472,7 +472,7 @@ namespace BountyBandits
             foreach (Being player in players)
             {
                 player.newLevel();
-                player.currenthealth = player.getStat(BountyBandits.Stats.Type.Life);
+                player.currenthealth = player.getStat(BountyBandits.Stats.StatType.Life);
                 lowestLevel = (player.unlocked.Y < lowestLevel) ? (int)player.unlocked.Y : lowestLevel;
             }
             mapManager.currentLevelIndex = lowestLevel;

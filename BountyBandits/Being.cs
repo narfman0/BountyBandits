@@ -8,6 +8,9 @@ using FarseerGames.FarseerPhysics;
 using FarseerGames.FarseerPhysics.Collisions;
 using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
+using BountyBandits.Animation;
+using BountyBandits.Stats;
+using BountyBandits.Inventory;
 
 namespace BountyBandits
 {
@@ -16,16 +19,18 @@ namespace BountyBandits
         #region Fields
         Game gameref;
         public string name;
-        public BountyBandits.Stats.Stats myStats = new BountyBandits.Stats.Stats();
-        private BountyBandits.Inventory.Manager itemManager = new BountyBandits.Inventory.Manager();
+        public StatSet myStats = new StatSet();
+        private InventoryManager itemManager = new InventoryManager();
         public int currenthealth = 5, maxspecial = 5, currentspecial = 5;
         int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
         public int xp = 0, level = 1, xpOfNextLevel = 100, unusedAttr = 0;
         bool isFacingLeft = false, attackComputed = true;
         public bool isDead = false;
-        public Body body;	Vector2 pos; //used to draw when dead
+        public Body body; private Vector2 pos; //used to draw when dead
         public Geom geom;
-        public BountyBandits.Animation.Controller controller; int currFrame; public BountyBandits.Animation.AnimationInfo currAnimation;
+        public AnimationController controller; 
+        private int currFrame; 
+        public AnimationInfo currAnimation;
         public KeyboardState prevKeyboardState = new KeyboardState(); public GamePadState prevGamePadState = new GamePadState();
 
         //player specific fields
@@ -35,18 +40,18 @@ namespace BountyBandits
         //enemy specific fields
         public int targetPlayer = -1;
         #endregion
-        public Being(string name, int maxhealth, Game gameref, BountyBandits.Animation.Controller controller)
+        public Being(string name, int maxhealth, Game gameref, BountyBandits.Animation.AnimationController controller)
         {
             this.gameref = gameref;
             this.name = name;
             this.currenthealth = maxhealth;
             this.controller = controller;
             changeAnimation("idle");
-            myStats.setStatValue(BountyBandits.Stats.Type.Strength, 5);
-            myStats.setStatValue(BountyBandits.Stats.Type.Speed, 5);
-            myStats.setStatValue(BountyBandits.Stats.Type.Agility, 5);
-            myStats.setStatValue(BountyBandits.Stats.Type.Magic, 5);
-            myStats.setStatValue(BountyBandits.Stats.Type.Life, maxhealth);
+            myStats.setStatValue(BountyBandits.Stats.StatType.Strength, 5);
+            myStats.setStatValue(BountyBandits.Stats.StatType.Speed, 5);
+            myStats.setStatValue(BountyBandits.Stats.StatType.Agility, 5);
+            myStats.setStatValue(BountyBandits.Stats.StatType.Magic, 5);
+            myStats.setStatValue(BountyBandits.Stats.StatType.Life, maxhealth);
 
             newLevel();
         }
@@ -117,8 +122,8 @@ namespace BountyBandits
             else if (geom.CollisionCategories == CollisionCategory.Cat4)return 3;
             else return -1;
         }
-        public BountyBandits.Inventory.Manager getItemManager() { return itemManager; }
-        public int getStat(BountyBandits.Stats.Type type)
+        public BountyBandits.Inventory.InventoryManager getItemManager() { return itemManager; }
+        public int getStat(BountyBandits.Stats.StatType type)
         {
             return myStats.getStat(type).getValue() + itemManager.getStatBonus(type);
         }
@@ -133,7 +138,7 @@ namespace BountyBandits
             if (this.xp >= xpOfNextLevel)
             {
                 //TODOjrob make some fancy effect on levelup
-                myStats.setStatValue(BountyBandits.Stats.Type.Life, myStats.getStatValue(BountyBandits.Stats.Type.Life) + 1);
+                myStats.setStatValue(BountyBandits.Stats.StatType.Life, myStats.getStatValue(BountyBandits.Stats.StatType.Life) + 1);
                 maxspecial += 1;
                 xpOfNextLevel = gameref.xpManager.getXPToLevelUp(++level);
                 unusedAttr += 5;
@@ -158,7 +163,7 @@ namespace BountyBandits
             {
                 timeOfLastJump = Environment.TickCount;
                 if (isTouchingGeom(true))
-                    body.ApplyForce(new Vector2(0, 150 + 4 * getStat(BountyBandits.Stats.Type.Strength) + 50 * getStat(BountyBandits.Stats.Type.Agility)));
+                    body.ApplyForce(new Vector2(0, 150 + 4 * getStat(BountyBandits.Stats.StatType.Strength) + 50 * getStat(BountyBandits.Stats.StatType.Agility)));
             }
         }
 		public bool lane(bool up)
@@ -183,22 +188,22 @@ namespace BountyBandits
 		}
         public void move(Vector2 force)
         {
-            if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 + getStat(BountyBandits.Stats.Type.Speed) && isTouchingGeom(true))
+            if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 + getStat(BountyBandits.Stats.StatType.Speed) && isTouchingGeom(true))
             {
-                body.ApplyForce(new Vector2((float)getStat(BountyBandits.Stats.Type.Speed) * force.X, force.Y));
+                body.ApplyForce(new Vector2((float)getStat(BountyBandits.Stats.StatType.Speed) * force.X, force.Y));
                 isFacingLeft = (force.X > 0) ? false : true;
             }
         }
         public void newLevel()
         {
             Texture2D tex = controller.frames[currFrame];
-            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 3, tex.Height, myStats.getStatValue(BountyBandits.Stats.Type.Strength) / 5f);
+            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 3, tex.Height, myStats.getStatValue(BountyBandits.Stats.StatType.Strength) / 5f);
             body.Position = new Vector2(10 + tex.Width / 2, 10 + tex.Height / 2);
             geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 3, tex.Height);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
             setCollisionCategories(CollisionCategory.Cat1);
-            currenthealth = getStat(BountyBandits.Stats.Type.Life);
+            currenthealth = getStat(BountyBandits.Stats.StatType.Life);
             currentspecial = maxspecial;
         }
         public void setCollisionCategories(CollisionCategory newCat)
@@ -242,10 +247,10 @@ namespace BountyBandits
                             enemy.geom.Collide(geom))
                         {
                             int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
-                            bool criticalHit = (getStat(BountyBandits.Stats.Type.Agility) - enemy.getStat(BountyBandits.Stats.Type.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
+                            bool criticalHit = (getStat(BountyBandits.Stats.StatType.Agility) - enemy.getStat(BountyBandits.Stats.StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
                             if (currAnimation.name.Contains("attack"))
                             {
-                                float damage = (float)getStat(BountyBandits.Stats.Type.Agility) / 8f + (float)getStat(BountyBandits.Stats.Type.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
+                                float damage = (float)getStat(BountyBandits.Stats.StatType.Agility) / 8f + (float)getStat(BountyBandits.Stats.StatType.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
                                 if (criticalHit) 
                                     damage *= 2;
                                 if (damage > 0)
@@ -267,8 +272,8 @@ namespace BountyBandits
                             isEnemyAlive = true;
                     if (gameref.spawnManager.enemies.Count < 1 && targetPlayer == -1 && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
                     {
-                        currenthealth += getStat(BountyBandits.Stats.Type.Life) / 5 + getStat(BountyBandits.Stats.Type.Agility) / 10;
-                        if (currenthealth > getStat(BountyBandits.Stats.Type.Life)) currenthealth = getStat(BountyBandits.Stats.Type.Life);
+                        currenthealth += getStat(BountyBandits.Stats.StatType.Life) / 5 + getStat(BountyBandits.Stats.StatType.Agility) / 10;
+                        if (currenthealth > getStat(BountyBandits.Stats.StatType.Life)) currenthealth = getStat(BountyBandits.Stats.StatType.Life);
                     }
                 }
                 #endregion
@@ -282,7 +287,7 @@ namespace BountyBandits
 						enemiesAlive=true;
 				if(!enemiesAlive)
 				{
-                    currenthealth = getStat(BountyBandits.Stats.Type.Life) / 3;
+                    currenthealth = getStat(BountyBandits.Stats.StatType.Life) / 3;
 					changeAnimation("idle");
 					isDead = false;
 				}

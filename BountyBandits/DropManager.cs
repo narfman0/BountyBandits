@@ -11,144 +11,144 @@ namespace BountyBandits
         public static Item generateItem(Being being)
         {
             //TODO being passed in does nothing. boring.
-            BountyBandits.Inventory.Type type = rollType(being);
-            BountyBandits.Inventory.Class itemClass = rollClass(being);
-            Stats.Stats stats = rollStats(being, itemClass, type);
+            BountyBandits.Inventory.ItemType type = rollType(being);
+            BountyBandits.Inventory.ItemClass itemClass = rollClass(being);
+            Stats.StatSet stats = rollStats(being, itemClass, type);
             String name = rollName(being, itemClass, type, stats);
             //Following: dirty stinking hack to get the names of the colors tacked on to texture name
             //String primaryColor = new Item(name, stats, type, "", itemClass).getPrimaryColor();
             //String secondaryColor = new Item(name, stats, type, "", itemClass).getSecondaryColor();
             
-            String textureName = Enum.GetName(typeof(BountyBandits.Inventory.Type), type) + rand.Next(4);
+            String textureName = Enum.GetName(typeof(BountyBandits.Inventory.ItemType), type) + rand.Next(4);
             //if (itemClass != Class.Unique)
             //    textureName += primaryColor + secondaryColor;
             return new Item(name, stats, type, textureName, itemClass);
         }
-        private static Inventory.Class rollClass(Being being)
+        private static Inventory.ItemClass rollClass(Being being)
         {
             //roll for item class/quality
-            BountyBandits.Inventory.Class itemClass = Class.Normal;
+            BountyBandits.Inventory.ItemClass itemClass = ItemClass.Normal;
             double randMod = rand.NextDouble();
             if (randMod < .001)
-                itemClass = Class.Unique;
+                itemClass = ItemClass.Unique;
             else if (randMod < .015)
-                itemClass = Class.Rare;
+                itemClass = ItemClass.Rare;
             else if (randMod < .20)
-                itemClass = Class.Magic;
+                itemClass = ItemClass.Magic;
             return itemClass;
         }
-        private static Inventory.Type rollType(Being being)
+        private static Inventory.ItemType rollType(Being being)
         {
-            BountyBandits.Inventory.Type[] values = (BountyBandits.Inventory.Type[])Enum.GetValues(typeof(BountyBandits.Inventory.Type));
+            BountyBandits.Inventory.ItemType[] values = (BountyBandits.Inventory.ItemType[])Enum.GetValues(typeof(BountyBandits.Inventory.ItemType));
             return values[rand.Next(0, values.Length)];
         }
-        private static Stats.Stats rollStats(Being being, Inventory.Class itemClass, Inventory.Type type)
+        private static Stats.StatSet rollStats(Being being, Inventory.ItemClass itemClass, Inventory.ItemType type)
         {
-            Stats.Stats stats = new BountyBandits.Stats.Stats();
+            Stats.StatSet stats = new BountyBandits.Stats.StatSet();
             #region Calculate how many random stat modifiers there shall be
             int randomStatItems = 0;
             switch (itemClass)
             {
-                case Class.Normal:
+                case ItemClass.Normal:
                     randomStatItems++;
                     break;
-                case Class.Magic:
+                case ItemClass.Magic:
                     randomStatItems+=1+rand.Next()%2;
                     break;
-                case Class.Rare:
+                case ItemClass.Rare:
                     randomStatItems+=2+rand.Next()%2;
                     break;
-                case Class.Unique:
+                case ItemClass.Unique:
                     randomStatItems+=4+rand.Next()%6;
                     break;
             }
             #endregion
 
-            if(type == BountyBandits.Inventory.Type.Chest)
-                stats.addStatValue(BountyBandits.Stats.Type.Defense, 20 + rand.Next()%10);
-            if(type == BountyBandits.Inventory.Type.Head)
-                stats.addStatValue(BountyBandits.Stats.Type.Defense, 5 + rand.Next()%5);
-            if(type == BountyBandits.Inventory.Type.Legs)
-                stats.addStatValue(BountyBandits.Stats.Type.Defense, 7 + rand.Next()%10);
-            if(type == BountyBandits.Inventory.Type.MainHand){
-                stats.addStatValue(BountyBandits.Stats.Type.MinDamage, 2);
-                stats.addStatValue(BountyBandits.Stats.Type.MaxDamage, 2);
+            if(type == BountyBandits.Inventory.ItemType.Chest)
+                stats.addStatValue(BountyBandits.Stats.StatType.Defense, 20 + rand.Next()%10);
+            if(type == BountyBandits.Inventory.ItemType.Head)
+                stats.addStatValue(BountyBandits.Stats.StatType.Defense, 5 + rand.Next()%5);
+            if(type == BountyBandits.Inventory.ItemType.Legs)
+                stats.addStatValue(BountyBandits.Stats.StatType.Defense, 7 + rand.Next()%10);
+            if(type == BountyBandits.Inventory.ItemType.MainHand){
+                stats.addStatValue(BountyBandits.Stats.StatType.MinDamage, 2);
+                stats.addStatValue(BountyBandits.Stats.StatType.MaxDamage, 2);
             }
             switch (itemClass)
             {
-                case Class.Normal:
+                case ItemClass.Normal:
                     break;
-                case Class.Magic:
-                    if(stats.getStatValue(BountyBandits.Stats.Type.Defense) > 0)
-                        stats.setStatValue(BountyBandits.Stats.Type.Defense, stats.getStatValue(BountyBandits.Stats.Type.Defense) + 3);
+                case ItemClass.Magic:
+                    if(stats.getStatValue(BountyBandits.Stats.StatType.Defense) > 0)
+                        stats.setStatValue(BountyBandits.Stats.StatType.Defense, stats.getStatValue(BountyBandits.Stats.StatType.Defense) + 3);
                     break;
-                case Class.Rare:
-                    if(stats.getStatValue(BountyBandits.Stats.Type.Defense) > 0)
-                        stats.setStatValue(BountyBandits.Stats.Type.Defense, stats.getStatValue(BountyBandits.Stats.Type.Defense) * 2);
+                case ItemClass.Rare:
+                    if(stats.getStatValue(BountyBandits.Stats.StatType.Defense) > 0)
+                        stats.setStatValue(BountyBandits.Stats.StatType.Defense, stats.getStatValue(BountyBandits.Stats.StatType.Defense) * 2);
                     break;
-                case Class.Unique:
-                    if(stats.getStatValue(BountyBandits.Stats.Type.Defense) > 0)
-                        stats.setStatValue(BountyBandits.Stats.Type.Defense, stats.getStatValue(BountyBandits.Stats.Type.Defense) * 3);
+                case ItemClass.Unique:
+                    if(stats.getStatValue(BountyBandits.Stats.StatType.Defense) > 0)
+                        stats.setStatValue(BountyBandits.Stats.StatType.Defense, stats.getStatValue(BountyBandits.Stats.StatType.Defense) * 3);
                     break;
             }
             #region Add that random amount of modifiers
             for (; randomStatItems > 0; randomStatItems--)
             {
                 //get random modifier
-                Stats.Type[] values = (Stats.Type[])Enum.GetValues(typeof(Stats.Type));
-                Stats.Type stat = values[rand.Next(0, values.Length)];
+                Stats.StatType[] values = (Stats.StatType[])Enum.GetValues(typeof(Stats.StatType));
+                Stats.StatType stat = values[rand.Next(0, values.Length)];
 
                 stats.addStatValue(stat, (int)(1 + rand.Next() % 8));
             }
             #endregion
             return stats;
         }
-        private static String rollName(Being being, Inventory.Class itemClass, Inventory.Type type, Stats.Stats stats)
+        private static String rollName(Being being, Inventory.ItemClass itemClass, Inventory.ItemType type, Stats.StatSet stats)
         {
             String name = "";
-            if (type == BountyBandits.Inventory.Type.Chest)
+            if (type == BountyBandits.Inventory.ItemType.Chest)
                 name = "Plate";
-            if (type == BountyBandits.Inventory.Type.Head)
+            if (type == BountyBandits.Inventory.ItemType.Head)
                 name = "Helmet";
-            if (type == BountyBandits.Inventory.Type.Legs)
+            if (type == BountyBandits.Inventory.ItemType.Legs)
                 name = "Leggings";
-            if (type == BountyBandits.Inventory.Type.MainHand)
+            if (type == BountyBandits.Inventory.ItemType.MainHand)
                 name = "Sword";
-            if (type == BountyBandits.Inventory.Type.OffHand)
+            if (type == BountyBandits.Inventory.ItemType.OffHand)
                 name = "Trinket";
             switch (itemClass)
             {
-                case Class.Normal:
+                case ItemClass.Normal:
                     break;
-                case Class.Magic:
-                case Class.Rare:
-                    foreach (Stats.Type stat in Enum.GetValues(typeof(Stats.Type)))
+                case ItemClass.Magic:
+                case ItemClass.Rare:
+                    foreach (Stats.StatType stat in Enum.GetValues(typeof(Stats.StatType)))
                     {
                         if(stats.getStatValue(stat) > 0)
                             switch (stat)
                             {
-                                case BountyBandits.Stats.Type.DamageReduction:
+                                case BountyBandits.Stats.StatType.DamageReduction:
                                     name += " of the masochist";
                                     break;
-                                case BountyBandits.Stats.Type.Agility:
+                                case BountyBandits.Stats.StatType.Agility:
                                     name += " of the fox";
                                     break;
-                                case BountyBandits.Stats.Type.Defense:
+                                case BountyBandits.Stats.StatType.Defense:
                                     name += " of the bear";
                                     break;
-                                case BountyBandits.Stats.Type.EnhancedDamage:
+                                case BountyBandits.Stats.StatType.EnhancedDamage:
                                     name = "Slayer's " + name;
                                     break;
-                                case BountyBandits.Stats.Type.Life:
+                                case BountyBandits.Stats.StatType.Life:
                                     name = "Life giving " + name;
                                     break;
-                                case BountyBandits.Stats.Type.LifeSteal:
+                                case BountyBandits.Stats.StatType.LifeSteal:
                                     name = "Vampire's " + name;
                                     break;
-                                case BountyBandits.Stats.Type.Speed:
+                                case BountyBandits.Stats.StatType.Speed:
                                     name = "Pheonix's " + name;
                                     break;
-                                case BountyBandits.Stats.Type.Strength:
+                                case BountyBandits.Stats.StatType.Strength:
                                     name = "Vin Diesel's " + name;
                                     break;
                                 default:
@@ -157,7 +157,7 @@ namespace BountyBandits
                             }
                     }
                     break;
-                case Class.Unique:
+                case ItemClass.Unique:
                     name += " of Doom";
                     break;
             }
