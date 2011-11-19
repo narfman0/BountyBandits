@@ -99,11 +99,11 @@ namespace BountyBandits
                                 currentplayer.update(gameTime);
                                 #region Input
                                 input.setCurrentInput(currentplayer.prevKeyboardState, GamePad.GetState(index), currentplayer.prevGamePadState);
-                                if (input.getButtonDownCurrent(Buttons.LeftThumbstickLeft))
+                                if (input.getButtonDown(Buttons.LeftThumbstickLeft))
                                     currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
-                                if (input.getButtonDownCurrent(Buttons.LeftThumbstickRight))
+                                if (input.getButtonDown(Buttons.LeftThumbstickRight))
                                     currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
-                                if (input.getButtonHitCurrent(Buttons.A))
+                                if (input.getButtonHit(Buttons.A))
                                 {
                                     if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                                     {
@@ -115,26 +115,26 @@ namespace BountyBandits
                                     }
                                     currentplayer.jump();
                                 }
-                                if (input.getButtonHitCurrent(Buttons.X))
+                                if (input.getButtonHit(Buttons.X))
                                     currentplayer.attack("attack1");
-                                if (input.getButtonHitCurrent(Buttons.Back))
+                                if (input.getButtonHit(Buttons.Back))
                                     currentplayer.menu.toggleMenu();
-                                if (input.getButtonHitCurrent(Buttons.DPadDown))
+                                if (input.getButtonHit(Buttons.DPadDown))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(false);
                                     else
                                         currentplayer.lane(false);
-                                if (input.getButtonHitCurrent(Buttons.DPadUp))
+                                if (input.getButtonHit(Buttons.DPadUp))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(true);
                                     else
                                         currentplayer.lane(true);
 
-                                if (input.getButtonHitCurrent(Buttons.DPadRight))
+                                if (input.getButtonHit(Buttons.DPadRight))
                                     currentplayer.menu.changeMenuScreen(true);
-                                if (input.getButtonHitCurrent(Buttons.DPadLeft))
+                                if (input.getButtonHit(Buttons.DPadLeft))
                                     currentplayer.menu.changeMenuScreen(false);
-                                if (input.getButtonHitCurrent(Buttons.RightShoulder))
+                                if (input.getButtonHit(Buttons.RightShoulder))
                                 {
                                     //pick up closest item and throw the equipped one on the ground
                                     DropItem dropItem = getClosestDropItem(currentplayer);

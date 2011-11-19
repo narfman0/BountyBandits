@@ -27,15 +27,15 @@ namespace BountyBandits
 
         private bool getButtonHit(Buttons target, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
         {
-            if (getButtonDown(target, keyPreviousState, padState, padPreviousState) &&
-                (padPreviousState.IsButtonUp(target) || keyPreviousState.IsKeyUp(xboxButtonToKeyboardKey[target])) )
+            if (!getButtonDown(target, keyPreviousState, padState, padPreviousState) &&
+                getButtonDown(target, Keyboard.GetState(), padState, padPreviousState))
                 return true;
             return false;
         }
 
-        private bool getButtonDown(Buttons target, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
+        private bool getButtonDown(Buttons target, KeyboardState keyState, GamePadState padState, GamePadState padPreviousState)
         {
-            if (padState.IsButtonDown(target) || Keyboard.GetState().IsKeyDown(xboxButtonToKeyboardKey[target]))
+            if (padState.IsButtonDown(target) || keyState.IsKeyDown(xboxButtonToKeyboardKey[target]))
                 return true;
             return false;
         }
@@ -47,12 +47,12 @@ namespace BountyBandits
             this.padPreviousState = padPreviousState;
         }
 
-        public bool getButtonHitCurrent(Buttons target)
+        public bool getButtonHit(Buttons target)
         {
             return getButtonHit(target, keyPreviousState, padState, padPreviousState);
         }
 
-        public bool getButtonDownCurrent(Buttons target)
+        public bool getButtonDown(Buttons target)
         {
             return getButtonDown(target, keyPreviousState, padState, padPreviousState);
         }
