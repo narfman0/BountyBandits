@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using BountyBandits.Story;
 
 namespace BountyBandits
 {
@@ -18,6 +19,7 @@ namespace BountyBandits
 
         #region In game specific
         public Texture2D background, horizon;
+        public List<StoryElement> storyElements = new List<StoryElement>();
         public List<GameItem> items = new List<GameItem>();
         public List<SpawnPoint> spawns = new List<SpawnPoint>();
         #endregion

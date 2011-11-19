@@ -62,6 +62,27 @@
         <weight>1</weight>
       </item>
     </items>
+    <story>
+      <element>
+        <aveXTrigger>1</aveXTrigger>
+        <startX>100</startX>
+        <cutsceneLength>5000</cutsceneLength>
+        <pathSegments>
+          <pathSegment>
+            <begin>
+              <x>0</x>
+              <y>0</y>
+            </begin>
+            <end>
+              <x>300</x>
+              <y>0</y>
+            </end>
+            <msSpan>1000</msSpan>
+            <msStart>1000</msStart>
+          </pathSegment>
+        </pathSegments>
+      </element>
+    </story>
     <location>237,169</location>
     <name>levelOne</name>
     <number>0</number>

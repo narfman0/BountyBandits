@@ -6,6 +6,7 @@ using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using BountyBandits.Story;
 
 namespace BountyBandits
 {
@@ -65,6 +66,9 @@ namespace BountyBandits
                                     newLvl.items.Add(new GameItem(item));
                             }
                         }
+                        else if (node.Name.Equals("story"))
+                            foreach (XmlNode item in node.ChildNodes)
+                                newLvl.storyElements.Add(StoryElement.fromXML(item));
                 if (newLvl.background == null)
                     newLvl.background = gameref.easyLevel;
                 levels.Add(newLvl);

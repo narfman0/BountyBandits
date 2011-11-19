@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
+using BountyBandits.Stats;
 
 namespace BountyBandits.Inventory
 {
     public class Item
     {
         private String name, textureName;   //for rendering purposes both when dropped and when equipping
-        private BountyBandits.Stats.StatSet stats = new BountyBandits.Stats.StatSet();
+        private StatSet stats = new StatSet();
         private ItemType type;
-        private BountyBandits.Inventory.ItemClass itemClass;
-        public Item(String name, BountyBandits.Stats.StatSet stats, ItemType type, String textureName, BountyBandits.Inventory.ItemClass itemClass)
+        private ItemClass itemClass;
+        public Item(String name, StatSet stats, ItemType type, String textureName, ItemClass itemClass)
         {
             this.name = name;
             this.stats = stats;
@@ -24,22 +25,22 @@ namespace BountyBandits.Inventory
         {
             const byte color = 230;
             const byte antiColor = color - 50;
-            if (stats.getStatValue(BountyBandits.Stats.StatType.AbilityLevel) > 0)
+            if (stats.getStatValue(StatType.AbilityLevel) > 0)
                 return new Color(color, antiColor, color);
-            if (stats.getStatValue(BountyBandits.Stats.StatType.EnhancedDamage) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.LifeSteal) > 0)
+            if (stats.getStatValue(StatType.EnhancedDamage) > 0 ||
+                stats.getStatValue(StatType.LifeSteal) > 0)
                 return new Color(color, antiColor, antiColor);
-            if (stats.getStatValue(BountyBandits.Stats.StatType.Defense) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.EnhanecdDefense) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.DamageReduction) > 0)
+            if (stats.getStatValue(StatType.Defense) > 0 ||
+                stats.getStatValue(StatType.EnhanecdDefense) > 0 ||
+                stats.getStatValue(StatType.DamageReduction) > 0)
                 return new Color(antiColor, color, antiColor);
-            if (stats.getStatValue(BountyBandits.Stats.StatType.Magic) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.Speed) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.Speed) > 0)
+            if (stats.getStatValue(StatType.Magic) > 0 ||
+                stats.getStatValue(StatType.Speed) > 0 ||
+                stats.getStatValue(StatType.Speed) > 0)
                 return new Color(antiColor, antiColor, color);
-            if (stats.getStatValue(BountyBandits.Stats.StatType.Knockback) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.MinDamage) > 0 ||
-                stats.getStatValue(BountyBandits.Stats.StatType.MaxDamage) > 0)
+            if (stats.getStatValue(StatType.Knockback) > 0 ||
+                stats.getStatValue(StatType.MinDamage) > 0 ||
+                stats.getStatValue(StatType.MaxDamage) > 0)
                 return new Color(color, color, color);
             return new Color(color, color, color);
         }
@@ -58,7 +59,7 @@ namespace BountyBandits.Inventory
             Color primary = getPrimaryColor();
             return Color.Black;// new Color(primary.R + 5, primary.G + 5, primary.B + 5);
         }
-        public BountyBandits.Stats.StatSet getStats() { return stats; }
+        public StatSet getStats() { return stats; }
         public String getTextureName() { return textureName; }
         public ItemType getItemType() { return type; }
         public ItemClass getItemClass() { return itemClass; }
