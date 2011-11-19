@@ -119,12 +119,12 @@ namespace BountyBandits
                                     currentplayer.attack("attack1");
                                 if (input.getButtonHit(Buttons.Back))
                                     currentplayer.menu.toggleMenu();
-                                if (input.getButtonHit(Buttons.DPadDown))
+                                if (input.getButtonDown(Buttons.DPadDown))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(false);
                                     else
                                         currentplayer.lane(false);
-                                if (input.getButtonHit(Buttons.DPadUp))
+                                if (input.getButtonDown(Buttons.DPadUp))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(true);
                                     else

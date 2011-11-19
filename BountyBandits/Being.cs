@@ -62,7 +62,7 @@ namespace BountyBandits
         }
         public void attack(string attackName)
         {
-            if (!isDead)
+            if (!isDead && !currAnimation.name.Contains("attack"))
             {
                 changeAnimation(attackName);
                 attackComputed = false;
