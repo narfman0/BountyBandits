@@ -74,7 +74,7 @@ namespace BountyBandits
             mediumLevel = Content.Load<Texture2D>(@"Map\mediumLevel");
             worldBackground = Content.Load<Texture2D>(@"Map\worldBackground");
             mapManager = new MapManager(this);
-            animationManager = new BountyBandits.Animation.Manager(Content);
+            animationManager = new BountyBandits.Animation.Manager(Content, this);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             players.Add(new Being("temp", 1, this, animationManager.getController("cowboy")));

@@ -17,6 +17,16 @@ namespace BountyBandits.Animation
         public List<AnimationInfo> animations = new List<AnimationInfo>();
         public StatSet statRatios = new StatSet();
         public List<Color[]> permutations = new List<Color[]>();
+        public int PermutationCount { get {
+            //int i = 1;
+            //foreach (Color[] colors in permutations)
+            //    i *= colors.Length;
+            int i = 0;
+            for (int permutationCount = 0; permutationCount < permutations.Count; permutationCount++)
+                for (int dest = 0; dest < permutations[permutationCount].Length; dest++)
+                    i++;
+            return i;
+        }}
 
         public void fromXML(ContentManager content, string name)
         {
@@ -89,15 +99,26 @@ namespace BountyBandits.Animation
                     }
             }
         }
-        private void getAlphaFromTex(ref Texture2D tex)
+
+        /// <summary>
+        /// Replace magenta with transparent black (alphad)
+        /// </summary>
+        /// <param name="tex"></param>
+        public static void getAlphaFromTex(ref Texture2D tex)
+        {
+            replaceColor(ref tex, Color.Magenta, Color.TransparentBlack);
+        }
+
+        public static void replaceColor(ref Texture2D tex, Color src, Color dst)
         {
             Color[] pixels = new Color[tex.Width * tex.Height];
             tex.GetData<Color>(pixels);
             for (int i = 0; i < pixels.Length; i++)
-                if (pixels[i] == Color.Magenta)
-                    pixels[i] = Color.TransparentBlack;
+                if (pixels[i] == src)
+                    pixels[i] = dst;
             tex.SetData<Color>(pixels);
         }
+
         public AnimationInfo getAnimationInfo(string name)
         {
             foreach (AnimationInfo animInf in animations)
