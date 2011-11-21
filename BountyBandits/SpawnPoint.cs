@@ -15,7 +15,7 @@ namespace BountyBandits
         public Vector2 loc = Vector2.Zero;
         public uint count = 1;
         public uint bosses = 0;
-        public string type = "cow";
+        public string type;
         public uint weight = 1;
         public bool isSpawned = false;
         XmlNode fromNode;
@@ -45,9 +45,7 @@ namespace BountyBandits
                 else if (itemChild.Name.Equals("weight"))
                     weight = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("type"))
-                {
                     type = itemChild.FirstChild.Value;
-                }
         }
     }
 }

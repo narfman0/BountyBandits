@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
+using BountyBandits.Stats;
 
 namespace BountyBandits
 {
@@ -31,11 +32,11 @@ namespace BountyBandits
                 if (type.Contains("cow"))
                 {
                     enemy.level = (int)weight / 5;
-                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Magic, 1);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Agility, 2);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Strength, (int)weight);
-                    enemy.myStats.setStatValue(BountyBandits.Stats.StatType.Speed, 3);
-                    enemy.currenthealth = enemy.myStats.getStatValue(BountyBandits.Stats.StatType.Life);
+                    enemy.myStats.setStatValue(StatType.Magic, 1);
+                    enemy.myStats.setStatValue(StatType.Agility, 2);
+                    enemy.myStats.setStatValue(StatType.Strength, (int)weight);
+                    enemy.myStats.setStatValue(StatType.Speed, 3);
+                    enemy.currenthealth = enemy.myStats.getStatValue(StatType.Life);
                     enemy.currentspecial = enemy.maxspecial;
                 }
 
