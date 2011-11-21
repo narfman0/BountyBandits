@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using BountyBandits.Stats;
 
 namespace BountyBandits.Animation
 {
@@ -14,6 +15,7 @@ namespace BountyBandits.Animation
         public List<Texture2D> frames = new List<Texture2D>();
         public Texture2D portrait;
         public List<AnimationInfo> animations = new List<AnimationInfo>();
+        public StatSet statRatios = new StatSet();
 
         public void fromXML(ContentManager content, string name)
         {
@@ -62,7 +64,13 @@ namespace BountyBandits.Animation
                             getAlphaFromTex(ref newFrame);
                             frames.Add(newFrame);
                         }
-                    }
+                    } else if (monsterchild.Name == "stats")
+                        foreach (XmlNode node in monsterchild.ChildNodes)
+                        {
+                            StatType statType = (StatType)Enum.Parse(typeof(StatType), node.Attributes.GetNamedItem("type").Value);
+                            int value = int.Parse(node.Attributes.GetNamedItem("value").Value);
+                            statRatios.addStatValue(statType, value);
+                        }
                 }
                 foreach(string str in Directory.GetFiles(@"Content\Beings\" + name))
                     if (str.Contains("portrait"))

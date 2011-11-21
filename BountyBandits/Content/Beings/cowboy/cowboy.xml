@@ -25,5 +25,14 @@
         <end>104</end>
       </animation>
     </animations>
+    <stats>
+      <stat type='Strength' value='3' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='3' />
+      <stat type='Speed' value='5' />
+      <stat type='Range' value='125' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
   </monster>
 </Root>

@@ -19,11 +19,11 @@ namespace BountyBandits
         #region Fields
         Game gameref;
         public string name;
-        public StatSet myStats = new StatSet();
+        private StatSet myStats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
         public int currenthealth = 5, maxspecial = 5, currentspecial = 5;
         int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
-        public int xp = 0, level = 1, xpOfNextLevel = 100, unusedAttr = 0;
+        public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0;
         bool isFacingLeft = false, attackComputed = true;
         public bool isDead = false;
         public Body body; private Vector2 pos; //used to draw when dead
@@ -40,18 +40,19 @@ namespace BountyBandits
         //enemy specific fields
         public int targetPlayer = -1;
         #endregion
-        public Being(string name, int maxhealth, Game gameref, BountyBandits.Animation.AnimationController controller)
+        public Being(string name, int level, Game gameref, AnimationController controller)
         {
             this.gameref = gameref;
             this.name = name;
-            this.currenthealth = maxhealth;
             this.controller = controller;
+            this.level = level;
             changeAnimation("idle");
             myStats.setStatValue(StatType.Strength, 5);
             myStats.setStatValue(StatType.Speed, 5);
             myStats.setStatValue(StatType.Agility, 5);
             myStats.setStatValue(StatType.Magic, 5);
-            myStats.setStatValue(StatType.Life, maxhealth);
+            foreach (Stat stat in controller.statRatios.statsTable.Values)
+                myStats.addStatValue(stat.getType(), stat.getValue() * level);
 
             newLevel();
         }
@@ -122,10 +123,14 @@ namespace BountyBandits
             else if (geom.CollisionCategories == CollisionCategory.Cat4)return 3;
             else return -1;
         }
-        public BountyBandits.Inventory.InventoryManager getItemManager() { return itemManager; }
+        public InventoryManager getItemManager() { return itemManager; }
         public int getStat(StatType type)
         {
             return myStats.getStat(type).getValue() + itemManager.getStatBonus(type);
+        }
+        public void upgradeStat(StatType type, int value)
+        {
+            myStats.addStatValue(type, value);
         }
 		public Vector2 getPos()
 		{

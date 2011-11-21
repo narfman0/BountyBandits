@@ -16,6 +16,9 @@ namespace BountyBandits
         public uint count = 1;
         public uint bosses = 0;
         public string type;
+        /// <summary>
+        /// This can be weight of a box OR the level if it is an enemy
+        /// </summary>
         public uint weight = 1;
         public bool isSpawned = false;
         XmlNode fromNode;

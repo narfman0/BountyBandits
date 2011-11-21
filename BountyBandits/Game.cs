@@ -15,6 +15,7 @@ using FarseerGames.FarseerPhysics;
 using FarseerGames.FarseerPhysics.Collisions;
 using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
+using BountyBandits.Stats;
 
 namespace BountyBandits
 {
@@ -76,7 +77,7 @@ namespace BountyBandits
             animationManager = new BountyBandits.Animation.Manager(Content);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
-            players.Add(new Being("temp", 5, this, animationManager.controllers[0]));
+            players.Add(new Being("temp", 1, this, animationManager.controllers[0]));
             players[0].controllerIndex = PlayerIndex.One;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -107,10 +108,10 @@ namespace BountyBandits
                                 {
                                     if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                                     {
-                                        if (currentplayer.menu.getMenuItem() == 0) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Agility, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 1) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Magic, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 2) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Speed, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 3) currentplayer.myStats.addStatValue(BountyBandits.Stats.StatType.Strength, 1);
+                                        if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
+                                        else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
                                         currentplayer.unusedAttr--;
                                     }
                                     currentplayer.jump();
@@ -197,7 +198,7 @@ namespace BountyBandits
                                     found = true;
                             if (!found)
                             {
-                                players.Add(new Being("newName" + index.ToString(), 10, this, animationManager.controllers[0]));
+                                players.Add(new Being("newName" + index.ToString(), 1, this, animationManager.controllers[0]));
                                 players[players.Count - 1].controllerIndex = index;
                             }
                         }

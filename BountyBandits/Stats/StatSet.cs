@@ -7,10 +7,10 @@ namespace BountyBandits.Stats
 {
     public class StatSet
     {
-        Hashtable statsTable;
+        public Dictionary<StatType, Stat> statsTable;
         public StatSet()
         {
-            statsTable = new Hashtable();
+            statsTable = new Dictionary<StatType, Stat>();
             foreach (StatType type in Enum.GetValues(typeof(StatType)))
                 statsTable.Add(type, new Stat(type, 0));
         }

@@ -23,22 +23,14 @@ namespace BountyBandits
             foreach (SpawnPoint point in newLvl.spawns)
                 spawnPoints.Add(point.Clone());
         }
-        public void spawnGroup(string type, uint weight, uint amount)
+        public void spawnGroup(string type, uint level, uint amount)
         {
             for (int i = 0; i < amount; ++i)
             {
-                Being enemy = new Being(type, (int)weight, gameref, gameref.animationManager.getController(type));
-
-                if (type.Contains("cow"))
-                {
-                    enemy.level = (int)weight / 5;
-                    enemy.myStats.setStatValue(StatType.Magic, 1);
-                    enemy.myStats.setStatValue(StatType.Agility, 2);
-                    enemy.myStats.setStatValue(StatType.Strength, (int)weight);
-                    enemy.myStats.setStatValue(StatType.Speed, 3);
-                    enemy.currenthealth = enemy.myStats.getStatValue(StatType.Life);
-                    enemy.currentspecial = enemy.maxspecial;
-                }
+                Being enemy = new Being(type, (int)level, gameref, 
+                    gameref.animationManager.getController(type));
+                enemy.currenthealth = enemy.getStat(StatType.Life);
+                enemy.currentspecial = enemy.maxspecial;
 
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
                 if (gameref.getAveX() - gameref.res.ScreenWidth / 2 < 16) 
@@ -62,7 +54,7 @@ namespace BountyBandits
             foreach (SpawnPoint spawnp in spawnPoints)
                 if (spawnp.loc.X < gameref.getAveX() && !spawnp.isSpawned)
                 {
-                    spawnGroup(spawnp.type, spawnp.weight, spawnp.count);
+                    spawnGroup(spawnp.type, spawnp.weight/*level*/, spawnp.count);
                     spawnp.isSpawned = true;
                 }
             #endregion
@@ -88,7 +80,7 @@ namespace BountyBandits
                     else
                         enemy.move(new Vector2(Game.FORCE_AMOUNT, 0));
                 }
-                if(Vector2.Distance(targetPlayer.getPos(), enemy.getPos()) < 80)
+                if(Vector2.Distance(targetPlayer.getPos(), enemy.getPos()) < enemy.getStat(StatType.Range))
                     enemy.attack("attack1");
             }
             #endregion
