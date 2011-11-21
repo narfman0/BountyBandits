@@ -77,7 +77,7 @@ namespace BountyBandits
             animationManager = new BountyBandits.Animation.Manager(Content);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
-            players.Add(new Being("temp", 1, this, animationManager.controllers[0]));
+            players.Add(new Being("temp", 1, this, animationManager.getController("cowboy")));
             players[0].controllerIndex = PlayerIndex.One;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -198,7 +198,7 @@ namespace BountyBandits
                                     found = true;
                             if (!found)
                             {
-                                players.Add(new Being("newName" + index.ToString(), 1, this, animationManager.controllers[0]));
+                                players.Add(new Being("newName" + index.ToString(), 1, this, animationManager.getController("cow")));
                                 players[players.Count - 1].controllerIndex = index;
                             }
                         }
@@ -480,6 +480,9 @@ namespace BountyBandits
             #endregion
             #region add gameitems
             activeItems = new List<GameItem>();
+            foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
+                if (spawn.type != null)
+                    animationManager.getController(spawn.type);
             foreach (GameItem item in mapManager.getCurrentLevel().items)
             {
                 Geom geom = new Geom();

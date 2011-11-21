@@ -9,24 +9,34 @@ namespace BountyBandits.Animation
 {
     public class Manager
     {
-        public List<AnimationController> controllers = new List<AnimationController>();
+        private Dictionary<String, AnimationController> controllerMap = 
+            new Dictionary<string, AnimationController>();
+        private ContentManager content;
 
         public Manager(ContentManager content)
         {
-            string[] dirEntries = Directory.GetDirectories(@"Content\Beings");
-            foreach (string dirName in dirEntries)
-            {
-                AnimationController controller = new AnimationController();
-                controller.fromXML(content, dirName.Split('\\')[dirName.Split('\\').Length-1]);
-                controllers.Add(controller);
-            }
+            this.content = content;
         }
         public AnimationController getController(string controllerName)
         {
-            foreach (AnimationController contr in controllers)
-                if (contr.name.Equals(controllerName))
-                    return contr;
-            return null;
+            if (!controllerMap.ContainsKey(controllerName))
+                buildController(controllerName);
+            return controllerMap[controllerName];
+        }
+
+        private void buildController(string controllerName)
+        {
+            string[] dirEntries = Directory.GetDirectories(@"Content\Beings");
+            foreach (string dirPath in dirEntries)
+            {
+                String dirName = dirPath.Substring(dirPath.LastIndexOf('\\')+1);
+                if (dirName.Equals(controllerName))
+                {
+                    AnimationController controller = new AnimationController();
+                    controller.fromXML(content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
+                    controllerMap.Add(controller.name, controller);
+                }
+            }
         }
     }
 }
