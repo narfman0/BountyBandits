@@ -16,6 +16,7 @@ namespace BountyBandits.Animation
         public Texture2D portrait;
         public List<AnimationInfo> animations = new List<AnimationInfo>();
         public StatSet statRatios = new StatSet();
+        public List<Color[]> permutations = new List<Color[]>();
 
         public void fromXML(ContentManager content, string name)
         {
@@ -70,6 +71,14 @@ namespace BountyBandits.Animation
                             StatType statType = (StatType)Enum.Parse(typeof(StatType), node.Attributes.GetNamedItem("type").Value);
                             int value = int.Parse(node.Attributes.GetNamedItem("value").Value);
                             statRatios.addStatValue(statType, value);
+                        }
+                    else if (monsterchild.Name == "colorPermutations")
+                        foreach (XmlNode permutationNode in monsterchild.ChildNodes)
+                        {
+                            Color[] colors = new Color[permutationNode.ChildNodes.Count];
+                            for (int colorIndex = 0; colorIndex < colors.Length; colorIndex++)
+                                colors[colorIndex] = XMLUtil.colorFromXML(permutationNode.ChildNodes.Item(colorIndex));
+                            permutations.Add(colors);
                         }
                 }
                 foreach(string str in Directory.GetFiles(@"Content\Beings\" + name))

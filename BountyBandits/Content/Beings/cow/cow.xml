@@ -25,6 +25,25 @@
         <end>155</end>
       </animation>
 	  </animations>
+    <colorPermutations>
+      <permutation>
+        <base>
+          <r>255</r>
+          <g>255</g>
+          <b>255</b>
+        </base>
+        <permutation>
+          <r>102</r>
+          <g>051</g>
+          <b>051</b>
+        </permutation>
+        <permutation>
+          <r>153</r>
+          <g>102</g>
+          <b>000</b>
+        </permutation>
+      </permutation>
+    </colorPermutations>
     <stats>
       <stat type='Strength' value='5' />
       <stat type='Magic' value='1' />

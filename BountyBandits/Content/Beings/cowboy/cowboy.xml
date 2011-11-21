@@ -25,6 +25,54 @@
         <end>104</end>
       </animation>
     </animations>
+    <colorPermutations>
+      <permutation>
+        <base>
+          <r>123</r>
+          <g>046</g>
+          <b>000</b>
+        </base>
+        <permutation>
+          <r>210</r>
+          <g>079</g>
+          <b>000</b>
+        </permutation>
+        <permutation>
+          <r>090</r>
+          <g>081</g>
+          <b>206</b>
+        </permutation>
+      </permutation>
+      <permutation>
+        <base>
+          <r>000</r>
+          <g>094</g>
+          <b>032</b>
+        </base>
+        <permutation>
+          <r>088</r>
+          <g>098</g>
+          <b>211</b>
+        </permutation>
+        <permutation>
+          <r>222</r>
+          <g>058</g>
+          <b>063</b>
+        </permutation>
+      </permutation>
+      <permutation>
+        <base>
+          <r>000</r>
+          <g>033</g>
+          <b>087</b>
+        </base>
+        <permutation>
+          <r>089</r>
+          <g>165</g>
+          <b>075</b>
+        </permutation>
+      </permutation>
+    </colorPermutations>
     <stats>
       <stat type='Strength' value='3' />
       <stat type='Magic' value='1' />
