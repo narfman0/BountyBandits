@@ -95,6 +95,7 @@ namespace BountyBandits.Animation
                     if (str.Contains("portrait"))
                     {
                         portrait = content.Load<Texture2D>(@"Beings\" + name + @"\portrait");
+                        AnimationController.getAlphaFromTex(ref portrait);
                         break;
                     }
             }

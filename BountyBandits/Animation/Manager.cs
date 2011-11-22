@@ -11,12 +11,10 @@ namespace BountyBandits.Animation
     {
         private Dictionary<String, AnimationController> controllerMap = 
             new Dictionary<string, AnimationController>();
-        private ContentManager content;
         private Game gameref;
 
-        public Manager(ContentManager content, Game gameref)
+        public Manager(Game gameref)
         {
-            this.content = content;
             this.gameref = gameref;
         }
         public AnimationController getController(string controllerName)
@@ -39,7 +37,7 @@ namespace BountyBandits.Animation
                 if (dirName.Equals(controllerName))
                 {
                     AnimationController baseController = new AnimationController();
-                    baseController.fromXML(content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
+                    baseController.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
                     controllerMap.Add(baseController.name + "_p00", baseController);
 
                     int count = 0;
@@ -49,13 +47,18 @@ namespace BountyBandits.Animation
                         {
                             count++;
                             AnimationController controller = new AnimationController();
-                            controller.fromXML(content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
+                            controller.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
                             for (int textureIndex = 0; textureIndex < controller.frames.Count; textureIndex++)
                             {
                                 Texture2D tex = controller.frames[textureIndex];
-                                //AnimationController.replaceColor(ref tex, 
-                                //    controller.permutations[permutations][0], 
-                                //    controller.permutations[permutations][dest]);
+                                Color[] color = new Color[tex.Height * tex.Width];
+                                tex.GetData<Color>(color);
+                                tex = new Texture2D(gameref.GraphicsDevice, tex.Width, tex.Height);
+                                tex.SetData<Color>(color);
+                                AnimationController.replaceColor(ref tex, 
+                                    controller.permutations[permutations][0], 
+                                    controller.permutations[permutations][dest]);
+                                controller.frames[textureIndex] = tex;
                             }
                             String name = controller.name + "_p" + (count > 9 ? "" : "0") + count;
                             controllerMap.Add(name, controller);

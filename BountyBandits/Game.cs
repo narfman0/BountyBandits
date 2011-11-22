@@ -74,7 +74,7 @@ namespace BountyBandits
             mediumLevel = Content.Load<Texture2D>(@"Map\mediumLevel");
             worldBackground = Content.Load<Texture2D>(@"Map\worldBackground");
             mapManager = new MapManager(this);
-            animationManager = new BountyBandits.Animation.Manager(Content, this);
+            animationManager = new BountyBandits.Animation.Manager(this);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             players.Add(new Being("temp", 1, this, animationManager.getController("cowboy")));
@@ -301,7 +301,12 @@ namespace BountyBandits
 
 
                             }
-                            if(currPlayer.controller.portrait != null) spriteBatch.Draw(currPlayer.controller.portrait, new Vector2(24 + pIndex * 288 + 32 * pIndex, 24), Color.White);
+                            if (currPlayer.controller.portrait != null)
+                            {
+                                int xLoc = 42 - currPlayer.controller.portrait.Width / 2 + pIndex * 288 + 32 * pIndex,
+                                    yLoc = 43 - currPlayer.controller.portrait.Height / 2;
+                                spriteBatch.Draw(currPlayer.controller.portrait, new Vector2(xLoc, yLoc), Color.White);
+                            }
                             spriteBatch.Draw(texMan.getTex("portrait"), new Vector2(16 + pIndex * 288 + 32 * pIndex, 16), Color.White);
 
                             for (int healthIndex = 0; healthIndex < currPlayer.currenthealth; ++healthIndex)
