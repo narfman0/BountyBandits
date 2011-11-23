@@ -1,9 +1,10 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<Root>
+<root>
+  <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
   <level>
     <adj>1</adj>
-    <backgroundPath>Map\backGround1</backgroundPath>
-    <horizonPath>Map\horizon1</horizonPath>
+    <backgroundPath>backGround1</backgroundPath>
+    <horizonPath>horizon1</horizonPath>
     <items>
       <item>
         <name>box</name>
@@ -90,8 +91,8 @@
   </level>
   <level>
     <adj>0</adj>
-    <backgroundPath>Map\backGround1</backgroundPath>
-    <horizonPath>Map\horizon1</horizonPath>
+    <backgroundPath>backGround1</backgroundPath>
+    <horizonPath>horizon1</horizonPath>
     <items>
       <item>
         <name>circle</name>
@@ -147,4 +148,4 @@
     <number>1</number>
     <prereq>1</prereq>
   </level>
-</Root>
+</root>

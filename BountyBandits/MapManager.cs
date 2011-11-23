@@ -12,14 +12,21 @@ namespace BountyBandits
 {
     public class MapManager
     {
-        const string MAP_PATH = @"Content\Map\map.xml";
+        public const string CAMPAIGNS_PATH = @"Campaigns\",
+            CONTENT_PATH = @"Content\",
+            DEFAULT_CAMPAIGN_PATH = CAMPAIGNS_PATH + @"default\",
+            MAP_FILENAME = "map.xml";
         List<Level> levels;
         public int currentLevelIndex;
-        public MapManager(Game gameref){
+        public Guid guid;
+        public Texture2D worldBackground;
+
+        public MapManager(Game gameref, String campaignPath){
             levels = new List<Level>();
-            FileStream fs = new FileStream(MAP_PATH, FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.Open, FileAccess.Read);
             XmlDocument mapdoc = new XmlDocument();
             mapdoc.Load(fs);
+            guid = new Guid(mapdoc.GetElementsByTagName("guid").Item(0).FirstChild.Value);
             XmlNodeList xmlnode = mapdoc.GetElementsByTagName("level");
             for(int i=0;i<xmlnode.Count;i++)
             {
@@ -49,9 +56,9 @@ namespace BountyBandits
                                 newLvl.loc = new Vector2(Int32.Parse(loc[0]), Int32.Parse(loc[1]));
                         }
                         else if (node.Name.Equals("backgroundPath"))
-                            newLvl.background = gameref.Content.Load<Texture2D>(node.FirstChild.Value);
+                            newLvl.background = gameref.Content.Load<Texture2D>(campaignPath + node.FirstChild.Value);
                         else if (node.Name.Equals("horizonPath"))
-                            newLvl.horizon = gameref.Content.Load<Texture2D>(node.FirstChild.Value);
+                            newLvl.horizon = gameref.Content.Load<Texture2D>(campaignPath + node.FirstChild.Value);
                         else if (node.Name.Equals("items"))
                         {
                             foreach (XmlNode item in node.ChildNodes)
@@ -73,6 +80,7 @@ namespace BountyBandits
                     newLvl.background = gameref.easyLevel;
                 levels.Add(newLvl);
             }
+            worldBackground = gameref.Content.Load<Texture2D>(campaignPath + "worldBackground");
         }
         public List<Level> getLevels() { return levels; }
         public Level getCurrentLevel() { return getLevelByNumber(currentLevelIndex); }

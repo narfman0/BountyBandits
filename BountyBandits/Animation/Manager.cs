@@ -7,13 +7,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BountyBandits.Animation
 {
-    public class Manager
+    public class AnimationManager
     {
         private Dictionary<String, AnimationController> controllerMap = 
             new Dictionary<string, AnimationController>();
         private Game gameref;
 
-        public Manager(Game gameref)
+        public AnimationManager(Game gameref)
         {
             this.gameref = gameref;
         }

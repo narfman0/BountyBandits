@@ -38,28 +38,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\easyLevel.png">
+    <Compile Include="Campaigns\easyLevel.png">
       <Name>easyLevel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\extremeLevel.png">
+    <Compile Include="Campaigns\extremeLevel.png">
       <Name>extremeLevel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\hardLevel.png">
+    <Compile Include="Campaigns\hardLevel.png">
       <Name>hardLevel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Map\map.xml">
+    <None Include="Campaigns\default\map.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Name>map</Name>
       <Importer>XmlImporter</Importer>
@@ -67,14 +67,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\mediumLevel.png">
+    <Compile Include="Campaigns\mediumLevel.png">
       <Name>mediumLevel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\backGround1.png">
+    <Compile Include="Campaigns\default\backGround1.png">
       <Name>backGround1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -906,7 +906,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\worldBackground.PNG">
+    <Compile Include="Campaigns\default\worldBackground.PNG">
       <Name>worldBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -949,7 +949,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Map\horizon1.PNG">
+    <Compile Include="Campaigns\default\horizon1.PNG">
       <Name>horizon1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

@@ -16,6 +16,7 @@ using FarseerGames.FarseerPhysics.Collisions;
 using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 using BountyBandits.Stats;
+using BountyBandits.Animation;
 
 namespace BountyBandits
 {
@@ -37,9 +38,9 @@ namespace BountyBandits
         StateManager currentState = new StateManager();
         private SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
-        public BountyBandits.Animation.Manager animationManager;
+        public AnimationManager animationManager;
         public SpawnManager spawnManager;
-        public Texture2D easyLevel, extremeLevel, hardLevel, worldBackground, mediumLevel;
+        public Texture2D easyLevel, extremeLevel, hardLevel, mediumLevel;
         public PhysicsSimulator physicsSimulator;
         public Resolution res;
         public Random rand;
@@ -68,13 +69,12 @@ namespace BountyBandits
             vademecumFont18 = Content.Load<SpriteFont>(@"Fonts\vademecum18");
             vademecumFont24 = Content.Load<SpriteFont>(@"Fonts\vademecum24");
 
-            easyLevel = Content.Load<Texture2D>(@"Map\easyLevel");
-            extremeLevel = Content.Load<Texture2D>(@"Map\extremeLevel");
-            hardLevel = Content.Load<Texture2D>(@"Map\hardLevel");
-            mediumLevel = Content.Load<Texture2D>(@"Map\mediumLevel");
-            worldBackground = Content.Load<Texture2D>(@"Map\worldBackground");
-            mapManager = new MapManager(this);
-            animationManager = new BountyBandits.Animation.Manager(this);
+            easyLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "easyLevel");
+            extremeLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "extremeLevel");
+            hardLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "hardLevel");
+            mediumLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "mediumLevel");
+            mapManager = new MapManager(this, MapManager.DEFAULT_CAMPAIGN_PATH);
+            animationManager = new AnimationManager(this);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             players.Add(new Being("temp", 1, this, animationManager.getController("cowboy")));
@@ -332,7 +332,7 @@ namespace BountyBandits
                 #endregion
                 #region worldmap
                 case GameState.WorldMap:
-                    spriteBatch.Draw(worldBackground, Vector2.Zero, Color.White);
+                    spriteBatch.Draw(mapManager.worldBackground, Vector2.Zero, Color.White);
                     foreach (Level level in mapManager.getLevels())
                         spriteBatch.Draw(easyLevel, level.loc, Color.White);
                     const string chooseLevelStr = "Choose level, A to start game";
