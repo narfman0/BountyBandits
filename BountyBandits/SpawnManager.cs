@@ -31,7 +31,7 @@ namespace BountyBandits
                 Being enemy = new Being(type, (int)level, gameref, 
                     gameref.animationManager.getController(type));
                 enemy.currenthealth = enemy.getStat(StatType.Life);
-                enemy.currentspecial = enemy.maxspecial;
+                enemy.currentspecial = enemy.getStat(StatType.Special);
 
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
                 if (gameref.getAveX() - gameref.res.ScreenWidth / 2 < 16) 

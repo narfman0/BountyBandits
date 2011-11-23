@@ -12,6 +12,7 @@ using BountyBandits.Animation;
 using BountyBandits.Stats;
 using BountyBandits.Inventory;
 using BountyBandits.Map;
+using System.Xml;
 
 namespace BountyBandits
 {
@@ -22,7 +23,7 @@ namespace BountyBandits
         public string name;
         private StatSet myStats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
-        public int currenthealth = 5, maxspecial = 5, currentspecial = 5;
+        public int currenthealth = 5, currentspecial = 5;
         int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0;
         bool isFacingLeft = false, attackComputed = true;
@@ -145,7 +146,7 @@ namespace BountyBandits
             {
                 //TODOjrob make some fancy effect on levelup
                 myStats.setStatValue(StatType.Life, myStats.getStatValue(StatType.Life) + 1);
-                maxspecial += 1;
+                myStats.setStatValue(StatType.Special, myStats.getStatValue(StatType.Special) + 1);
                 xpOfNextLevel = gameref.xpManager.getXPToLevelUp(++level);
                 unusedAttr += 5;
             }
@@ -210,7 +211,7 @@ namespace BountyBandits
             body.MomentOfInertia = float.MaxValue;
             setCollisionCategories(CollisionCategory.Cat1);
             currenthealth = getStat(StatType.Life);
-            currentspecial = maxspecial;
+            currentspecial = getStat(StatType.Special);
         }
         public void setCollisionCategories(CollisionCategory newCat)
         {
@@ -299,6 +300,18 @@ namespace BountyBandits
 				}
             }
 			#endregion
+        }
+        public void asXML(XmlNode parentNode)
+        {
+            XmlElement beingElement = parentNode.OwnerDocument.CreateElement("being");
+            beingElement.SetAttribute("name", name);
+            beingElement.SetAttribute("xp", xp.ToString());
+            beingElement.SetAttribute("level", level.ToString());
+            beingElement.SetAttribute("unusedAttr", unusedAttr.ToString());
+            beingElement.SetAttribute("xpOfNextLevel", xpOfNextLevel.ToString());
+            myStats.asXML(beingElement);
+            itemManager.asXML(beingElement);
+            parentNode.AppendChild(beingElement);
         }
     }
 }

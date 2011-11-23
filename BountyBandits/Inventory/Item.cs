@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Stats;
+using System.Xml;
 
 namespace BountyBandits.Inventory
 {
@@ -63,5 +64,16 @@ namespace BountyBandits.Inventory
         public String getTextureName() { return textureName; }
         public ItemType getItemType() { return type; }
         public ItemClass getItemClass() { return itemClass; }
+
+        public void asXML(XmlNode parentNode)
+        {
+            XmlElement itemElement = parentNode.OwnerDocument.CreateElement("item");
+            itemElement.SetAttribute("type", type.ToString());
+            itemElement.SetAttribute("class", itemClass.ToString());
+            itemElement.SetAttribute("name", name);
+            itemElement.SetAttribute("textureName", textureName);
+            stats.asXML(itemElement);
+            parentNode.AppendChild(itemElement);
+        }
     }
 }

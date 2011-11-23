@@ -51,18 +51,7 @@ namespace BountyBandits.Inventory
         {
             XmlElement inventoryElement = parentNode.OwnerDocument.CreateElement("inventory");
             foreach (ItemType type in items.Keys)
-            {
-                Item item = items[type];
-                XmlElement itemElement = parentNode.OwnerDocument.CreateElement("item");
-                itemElement.SetAttribute("type", type.ToString());
-                itemElement.SetAttribute("class", item.getItemClass().ToString());
-                itemElement.SetAttribute("name", item.getName());
-                itemElement.SetAttribute("textureName", item.getTextureName());
-                XMLUtil.asXMLColor(itemElement, item.getPrimaryColor(), "primaryColor");
-                XMLUtil.asXMLColor(itemElement, item.getSecondaryColor(), "secondaryColor");
-                item.getStats().asXML(itemElement);
-                inventoryElement.AppendChild(itemElement);
-            }
+                items[type].asXML(inventoryElement);
             parentNode.AppendChild(inventoryElement);
         }
     }

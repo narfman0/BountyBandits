@@ -326,7 +326,7 @@ namespace BountyBandits
 
                             for (int specialIndex = 0; specialIndex < currPlayer.currentspecial; ++specialIndex)
                                 spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
-                            spriteBatch.DrawString(vademecumFont12, currPlayer.currentspecial + "/" + currPlayer.maxspecial, new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
+                            spriteBatch.DrawString(vademecumFont12, currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
 
                         }
                         #endregion
