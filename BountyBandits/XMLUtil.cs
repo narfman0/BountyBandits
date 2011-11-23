@@ -33,5 +33,20 @@ namespace BountyBandits
                     b = byte.Parse(subnode.FirstChild.Value);
             return new Color(r,g,b);
         }
+
+        public static void asXMLColor(XmlNode parentNode, Color color, String name)
+        {
+            XmlElement colorElement = parentNode.OwnerDocument.CreateElement(name),
+                rElement = parentNode.OwnerDocument.CreateElement("r"),
+                gElement = parentNode.OwnerDocument.CreateElement("g"),
+                bElement = parentNode.OwnerDocument.CreateElement("b");
+            rElement.Value = color.R.ToString();
+            gElement.Value = color.G.ToString();
+            bElement.Value = color.B.ToString();
+            colorElement.AppendChild(rElement);
+            colorElement.AppendChild(gElement);
+            colorElement.AppendChild(bElement);
+            parentNode.AppendChild(colorElement);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 
 namespace BountyBandits.Inventory
 {
@@ -40,6 +41,29 @@ namespace BountyBandits.Inventory
             foreach (Item item in items.Values)
                 total += item.getStats().getStatValue(type);
             return total;
+        }
+
+        /// <summary>
+        /// Represent this in XML
+        /// </summary>
+        /// <param name="parentNode">parent to be appended</param>
+        public void asXML(XmlNode parentNode)
+        {
+            XmlElement inventoryElement = parentNode.OwnerDocument.CreateElement("inventory");
+            foreach (ItemType type in items.Keys)
+            {
+                Item item = items[type];
+                XmlElement itemElement = parentNode.OwnerDocument.CreateElement("item");
+                itemElement.SetAttribute("type", type.ToString());
+                itemElement.SetAttribute("class", item.getItemClass().ToString());
+                itemElement.SetAttribute("name", item.getName());
+                itemElement.SetAttribute("textureName", item.getTextureName());
+                XMLUtil.asXMLColor(itemElement, item.getPrimaryColor(), "primaryColor");
+                XMLUtil.asXMLColor(itemElement, item.getSecondaryColor(), "secondaryColor");
+                item.getStats().asXML(itemElement);
+                inventoryElement.AppendChild(itemElement);
+            }
+            parentNode.AppendChild(inventoryElement);
         }
     }
 }

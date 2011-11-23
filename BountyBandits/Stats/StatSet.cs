@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
 
 namespace BountyBandits.Stats
 {
@@ -18,5 +19,19 @@ namespace BountyBandits.Stats
         public int getStatValue(StatType type) { return getStat(type).getValue(); }
         public void setStatValue(StatType type, int value) { getStat(type).setValue(value); }
         public void addStatValue(StatType type, int addValue) { setStatValue(type, getStatValue(type) + addValue); }
+
+        public void asXML(XmlElement parentNode)
+        {
+            XmlElement statsElement = parentNode.OwnerDocument.CreateElement("stats");
+            foreach (StatType type in statsTable.Keys)
+            {
+                Stat item = statsTable[type];
+                XmlElement itemElement = parentNode.OwnerDocument.CreateElement("stat");
+                itemElement.SetAttribute("type", type.ToString());
+                itemElement.Value = item.getValue().ToString();
+                statsElement.AppendChild(itemElement);
+            }
+            parentNode.AppendChild(statsElement);
+        }
     }
 }
