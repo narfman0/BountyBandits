@@ -87,7 +87,7 @@ namespace BountyBandits.Animation
                         {
                             Color[] colors = new Color[permutationNode.ChildNodes.Count];
                             for (int colorIndex = 0; colorIndex < colors.Length; colorIndex++)
-                                colors[colorIndex] = XMLUtil.colorFromXML(permutationNode.ChildNodes.Item(colorIndex));
+                                colors[colorIndex] = XMLUtil.fromXMLColor(permutationNode.ChildNodes.Item(colorIndex));
                             permutations.Add(colors);
                         }
                 }

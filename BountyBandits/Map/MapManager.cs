@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Story;
 
-namespace BountyBandits
+namespace BountyBandits.Map
 {
     public class MapManager
     {

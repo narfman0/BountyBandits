@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using BountyBandits.Stats;
+using BountyBandits.Map;
 
 namespace BountyBandits
 {

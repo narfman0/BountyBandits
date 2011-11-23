@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Story;
 
-namespace BountyBandits
+namespace BountyBandits.Map
 {
     public class Level
     {

@@ -26,6 +26,7 @@ namespace BountyBandits
             xboxButtonToKeyboardKey.Add(Buttons.Back, Keys.C);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadUp, Keys.W);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadDown, Keys.S);
+            xboxButtonToKeyboardKeySecondary.Add(Buttons.A, Keys.Enter);
         }
 
         private bool getButtonHit(Buttons target, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)

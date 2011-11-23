@@ -10,7 +10,7 @@ namespace BountyBandits
 {
     public static class XMLUtil
     {
-        public static Vector2 fromXML(XmlNode node)
+        public static Vector2 fromXMLVector2(XmlNode node)
         {
             Vector2 vec = Vector2.Zero;
             foreach (XmlNode subnode in node.ChildNodes)
@@ -21,7 +21,7 @@ namespace BountyBandits
             return vec;
         }
 
-        public static Color colorFromXML(XmlNode xmlNode)
+        public static Color fromXMLColor(XmlNode xmlNode)
         {
             byte r = 0, g = 0, b = 0;
             foreach (XmlNode subnode in xmlNode.ChildNodes)

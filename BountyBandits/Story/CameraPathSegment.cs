@@ -29,9 +29,9 @@ namespace BountyBandits.Story
             CameraPathSegment element = new CameraPathSegment();
             foreach (XmlNode subnode in pathSegment.ChildNodes)
                 if (subnode.Name.Equals("begin"))
-                    element.begin = XMLUtil.fromXML(subnode.FirstChild);
+                    element.begin = XMLUtil.fromXMLVector2(subnode.FirstChild);
                 else if (subnode.Name.Equals("end"))
-                    element.end = XMLUtil.fromXML(subnode.FirstChild);
+                    element.end = XMLUtil.fromXMLVector2(subnode.FirstChild);
                 else if (subnode.Name.Equals("msSpan"))
                     element.msSpan = int.Parse(subnode.FirstChild.Value);
                 else if (subnode.Name.Equals("msStart"))

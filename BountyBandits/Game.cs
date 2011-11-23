@@ -17,6 +17,7 @@ using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 using BountyBandits.Stats;
 using BountyBandits.Animation;
+using BountyBandits.Map;
 
 namespace BountyBandits
 {
@@ -30,6 +31,7 @@ namespace BountyBandits
         };
         #region Fields
         public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 4000f;
+        DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
         GameTime previousGameTime;
         SpriteBatch spriteBatch;
@@ -211,12 +213,21 @@ namespace BountyBandits
                 #endregion
                 #region world map
                 case GameState.WorldMap:
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                    if (input.getButtonHit(Buttons.Back))
                         currentState.setState(GameState.RootMenu);
-                    if (Keyboard.GetState().IsKeyDown(Keys.Enter) || GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
+                    if (input.getButtonHit(Buttons.A))
                         newLevel();
-                    if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                        ;//TODOjrob mapManager.currentLevelIndex++;
+                    if (input.getButtonHit(Buttons.DPadRight))
+                    {
+                        bool isUnlocked = true;
+                        foreach (Being player in players)
+                            if (!player.unlocked.isUnlocked(mapManager.guid, difficulty, mapManager.currentLevelIndex + 1))
+                                isUnlocked = false;
+                        if(isUnlocked)
+                            mapManager.currentLevelIndex++;
+                    }if (input.getButtonHit(Buttons.DPadLeft))
+                        if (mapManager.currentLevelIndex > 0)
+                            mapManager.currentLevelIndex--;
                     break;
                 #endregion
             }
@@ -423,8 +434,7 @@ namespace BountyBandits
         public void endLevel()
         {
             foreach (Being player in players)
-                if (player.unlocked.Y == mapManager.currentLevelIndex)
-                    player.unlocked.Y++;
+                player.unlocked.add(mapManager, difficulty);
             mapManager.currentLevelIndex++;
             currentState.setState(GameState.WorldMap);
         }
@@ -473,21 +483,13 @@ namespace BountyBandits
         public void newLevel()
         {
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
-            #region check what level to go to - lowest between everyone
-            int lowestLevel = 0;
-            foreach (Being player in players)
-            {
-                player.newLevel();
-                player.currenthealth = player.getStat(BountyBandits.Stats.StatType.Life);
-                lowestLevel = (player.unlocked.Y < lowestLevel) ? (int)player.unlocked.Y : lowestLevel;
-            }
-            mapManager.currentLevelIndex = lowestLevel;
-            #endregion
             #region add gameitems
             activeItems = new List<GameItem>();
             foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
                 if (spawn.type != null)
                     animationManager.getController(spawn.type);
+            foreach (Being player in players)
+                player.newLevel();
             foreach (GameItem item in mapManager.getCurrentLevel().items)
             {
                 Geom geom = new Geom();

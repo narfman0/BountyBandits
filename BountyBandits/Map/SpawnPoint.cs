@@ -7,7 +7,7 @@ using System.Text;
 using System.Xml;
 using Microsoft.Xna.Framework;
 
-namespace BountyBandits
+namespace BountyBandits.Map
 {
     public class SpawnPoint
     {

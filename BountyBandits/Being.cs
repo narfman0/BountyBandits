@@ -11,6 +11,7 @@ using FarseerGames.FarseerPhysics.Factories;
 using BountyBandits.Animation;
 using BountyBandits.Stats;
 using BountyBandits.Inventory;
+using BountyBandits.Map;
 
 namespace BountyBandits
 {
@@ -34,7 +35,7 @@ namespace BountyBandits
         public KeyboardState prevKeyboardState = new KeyboardState(); public GamePadState prevGamePadState = new GamePadState();
 
         //player specific fields
-        public Vector2 unlocked = Vector2.Zero; //first is difficulty, second is actual level
+        public UnlockedManager unlocked = new UnlockedManager(); //first is difficulty, second is actual level
         public PlayerIndex controllerIndex;
         public Menu menu = new Menu();
         //enemy specific fields
