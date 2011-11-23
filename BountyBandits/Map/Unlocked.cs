@@ -17,26 +17,27 @@ namespace BountyBandits.Map
         /// </summary>
         /// <param name="inputNode">Node getting appended</param>
         /// <returns></returns>
-        public void asXML(XmlNode inputNode)
+        public XmlNode asXML(XmlNode inputNode)
         {
-            XmlNode node = inputNode.OwnerDocument.CreateNode(XmlNodeType.Element, "levelsUnlocked", "");
+            XmlNode node = inputNode.OwnerDocument.CreateElement("levelsUnlocked");
             foreach (Guid guid in campaignsUnlocked.Keys)
             {
-                XmlElement guidnode = (XmlElement)inputNode.OwnerDocument.CreateNode(XmlNodeType.Element, "difficultyUnlocked", "");
+                XmlElement guidnode = campaignsUnlocked[guid].asXML(node);
                 guidnode.SetAttribute("guid", guid.ToString());
-                foreach (DifficultyEnum diffENum in campaignsUnlocked[guid].difficultiesUnlocked.Keys)
-                {
-                    XmlElement diffnode = (XmlElement)inputNode.OwnerDocument.CreateNode(XmlNodeType.Element, "levels", "");
-                    diffnode.SetAttribute("difficulty", diffENum.ToString());
-                    String levels = "";
-                    foreach (int level in campaignsUnlocked[guid].difficultiesUnlocked[diffENum].levelsUnlocked)
-                        levels += level + ",";
-                    diffnode.Value = levels;
-                    guidnode.AppendChild(diffnode);
-                }
                 node.AppendChild(guidnode);
             }
-            inputNode.AppendChild(node);
+            return node;
+        }
+
+        public static UnlockedManager fromXML(XmlElement xmlElement)
+        {
+            UnlockedManager manager = new UnlockedManager();
+            foreach(XmlElement element in xmlElement.GetElementsByTagName("difficultyUnlocked"))
+            {
+                DifficultyProgress prog = DifficultyProgress.fromXML(element);
+                manager.campaignsUnlocked.Add(new Guid(element.GetAttribute("guid")), prog);
+            }
+            return manager;
         }
 
         /// <summary>
@@ -70,11 +71,46 @@ namespace BountyBandits.Map
     public class DifficultyProgress
     {
         public Dictionary<DifficultyEnum, LevelsUnlocked> difficultiesUnlocked = new Dictionary<DifficultyEnum, LevelsUnlocked>();
+
+        public XmlElement asXML(XmlNode parentNode)
+        {
+            XmlElement diffUnlockedNode = parentNode.OwnerDocument.CreateElement("difficultyUnlocked");
+            foreach (DifficultyEnum diffENum in difficultiesUnlocked.Keys)
+            {
+                XmlElement levelsNode = parentNode.OwnerDocument.CreateElement("levels");
+                levelsNode.SetAttribute("difficulty", diffENum.ToString());
+                String levels = "";
+                foreach (int level in difficultiesUnlocked[diffENum].levelsUnlocked)
+                    levels += level + ",";
+                levelsNode.Value = levels;
+                diffUnlockedNode.AppendChild(levelsNode);
+            }
+            return diffUnlockedNode;
+        }
+
+        public static DifficultyProgress fromXML(XmlElement element)
+        {
+            DifficultyProgress progress = new DifficultyProgress();
+            foreach (XmlElement levelsNode in element)
+            {
+                DifficultyEnum difficulty = (DifficultyEnum)Enum.Parse(typeof(DifficultyEnum), levelsNode.GetAttribute("difficulty"));
+                List<int> levels = new List<int>();
+                foreach(String level in levelsNode.Value.Split(','))
+                    levels.Add(int.Parse(level));
+                progress.difficultiesUnlocked.Add(difficulty, new LevelsUnlocked(levels));
+            }
+            return progress;
+        }
     }
 
     public class LevelsUnlocked
     {
         public List<int> levelsUnlocked = new List<int>();
+        public LevelsUnlocked() { }
+        public LevelsUnlocked(List<int> levelsUnlocked)
+        {
+            this.levelsUnlocked = levelsUnlocked;
+        }
         public bool isUnlocked(int unlocked)
         {
             foreach (int lvl in levelsUnlocked)

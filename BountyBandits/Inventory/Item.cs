@@ -65,15 +65,24 @@ namespace BountyBandits.Inventory
         public ItemType getItemType() { return type; }
         public ItemClass getItemClass() { return itemClass; }
 
-        public void asXML(XmlNode parentNode)
+        public XmlNode asXML(XmlNode parentNode)
         {
             XmlElement itemElement = parentNode.OwnerDocument.CreateElement("item");
             itemElement.SetAttribute("type", type.ToString());
             itemElement.SetAttribute("class", itemClass.ToString());
             itemElement.SetAttribute("name", name);
             itemElement.SetAttribute("textureName", textureName);
-            stats.asXML(itemElement);
-            parentNode.AppendChild(itemElement);
+            itemElement.AppendChild(stats.asXML(itemElement));
+            return itemElement;
+        }
+
+        public static Item fromXML(XmlElement element)
+        {
+            ItemType type = (ItemType)Enum.Parse(typeof(ItemType), element.GetAttribute("type"));
+            ItemClass itemClass = (ItemClass)Enum.Parse(typeof(ItemClass), element.GetAttribute("class"));
+            String name = element.GetAttribute("name"), textureName = element.GetAttribute("textureName");
+            StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
+            return new Item(name, stats, type, textureName, itemClass);
         }
     }
 }

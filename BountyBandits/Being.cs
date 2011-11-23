@@ -301,7 +301,7 @@ namespace BountyBandits
             }
 			#endregion
         }
-        public void asXML(XmlNode parentNode)
+        public XmlElement asXML(XmlNode parentNode)
         {
             XmlElement beingElement = parentNode.OwnerDocument.CreateElement("being");
             beingElement.SetAttribute("name", name);
@@ -309,9 +309,25 @@ namespace BountyBandits
             beingElement.SetAttribute("level", level.ToString());
             beingElement.SetAttribute("unusedAttr", unusedAttr.ToString());
             beingElement.SetAttribute("xpOfNextLevel", xpOfNextLevel.ToString());
-            myStats.asXML(beingElement);
-            itemManager.asXML(beingElement);
-            parentNode.AppendChild(beingElement);
+            beingElement.SetAttribute("animationControllerName", controller.name);
+            beingElement.AppendChild(myStats.asXML(beingElement));
+            beingElement.AppendChild(itemManager.asXML(beingElement));
+            beingElement.AppendChild(unlocked.asXML(beingElement));
+            return beingElement;
+        }
+
+        public static Being fromXML(XmlElement element, Game gameref)
+        {
+            String name = element.GetAttribute("name"),
+                controllerName = element.GetAttribute("animationControllerName");
+            StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
+            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName));
+            being.xp = int.Parse(element.GetAttribute("xp"));
+            being.level = int.Parse(element.GetAttribute("level"));
+            being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
+            being.xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
+            being.unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("unlocked").Item(0));
+            return being;
         }
     }
 }

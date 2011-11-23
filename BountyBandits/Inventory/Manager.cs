@@ -47,12 +47,20 @@ namespace BountyBandits.Inventory
         /// Represent this in XML
         /// </summary>
         /// <param name="parentNode">parent to be appended</param>
-        public void asXML(XmlNode parentNode)
+        public XmlNode asXML(XmlNode parentNode)
         {
             XmlElement inventoryElement = parentNode.OwnerDocument.CreateElement("inventory");
             foreach (ItemType type in items.Keys)
-                items[type].asXML(inventoryElement);
-            parentNode.AppendChild(inventoryElement);
+                inventoryElement.AppendChild(items[type].asXML(inventoryElement));
+            return inventoryElement;
+        }
+
+        public static InventoryManager fromXML(XmlElement element)
+        {
+            InventoryManager manager = new InventoryManager();
+            foreach (XmlElement itemElement in element.GetElementsByTagName("item"))
+                manager.putItem(Item.fromXML(itemElement));
+            return manager;
         }
     }
 }
