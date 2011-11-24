@@ -1,0 +1,64 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.IO;
+
+namespace BountyBandits
+{
+    public class SaveManager
+    {
+        private static String SAVE_PATH = Environment.SpecialFolder.MyDocuments + @"\My Games\Bounty Bandits\";
+        private static int NUM_BACKUPS = 10;
+
+        public static void saveCharacter(Being being)
+        {
+            try
+            {
+                Directory.CreateDirectory(SAVE_PATH);
+                string filename = SAVE_PATH + being.name + ".xml";
+                backupSaves(filename, NUM_BACKUPS);
+                XmlDocument xmlDoc = new XmlDocument();
+                try
+                {
+                    xmlDoc.Load(filename);
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    //if file is not found, create a new xml file
+                    XmlTextWriter xmlWriter = new XmlTextWriter(filename, System.Text.Encoding.UTF8);
+                    xmlWriter.Formatting = Formatting.Indented;
+                    xmlWriter.WriteProcessingInstruction("xml", "version='1.0' encoding='UTF-8'");
+                    xmlWriter.WriteStartElement("Root");
+                    //If WriteProcessingInstruction is used as above,
+                    //Do not use WriteEndElement() here
+                    //xmlWriter.WriteEndElement();
+                    //it will cause the <Root> to be &ltRoot />
+                    xmlWriter.Close();
+                    xmlDoc.Load(filename);
+                }
+                XmlNode root = xmlDoc.DocumentElement;
+                root.AppendChild(being.asXML(root));
+                xmlDoc.Save(filename);
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        public static void backupSaves(String path, int iteration)
+        {
+            if(iteration == 0)
+                return;
+            String newPath = path.Substring(0, path.Length - 2) + (iteration > 9 ? "" : "0") + iteration;
+            try
+            {
+                File.Move(path, newPath);
+            }
+            catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
+            backupSaves(newPath, iteration-1);
+        }
+    }
+}

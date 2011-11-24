@@ -28,7 +28,7 @@ namespace BountyBandits.Stats
                 Stat item = statsTable[type];
                 XmlElement itemElement = parentNode.OwnerDocument.CreateElement("stat");
                 itemElement.SetAttribute("type", type.ToString());
-                itemElement.Value = item.getValue().ToString();
+                itemElement.SetAttribute("value", item.getValue().ToString());
                 statsElement.AppendChild(itemElement);
             }
             return statsElement;
@@ -40,7 +40,7 @@ namespace BountyBandits.Stats
             foreach(XmlElement statEle in element.GetElementsByTagName("stat"))
             {
                 StatType type = (StatType)Enum.Parse(typeof(StatType), statEle.GetAttribute("type"));
-                int value = int.Parse(statEle.Value);
+                int value = int.Parse(statEle.GetAttribute("value"));
                 statSet.addStatValue(type, value);
             }
             return statSet;

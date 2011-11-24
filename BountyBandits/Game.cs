@@ -434,7 +434,10 @@ namespace BountyBandits
         public void endLevel()
         {
             foreach (Being player in players)
+            {
                 player.unlocked.add(mapManager, difficulty);
+                SaveManager.saveCharacter(player);
+            }
             mapManager.currentLevelIndex++;
             currentState.setState(GameState.WorldMap);
         }

@@ -82,7 +82,7 @@ namespace BountyBandits.Map
                 String levels = "";
                 foreach (int level in difficultiesUnlocked[diffENum].levelsUnlocked)
                     levels += level + ",";
-                levelsNode.Value = levels;
+                levelsNode.SetAttribute("levels", levels);
                 diffUnlockedNode.AppendChild(levelsNode);
             }
             return diffUnlockedNode;
@@ -95,7 +95,7 @@ namespace BountyBandits.Map
             {
                 DifficultyEnum difficulty = (DifficultyEnum)Enum.Parse(typeof(DifficultyEnum), levelsNode.GetAttribute("difficulty"));
                 List<int> levels = new List<int>();
-                foreach(String level in levelsNode.Value.Split(','))
+                foreach(String level in levelsNode.GetAttribute("levels").Split(','))
                     levels.Add(int.Parse(level));
                 progress.difficultiesUnlocked.Add(difficulty, new LevelsUnlocked(levels));
             }
