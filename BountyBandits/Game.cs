@@ -210,8 +210,8 @@ namespace BountyBandits
                             else
                             {
                                 Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("cowboy"));
-                                if(characterSelectedIndex[index] == 0){
-                                    int charindex = characterSelectedIndex[index] + 1;
+                                if(characterSelectedIndex[index] != 0){
+                                    int charindex = characterSelectedIndex[index] - 1;
                                     String characterName = characterOptions[charindex];
                                     player = SaveManager.loadCharacter(characterName, this);
                                 }
@@ -236,7 +236,7 @@ namespace BountyBandits
                             }
                             characterSelectedIndex[index] = selected;
                             if (characterOptions.Count < selected)
-                                characterSelectedIndex[index] = 0;
+                                characterSelectedIndex[index] = characterOptions.Count;
                         }
                         if (input.getButtonDown(Buttons.DPadUp) || input.getButtonDown(Buttons.LeftThumbstickUp))
                         {
@@ -250,6 +250,8 @@ namespace BountyBandits
                                     playerIndex = 0;
                                 }
                             }
+                            if (selected <= 0)
+                                selected = 0;
                             characterSelectedIndex[index] = selected;
                         }
                         if (index == PlayerIndex.One && input.getButtonDown(Buttons.Back))
