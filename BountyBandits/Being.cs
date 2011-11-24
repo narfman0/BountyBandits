@@ -326,7 +326,7 @@ namespace BountyBandits
             being.level = int.Parse(element.GetAttribute("level"));
             being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
             being.xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
-            being.unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("unlocked").Item(0));
+            being.unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
             return being;
         }
     }

@@ -9,9 +9,16 @@ namespace BountyBandits
 {
     public class SaveManager
     {
-        private static String SAVE_PATH = Environment.SpecialFolder.MyDocuments + @"\My Games\Bounty Bandits\";
+        private static String SAVE_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\Bounty Bandits\";
         private static int NUM_BACKUPS = 10;
 
+        public static string[] getAvailableCharacterNames()
+        {
+            string[] files = Directory.GetFiles(SAVE_PATH, "*.xml");
+            for (int i = 0; i < files.Length; i++)
+                files[i] = files[i].Substring(files[i].LastIndexOf(@"\")+1);
+            return files;
+        }
         public static void saveCharacter(Being being)
         {
             try
@@ -30,7 +37,7 @@ namespace BountyBandits
                     XmlTextWriter xmlWriter = new XmlTextWriter(filename, System.Text.Encoding.UTF8);
                     xmlWriter.Formatting = Formatting.Indented;
                     xmlWriter.WriteProcessingInstruction("xml", "version='1.0' encoding='UTF-8'");
-                    xmlWriter.WriteStartElement("Root");
+                    xmlWriter.WriteStartElement("root");
                     //If WriteProcessingInstruction is used as above,
                     //Do not use WriteEndElement() here
                     //xmlWriter.WriteEndElement();
@@ -47,7 +54,6 @@ namespace BountyBandits
                 System.Console.WriteLine(ex.StackTrace);
             }
         }
-
         public static void backupSaves(String path, int iteration)
         {
             if(iteration == 0)
@@ -59,6 +65,13 @@ namespace BountyBandits
             }
             catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
             backupSaves(newPath, iteration-1);
+        }
+        public static Being loadCharacter(string beingName, Game gameref)
+        {
+            string filename = SAVE_PATH + beingName;
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(filename);
+            return Being.fromXML((XmlElement)xmlDoc.GetElementsByTagName("being").Item(0), gameref);
         }
     }
 }

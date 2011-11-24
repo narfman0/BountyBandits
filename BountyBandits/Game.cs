@@ -49,7 +49,11 @@ namespace BountyBandits
         public Geom groundGeom;
         public TextureManager texMan;
         public XPManager xpManager = new XPManager();
+        public static MarkovNameGenerator nameGenerator;
         private Input input;
+        //choosing characters
+        List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
+        Dictionary<PlayerIndex, int> characterSelectedIndex = new Dictionary<PlayerIndex, int>();
         #endregion
         public Game()
         {
@@ -66,6 +70,7 @@ namespace BountyBandits
         }
         protected override void LoadContent()
         {
+            nameGenerator = new MarkovNameGenerator(MarkovNameGenerator.SAMPLES, 3, 5);
             texMan = new TextureManager(Content);
             vademecumFont12 = Content.Load<SpriteFont>(@"Fonts\vademecum12");
             vademecumFont18 = Content.Load<SpriteFont>(@"Fonts\vademecum18");
@@ -79,8 +84,8 @@ namespace BountyBandits
             animationManager = new AnimationManager(this);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
-            players.Add(new Being("temp", 1, this, animationManager.getController("cowboy")));
-            players[0].controllerIndex = PlayerIndex.One;
+            foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
+                characterSelectedIndex.Add(playerIndex, -1);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -101,7 +106,8 @@ namespace BountyBandits
                             {
                                 currentplayer.update(gameTime);
                                 #region Input
-                                input.setCurrentInput(currentplayer.prevKeyboardState, GamePad.GetState(index), currentplayer.prevGamePadState);
+                                input.setCurrentInput(Keyboard.GetState(index), currentplayer.prevKeyboardState,
+                                    GamePad.GetState(index), currentplayer.prevGamePadState);
                                 if (input.getButtonDown(Buttons.LeftThumbstickLeft))
                                     currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
                                 if (input.getButtonDown(Buttons.LeftThumbstickRight))
@@ -156,12 +162,13 @@ namespace BountyBandits
                                     }
                                 }
 #if DEBUG
-                                if (Keyboard.GetState().IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
+                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
                                     spawnManager.spawnGroup("cowboy", 1, 1);
-                                if (Keyboard.GetState().IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
+                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
                                     foreach (Being player in players)
                                         player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                                if (Keyboard.GetState().IsKeyDown(Keys.F5) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F5)){
+                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F5) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F5))
+                                {
                                     DropItem item = new DropItem();
                                     item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
                                     item.body.Position = new Vector2(currentplayer.body.Position.X, currentplayer.body.Position.Y+25);
@@ -182,7 +189,7 @@ namespace BountyBandits
                                 }
 #endif
                                 currentplayer.prevGamePadState = GamePad.GetState(index);
-                                currentplayer.prevKeyboardState = Keyboard.GetState();
+                                currentplayer.prevKeyboardState = Keyboard.GetState(index);
                                 #endregion
                             }
                     spawnManager.update(gameTime);
@@ -192,42 +199,82 @@ namespace BountyBandits
                 #endregion
                 #region root menu
                 case GameState.RootMenu:
-                    foreach(PlayerIndex index in System.Enum.GetValues(typeof(PlayerIndex)))
-                        if (GamePad.GetState(index).Buttons.Start == ButtonState.Pressed){
-                            Boolean found = false;
-                            foreach(Being player in players)
-                                if(player.controllerIndex == index)
-                                    found = true;
-                            if (!found)
+                    foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
+                    {
+                        input.setCurrentInput(Keyboard.GetState(index), Keyboard.GetState(index), 
+                            GamePad.GetState(index), GamePad.GetState(index));
+                        if (input.getButtonDown(Buttons.A))
+                        {
+                            if (characterSelectedIndex[index] == -1)
+                                characterSelectedIndex[index] = 0;
+                            else
                             {
-                                players.Add(new Being("newName" + index.ToString(), 1, this, animationManager.getController("cow")));
+                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("cowboy"));
+                                if(characterSelectedIndex[index] == 0){
+                                    int charindex = characterSelectedIndex[index] + 1;
+                                    String characterName = characterOptions[charindex];
+                                    player = SaveManager.loadCharacter(characterName, this);
+                                }
+                                for (int extraPlayerIndex = 0; extraPlayerIndex < players.Count; extraPlayerIndex++)
+                                    if (players[extraPlayerIndex].controllerIndex == index)
+                                        players.RemoveAt(extraPlayerIndex--);
+                                players.Add(player);
                                 players[players.Count - 1].controllerIndex = index;
                             }
                         }
-
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                        Exit();
-                    if (Keyboard.GetState().IsKeyDown(Keys.Enter) || GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed)
-                        currentState.setState(GameState.WorldMap);
+                        if (input.getButtonDown(Buttons.DPadDown) || input.getButtonDown(Buttons.LeftThumbstickDown))
+                        {
+                            int selected = characterSelectedIndex[index] + 1;
+                            PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
+                            for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
+                            {
+                                if (characterSelectedIndex[indices[playerIndex]] == selected)
+                                {
+                                    selected++;
+                                    playerIndex = 0;
+                                }
+                            }
+                            characterSelectedIndex[index] = selected;
+                            if (characterOptions.Count < selected)
+                                characterSelectedIndex[index] = 0;
+                        }
+                        if (input.getButtonDown(Buttons.DPadUp) || input.getButtonDown(Buttons.LeftThumbstickUp))
+                        {
+                            int selected = characterSelectedIndex[index] - 1;
+                            PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
+                            for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
+                            {
+                                if (selected != 0 && characterSelectedIndex[indices[playerIndex]] == selected)
+                                {
+                                    selected--;
+                                    playerIndex = 0;
+                                }
+                            }
+                            characterSelectedIndex[index] = selected;
+                        }
+                        if (index == PlayerIndex.One && input.getButtonDown(Buttons.Back))
+                            Exit();
+                        if (players.Count > 1 && index == PlayerIndex.One && input.getButtonDown(Buttons.A))
+                            currentState.setState(GameState.WorldMap);
+                    }
                     break;
                 #endregion
                 #region world map
                 case GameState.WorldMap:
-                    if (input.getButtonHit(Buttons.Back))
-                        currentState.setState(GameState.RootMenu);
-                    if (input.getButtonHit(Buttons.A))
-                        newLevel();
-                    if (input.getButtonHit(Buttons.DPadRight))
+                    foreach (Being player in players)
                     {
-                        bool isUnlocked = true;
-                        foreach (Being player in players)
-                            if (!player.unlocked.isUnlocked(mapManager.guid, difficulty, mapManager.currentLevelIndex + 1))
-                                isUnlocked = false;
-                        if(isUnlocked)
-                            mapManager.currentLevelIndex++;
-                    }if (input.getButtonHit(Buttons.DPadLeft))
-                        if (mapManager.currentLevelIndex > 0)
-                            mapManager.currentLevelIndex--;
+                        input.setCurrentInput(Keyboard.GetState(), player.prevKeyboardState,
+                            GamePad.GetState(player.controllerIndex), player.prevGamePadState);
+                        if (input.getButtonHit(Buttons.Back))
+                            currentState.setState(GameState.RootMenu);
+                        if (input.getButtonHit(Buttons.A))
+                            newLevel();
+                        if (input.getButtonHit(Buttons.DPadRight))
+                            if (isUnlocked(mapManager.getCurrentLevelIndex() + 1))
+                                mapManager.incrementCurrentLevel(true);
+                        if (input.getButtonHit(Buttons.DPadLeft))
+                            mapManager.incrementCurrentLevel(false);
+                    }
                     break;
                 #endregion
             }
@@ -237,10 +284,16 @@ namespace BountyBandits
             Thread.Sleep(5);
             base.Update(gameTime);
         }
+        private bool isUnlocked(int level)
+        {
+            foreach (Being player in players)
+                if (!player.unlocked.isUnlocked(mapManager.guid, difficulty, level))
+                    return false;
+            return true;
+        }
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            StringBuilder buffer;
             Vector2 fontPos;
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
             switch (currentState.getState())
@@ -335,10 +388,28 @@ namespace BountyBandits
                 #endregion
                 #region root menu
                 case GameState.RootMenu:
-                    buffer = new StringBuilder();
                     fontPos = new Vector2(1.0f, 1.0f);
-                    buffer.AppendLine("Choose character, A to start game");
-                    spriteBatch.DrawString(vademecumFont24, buffer.ToString(), fontPos, Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black);
+                    fontPos = new Vector2(1.0f, res.ScreenHeight/2);
+                    foreach(PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
+                    {
+                        if (characterSelectedIndex[playerIndex] == -1)
+                            spriteBatch.DrawString(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black);
+                        else
+                        {
+                            List<String> saves = new List<string>();
+                            saves.Add("Create New...");
+                            saves.AddRange(SaveManager.getAvailableCharacterNames());
+                            for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
+                            {
+                                Color color = characterSelectedIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black;
+                                spriteBatch.DrawString(vademecumFont24, saves[saveIndex], fontPos, color);
+                                fontPos.Y += 28f;
+                            }
+                            fontPos.Y = res.ScreenHeight / 2;
+                        }
+                        fontPos.X += res.ScreenWidth / 4;
+                    }
                     break;
                 #endregion
                 #region worldmap
@@ -438,7 +509,7 @@ namespace BountyBandits
                 player.unlocked.add(mapManager, difficulty);
                 SaveManager.saveCharacter(player);
             }
-            mapManager.currentLevelIndex++;
+            mapManager.incrementCurrentLevel(true);
             currentState.setState(GameState.WorldMap);
         }
         public float getAveX()

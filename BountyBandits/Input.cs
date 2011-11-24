@@ -9,7 +9,7 @@ namespace BountyBandits
     {
         private Dictionary<Buttons, Keys> xboxButtonToKeyboardKey = new Dictionary<Buttons, Keys>(), 
             xboxButtonToKeyboardKeySecondary = new Dictionary<Buttons, Keys>();
-        KeyboardState keyPreviousState;
+        KeyboardState keyState, keyPreviousState;
         GamePadState padState, padPreviousState;
         public Input()
         {
@@ -22,6 +22,8 @@ namespace BountyBandits
             xboxButtonToKeyboardKey.Add(Buttons.DPadDown, Keys.Down);
             xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickLeft, Keys.A);
             xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickRight, Keys.D);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickUp, Keys.W);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickDown, Keys.S);
             xboxButtonToKeyboardKey.Add(Buttons.RightShoulder, Keys.E);
             xboxButtonToKeyboardKey.Add(Buttons.Back, Keys.C);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadUp, Keys.W);
@@ -29,15 +31,15 @@ namespace BountyBandits
             xboxButtonToKeyboardKeySecondary.Add(Buttons.A, Keys.Enter);
         }
 
-        private bool getButtonHit(Buttons target, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
+        private bool getButtonHit(Buttons target, KeyboardState keyCurrentState, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
         {
-            if (!getButtonDown(target, keyPreviousState, padState, padPreviousState) &&
-                getButtonDown(target, Keyboard.GetState(), padState, padPreviousState))
+            if (!getButtonDown(target, keyPreviousState, padPreviousState) &&
+                getButtonDown(target, keyCurrentState, padState))
                 return true;
             return false;
         }
 
-        private bool getButtonDown(Buttons target, KeyboardState keyState, GamePadState padState, GamePadState padPreviousState)
+        private bool getButtonDown(Buttons target, KeyboardState keyState, GamePadState padState)
         {
             if (padState.IsButtonDown(target) || keyState.IsKeyDown(xboxButtonToKeyboardKey[target]) ||
                 (xboxButtonToKeyboardKeySecondary.ContainsKey(target) && keyState.IsKeyDown(xboxButtonToKeyboardKeySecondary[target])))
@@ -45,8 +47,9 @@ namespace BountyBandits
             return false;
         }
 
-        public void setCurrentInput(KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
+        public void setCurrentInput(KeyboardState keyState, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
         {
+            this.keyState = keyState;
             this.keyPreviousState = keyPreviousState;
             this.padState = padState;
             this.padPreviousState = padPreviousState;
@@ -54,12 +57,12 @@ namespace BountyBandits
 
         public bool getButtonHit(Buttons target)
         {
-            return getButtonHit(target, keyPreviousState, padState, padPreviousState);
+            return getButtonHit(target, keyState, keyPreviousState, padState, padPreviousState);
         }
 
         public bool getButtonDown(Buttons target)
         {
-            return getButtonDown(target, keyPreviousState, padState, padPreviousState);
+            return getButtonDown(target, keyState, padState);
         }
         
     }

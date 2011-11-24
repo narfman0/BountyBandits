@@ -99,6 +99,7 @@
     <Compile Include="Map\Level.cs" />
     <Compile Include="Map\Unlocked.cs" />
     <Compile Include="Map\MapManager.cs" />
+    <Compile Include="MarkovNameGenerator.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolution.cs" />

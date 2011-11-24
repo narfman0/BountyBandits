@@ -63,8 +63,8 @@ namespace BountyBandits.Map
             if (!diffProgress.difficultiesUnlocked.ContainsKey(difficulty))
                 diffProgress.difficultiesUnlocked.Add(difficulty, new LevelsUnlocked());
             LevelsUnlocked unlocked = diffProgress.difficultiesUnlocked[difficulty];
-            if(!unlocked.isUnlocked(mapManager.currentLevelIndex))
-                unlocked.levelsUnlocked.Add(mapManager.currentLevelIndex);
+            if(!unlocked.isUnlocked(mapManager.getCurrentLevelIndex()))
+                unlocked.levelsUnlocked.Add(mapManager.getCurrentLevelIndex());
         }
     }
 
@@ -96,7 +96,11 @@ namespace BountyBandits.Map
                 DifficultyEnum difficulty = (DifficultyEnum)Enum.Parse(typeof(DifficultyEnum), levelsNode.GetAttribute("difficulty"));
                 List<int> levels = new List<int>();
                 foreach(String level in levelsNode.GetAttribute("levels").Split(','))
-                    levels.Add(int.Parse(level));
+                    try
+                    {
+                        levels.Add(int.Parse(level));
+                    }
+                    catch (Exception e) { System.Console.Write(e.StackTrace); }
                 progress.difficultiesUnlocked.Add(difficulty, new LevelsUnlocked(levels));
             }
             return progress;

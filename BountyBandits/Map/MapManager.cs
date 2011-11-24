@@ -17,9 +17,10 @@ namespace BountyBandits.Map
             DEFAULT_CAMPAIGN_PATH = CAMPAIGNS_PATH + @"default\",
             MAP_FILENAME = "map.xml";
         List<Level> levels;
-        public int currentLevelIndex;
+        private int currentLevelIndex;
         public Guid guid;
         public Texture2D worldBackground;
+        public int getCurrentLevelIndex() { return currentLevelIndex; }
 
         public MapManager(Game gameref, String campaignPath){
             levels = new List<Level>();
@@ -84,6 +85,13 @@ namespace BountyBandits.Map
         }
         public List<Level> getLevels() { return levels; }
         public Level getCurrentLevel() { return getLevelByNumber(currentLevelIndex); }
+        public void incrementCurrentLevel(bool up)
+        {
+            if(up && getLevelByNumber(currentLevelIndex) != null)
+                currentLevelIndex++;
+            if(!up && currentLevelIndex > 0)
+                currentLevelIndex--;
+        }
         public Level getLevelByNumber(int number)
         {
             foreach (Level level in levels)
