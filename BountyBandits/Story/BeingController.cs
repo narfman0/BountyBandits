@@ -15,6 +15,8 @@ namespace BountyBandits.Story
         /// </summary>
         public int entranceMS;
 
+        public int startDepth;
+
         public AnimationController animationController;
 
         public Vector2 startLocation;
@@ -30,6 +32,7 @@ namespace BountyBandits.Story
         {
             BeingController controller = new BeingController();
             controller.entranceMS = int.Parse(element.GetAttribute("entranceMS"));
+            controller.startDepth = int.Parse(element.GetAttribute("startDepth"));
             controller.animationController = gameref.animationManager.getController(element.GetAttribute("animationName"));
             foreach (XmlElement locElement in element.GetElementsByTagName("startLocation"))
                 controller.startLocation = XMLUtil.fromXMLVector2(locElement);

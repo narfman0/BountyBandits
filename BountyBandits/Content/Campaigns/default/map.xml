@@ -89,11 +89,11 @@
           </audioElement>
         </audioElements>
         <animations>
-          <animation animationName='cow' entranceMS='150'>
+          <animation animationName='cow' entranceMS='150' startDepth='2'>
             <timeAnimationStruct time='200'>walk</timeAnimationStruct>
             <startLocation>
               <x>400</x>
-              <y>0</y>
+              <y>64</y>
             </startLocation>
             <action>
               <actionEnum>WalkRight</actionEnum>

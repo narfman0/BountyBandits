@@ -209,9 +209,10 @@ namespace BountyBandits
             geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 3, tex.Height);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
-            setCollisionCategories(CollisionCategory.Cat1);
+            setDepth((int)controllerIndex);
             currenthealth = getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
+            
         }
         public void setCollisionCategories(CollisionCategory newCat)
         {
@@ -329,6 +330,25 @@ namespace BountyBandits
             foreach (Stat stat in stats.statsTable.Values)
                 being.myStats.setStatValue(stat.getType(), stat.getValue());
             return being;
+        }
+
+        public void setDepth(int depth)
+        {
+            switch (depth)
+            {
+                case 0:
+                    setCollisionCategories(CollisionCategory.Cat1);
+                    break;
+                case 1:
+                    setCollisionCategories(CollisionCategory.Cat2);
+                    break;
+                case 2:
+                    setCollisionCategories(CollisionCategory.Cat3);
+                    break;
+                case 3:
+                    setCollisionCategories(CollisionCategory.Cat4);
+                    break;
+            }
         }
     }
 }

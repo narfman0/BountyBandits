@@ -34,7 +34,7 @@ namespace BountyBandits
         public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 4000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
-        GameTime previousGameTime;
+        GameTime previousGameTime = new GameTime();
         SpriteBatch spriteBatch;
         public List<Being> players = new List<Being>();
         List<GameItem> activeItems;
@@ -96,6 +96,7 @@ namespace BountyBandits
         }
         protected override void Update(GameTime gameTime)
         {
+            float timeElapsed = (float)(gameTime.ElapsedRealTime.Milliseconds - previousGameTime.ElapsedRealTime.Milliseconds);
             switch (currentState.getState())
             {
                 #region cutscene
@@ -114,6 +115,7 @@ namespace BountyBandits
                             Being being = new Being(controller.entranceMS+"", 1, this, controller.animationController);
                             being.body.Position = controller.startLocation;
                             being.changeAnimation(controller.animations[0].animationName);
+                            being.setDepth(controller.startDepth);
                             storyBeings.Add(controller.entranceMS,being);
                         }
                         if (storyBeings.ContainsKey(controller.entranceMS))
@@ -122,19 +124,23 @@ namespace BountyBandits
                             being.changeAnimation(controller.getCurrentAnimation(gameTime));
                         }
                     }
+                    foreach (Being being in storyBeings.Values)
+                        being.update(gameTime);
                     #endregion
                     #region quit cutscene
                     bool startPressed = false;
                     foreach (Being player in players)
                         if (GamePad.GetState(player.controllerIndex).Buttons.Start == ButtonState.Pressed)
                             startPressed = true;
-                    if (startPressed || storyElement.cutsceneLength + 500 > gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted)
+                    double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
+                    if (startPressed || storyElement.cutsceneLength + 500 < msTotal - timeStoryElementStarted)
                     {
                         currentState.setState(GameState.Gameplay);
                         storyElement = null;
                         storyBeings.Clear();
                     }
                     #endregion
+                    physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     break;
                 #endregion
                 #region gameplay
@@ -234,7 +240,6 @@ namespace BountyBandits
                                 #endregion
                             }
                     spawnManager.update(gameTime);
-                    float timeElapsed = (float)(gameTime.ElapsedRealTime.Milliseconds - previousGameTime.ElapsedRealTime.Milliseconds);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     #region initiate cutscene
                     storyElement = mapManager.getCurrentLevel().popStoryElement(getAveX());
@@ -359,7 +364,7 @@ namespace BountyBandits
                             storyBeing.draw(1);
                     }
                     catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
-                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight-20), Color.Black);
+                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight-40), Color.Black);
                     break;
                 #endregion
                 #region Gameplay
