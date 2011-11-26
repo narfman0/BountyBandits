@@ -76,7 +76,7 @@ namespace BountyBandits.Map
                         }
                         else if (node.Name.Equals("story"))
                             foreach (XmlNode item in node.ChildNodes)
-                                newLvl.storyElements.Add(StoryElement.fromXML(item));
+                                newLvl.storyElements.Add(StoryElement.fromXML(item, gameref));
                 if (newLvl.background == null)
                     newLvl.background = gameref.easyLevel;
                 levels.Add(newLvl);

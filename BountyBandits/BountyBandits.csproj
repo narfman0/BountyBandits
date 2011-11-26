@@ -111,6 +111,7 @@
     <Compile Include="StateManager.cs" />
     <Compile Include="Stats\StatType.cs" />
     <Compile Include="Story\AudioElement.cs" />
+    <Compile Include="Story\BeingController.cs" />
     <Compile Include="Story\CameraPathSegment.cs" />
     <Compile Include="Story\StoryElement.cs" />
     <Compile Include="TextureManager.cs" />

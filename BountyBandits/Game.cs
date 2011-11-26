@@ -80,8 +80,8 @@ namespace BountyBandits
             extremeLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "extremeLevel");
             hardLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "hardLevel");
             mediumLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "mediumLevel");
-            mapManager = new MapManager(this, MapManager.DEFAULT_CAMPAIGN_PATH);
             animationManager = new AnimationManager(this);
+            mapManager = new MapManager(this, MapManager.DEFAULT_CAMPAIGN_PATH);
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))

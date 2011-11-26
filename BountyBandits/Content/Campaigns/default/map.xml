@@ -82,6 +82,26 @@
             <msStart>1000</msStart>
           </pathSegment>
         </pathSegments>
+        <audioElements>
+          <audioElement>
+            <audioPath>Content\Sounds\Story1</audioPath>
+            <startTime>100</startTime>
+          </audioElement>
+        </audioElements>
+        <animations>
+          <animation animationName='cow' entranceMS='150'>
+            <timeAnimationStruct time='200'>walk</timeAnimationStruct>
+            <action>
+              <actionEnum>WalkRight</actionEnum>
+              <time>200</time>
+              <intensity>30</intensity>
+            </action>
+            <action>
+              <actionEnum>Stop</actionEnum>
+              <time>1200</time>
+            </action>
+          </animation>
+        </animations>
       </element>
     </story>
     <location>237,169</location>

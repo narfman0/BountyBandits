@@ -32,11 +32,17 @@ namespace BountyBandits.Story
         /// </summary>
         public List<AudioElement> audioElements;
 
-        public static StoryElement fromXML(XmlNode node)
+        /// <summary>
+        /// Holds being cutscene parts (who where when)
+        /// </summary>
+        public List<BeingController> beingControllers;
+
+        public static StoryElement fromXML(XmlNode node, Game gameref)
         {
             StoryElement element = new StoryElement();
             element.pathSegments = new List<CameraPathSegment>();
             element.audioElements = new List<AudioElement>();
+            element.beingControllers = new List<BeingController>();
             foreach (XmlNode subnode in node.ChildNodes)
                 if (subnode.Name.Equals("aveXTrigger"))
                     element.aveXTrigger = int.Parse(subnode.FirstChild.Value);
@@ -50,6 +56,9 @@ namespace BountyBandits.Story
                 else if (subnode.Name.Equals("audioElements"))
                     foreach (XmlNode audioSegment in subnode.ChildNodes)
                         element.audioElements.Add(AudioElement.fromXML(audioSegment));
+                else if (subnode.Name.Equals("animations"))
+                    foreach (XmlElement anim in subnode.ChildNodes)
+                        element.beingControllers.Add(BeingController.fromXML(anim, gameref));
             return element;
         }
     }
