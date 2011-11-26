@@ -87,7 +87,7 @@ namespace BountyBandits.Map
         public Level getCurrentLevel() { return getLevelByNumber(currentLevelIndex); }
         public void incrementCurrentLevel(bool up)
         {
-            if(up && getLevelByNumber(currentLevelIndex) != null)
+            if(up && getLevelByNumber(currentLevelIndex+1) != null)
                 currentLevelIndex++;
             if(!up && currentLevelIndex > 0)
                 currentLevelIndex--;

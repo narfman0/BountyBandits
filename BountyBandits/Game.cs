@@ -228,7 +228,8 @@ namespace BountyBandits
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
-                                if (characterSelectedIndex[indices[playerIndex]] == selected)
+                                if (index != indices[playerIndex] && //same player
+                                    characterSelectedIndex[indices[playerIndex]] == selected)
                                 {
                                     selected++;
                                     playerIndex = 0;
@@ -236,7 +237,7 @@ namespace BountyBandits
                             }
                             characterSelectedIndex[index] = selected;
                             if (characterOptions.Count < selected)
-                                characterSelectedIndex[index] = characterOptions.Count;
+                                characterSelectedIndex[index] = 0;
                         }
                         if (input.getButtonDown(Buttons.DPadUp) || input.getButtonDown(Buttons.LeftThumbstickUp))
                         {
@@ -244,7 +245,8 @@ namespace BountyBandits
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
-                                if (selected != 0 && characterSelectedIndex[indices[playerIndex]] == selected)
+                                if (indices[playerIndex] != index && //same player
+                                    selected != 0 && characterSelectedIndex[indices[playerIndex]] == selected)
                                 {
                                     selected--;
                                     playerIndex = 0;
