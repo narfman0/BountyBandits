@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BountyBandits.Animation;
 using System.Xml;
+using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Story
 {
@@ -15,6 +16,8 @@ namespace BountyBandits.Story
         public int entranceMS;
 
         public AnimationController animationController;
+
+        public Vector2 startLocation;
 
         /// <summary>
         /// Contains all times (key) when animation changes. Animation name is value
@@ -28,11 +31,21 @@ namespace BountyBandits.Story
             BeingController controller = new BeingController();
             controller.entranceMS = int.Parse(element.GetAttribute("entranceMS"));
             controller.animationController = gameref.animationManager.getController(element.GetAttribute("animationName"));
+            foreach (XmlElement locElement in element.GetElementsByTagName("startLocation"))
+                controller.startLocation = XMLUtil.fromXMLVector2(locElement);
             foreach (XmlElement animationElement in element.GetElementsByTagName("timeAnimationStruct"))
                 controller.animations.Add(TimeAnimationStruct.fromXML(animationElement));
             foreach(XmlElement actionElement in element.GetElementsByTagName("action"))
                 controller.actions.Add(ActionStruct.fromXML(actionElement));
             return controller;
+        }
+
+        public String getCurrentAnimation(GameTime gameTime)
+        {
+            for (int i = animations.Count-1; i >= 0; i--)
+                if (gameTime.TotalGameTime.TotalMilliseconds - entranceMS > animations[i].time)
+                    return animations[i].animationName;
+            return "idle";
         }
     }
 
@@ -43,16 +56,16 @@ namespace BountyBandits.Story
 
     public struct ActionStruct
     {
-        ActionEnum action;
+        public ActionEnum action;
         /// <summary>
         /// Time to start action (ms)
         /// </summary>
-        int time;
+        public int time;
         /// <summary>
         /// Intensity at which to do action... ie if walking, the force 
         /// (more force walks faster)
         /// </summary>
-        float intensity;
+        public float intensity;
 
         public static ActionStruct fromXML(XmlElement actionElement)
         {
@@ -73,16 +86,16 @@ namespace BountyBandits.Story
         /// <summary>
         /// Time (ms) when animation should change
         /// </summary>
-        int time;
+        public int time;
         /// <summary>
         /// Animation to transition to
         /// </summary>
-        String animationName;
+        public String animationName;
 
         public static TimeAnimationStruct fromXML(XmlElement animationElement)
         {
             TimeAnimationStruct str = new TimeAnimationStruct();
-            str.animationName = animationElement.Value;
+            str.animationName = animationElement.FirstChild.Value;
             str.time = int.Parse(animationElement.GetAttribute("time"));
             return str;
         }

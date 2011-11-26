@@ -24,5 +24,21 @@ namespace BountyBandits.Map
         public List<SpawnPoint> spawns = new List<SpawnPoint>();
         #endregion
 
+        public void resetStoryElements()
+        {
+            foreach (StoryElement ele in storyElements)
+                ele.resetExecuted();
+        }
+
+        public StoryElement popStoryElement(float aveX)
+        {
+            foreach (StoryElement ele in storyElements)
+                if (!ele.executed && ele.startX <= aveX)
+                {
+                    ele.executed = true;
+                    return ele;
+                }
+            return null;
+        }
     }
 }

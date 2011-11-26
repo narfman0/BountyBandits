@@ -24,6 +24,12 @@ namespace BountyBandits.Story
         /// </summary>
         public int msStart;
 
+        public Vector2 getCurrent(GameTime gameTime)
+        {
+            float percentComplete = ((float)gameTime.TotalGameTime.TotalMilliseconds - msStart) / msSpan;
+            return (end - begin) * percentComplete + begin;
+        }
+
         public static CameraPathSegment fromXML(XmlNode pathSegment)
         {
             CameraPathSegment element = new CameraPathSegment();

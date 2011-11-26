@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Story
 {
@@ -15,7 +16,7 @@ namespace BountyBandits.Story
         /// <summary>
         /// Start camera at this x value before panning anywhere
         /// </summary>
-        public int startX;
+        public float startX;
 
         /// <summary>
         /// Cutscene length in ms
@@ -37,6 +38,11 @@ namespace BountyBandits.Story
         /// </summary>
         public List<BeingController> beingControllers;
 
+        /// <summary>
+        /// For use after loaded - in the middle of level, defines whether or not this has been executed
+        /// </summary>
+        public bool executed = false;
+
         public static StoryElement fromXML(XmlNode node, Game gameref)
         {
             StoryElement element = new StoryElement();
@@ -47,7 +53,7 @@ namespace BountyBandits.Story
                 if (subnode.Name.Equals("aveXTrigger"))
                     element.aveXTrigger = int.Parse(subnode.FirstChild.Value);
                 else if (subnode.Name.Equals("startX"))
-                    element.startX = int.Parse(subnode.FirstChild.Value);
+                    element.startX = float.Parse(subnode.FirstChild.Value);
                 else if (subnode.Name.Equals("cutsceneLength"))
                     element.cutsceneLength = int.Parse(subnode.FirstChild.Value);
                 else if (subnode.Name.Equals("pathSegments"))
@@ -60,6 +66,33 @@ namespace BountyBandits.Story
                     foreach (XmlElement anim in subnode.ChildNodes)
                         element.beingControllers.Add(BeingController.fromXML(anim, gameref));
             return element;
+        }
+
+        public AudioElement popAudioElement(double time)
+        {
+            foreach (AudioElement audio in audioElements)
+                if (!audio.executed && audio.startTime <= time)
+                {
+                    audio.executed = true;
+                    return audio;
+                }
+            return null;
+        }
+
+        public void resetExecuted()
+        {
+            executed = false;
+            foreach (AudioElement audioEle in audioElements)
+                audioEle.executed = false;
+        }
+
+        public Vector2 getCameraOffset(GameTime gameTime)
+        {
+            foreach (CameraPathSegment segment in pathSegments)
+                if (segment.msStart <= gameTime.TotalGameTime.TotalMilliseconds &&
+                    (segment.msStart + segment.msSpan) >= gameTime.TotalGameTime.TotalMilliseconds)
+                    return segment.getCurrent(gameTime);
+            return Vector2.Zero;
         }
     }
 }

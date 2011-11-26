@@ -84,13 +84,17 @@
         </pathSegments>
         <audioElements>
           <audioElement>
-            <audioPath>Content\Sounds\Story1</audioPath>
+            <audioPath>Sound\water_shot</audioPath>
             <startTime>100</startTime>
           </audioElement>
         </audioElements>
         <animations>
           <animation animationName='cow' entranceMS='150'>
             <timeAnimationStruct time='200'>walk</timeAnimationStruct>
+            <startLocation>
+              <x>400</x>
+              <y>0</y>
+            </startLocation>
             <action>
               <actionEnum>WalkRight</actionEnum>
               <time>200</time>

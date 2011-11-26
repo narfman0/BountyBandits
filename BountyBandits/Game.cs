@@ -18,6 +18,7 @@ using FarseerGames.FarseerPhysics.Factories;
 using BountyBandits.Stats;
 using BountyBandits.Animation;
 using BountyBandits.Map;
+using BountyBandits.Story;
 
 namespace BountyBandits
 {
@@ -27,7 +28,7 @@ namespace BountyBandits
         {
             RootMenu,   //choose characters
             WorldMap,
-            Gameplay
+            Gameplay, Cutscene
         };
         #region Fields
         public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 4000f;
@@ -38,6 +39,7 @@ namespace BountyBandits
         public List<Being> players = new List<Being>();
         List<GameItem> activeItems;
         StateManager currentState = new StateManager();
+        StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         private SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
         public AnimationManager animationManager;
@@ -96,10 +98,47 @@ namespace BountyBandits
         {
             switch (currentState.getState())
             {
+                #region cutscene
+                case GameState.Cutscene:
+                    #region audio
+                    AudioElement audio = storyElement.popAudioElement(gameTime.TotalGameTime.TotalMilliseconds);
+                    if (audio != null)
+                        Content.Load<SoundEffect>(mapManager.currentCampaignPath + audio.audioPath).Play();
+                    #endregion
+                    #region characters
+                    foreach (BeingController controller in storyElement.beingControllers)
+                    {
+                        if(!storyBeings.ContainsKey(controller.entranceMS) &&
+                            controller.entranceMS >= gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted)
+                        {
+                            Being being = new Being(controller.entranceMS+"", 1, this, controller.animationController);
+                            being.body.Position = controller.startLocation;
+                            being.changeAnimation(controller.animations[0].animationName);
+                            storyBeings.Add(controller.entranceMS,being);
+                        }
+                        if (storyBeings.ContainsKey(controller.entranceMS))
+                        {
+                            Being being = storyBeings[controller.entranceMS];
+                            being.changeAnimation(controller.getCurrentAnimation(gameTime));
+                        }
+                    }
+                    #endregion
+                    #region quit cutscene
+                    bool startPressed = false;
+                    foreach (Being player in players)
+                        if (GamePad.GetState(player.controllerIndex).Buttons.Start == ButtonState.Pressed)
+                            startPressed = true;
+                    if (startPressed || storyElement.cutsceneLength + 500 > gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted)
+                    {
+                        currentState.setState(GameState.Gameplay);
+                        storyElement = null;
+                        storyBeings.Clear();
+                    }
+                    #endregion
+                    break;
+                #endregion
                 #region gameplay
                 case GameState.Gameplay:
-                    if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                        currentState.setState(GameState.RootMenu);
                     foreach (PlayerIndex index in System.Enum.GetValues(typeof(PlayerIndex)))
                         foreach (Being currentplayer in players)
                             if (currentplayer.controllerIndex == index)
@@ -124,6 +163,8 @@ namespace BountyBandits
                                     }
                                     currentplayer.jump();
                                 }
+                                if (input.getButtonHit(Buttons.Back))
+                                    currentState.setState(GameState.RootMenu);
                                 if (input.getButtonHit(Buttons.X))
                                     currentplayer.attack("attack1");
                                 if (input.getButtonHit(Buttons.Back))
@@ -195,6 +236,15 @@ namespace BountyBandits
                     spawnManager.update(gameTime);
                     float timeElapsed = (float)(gameTime.ElapsedRealTime.Milliseconds - previousGameTime.ElapsedRealTime.Milliseconds);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+                    #region initiate cutscene
+                    storyElement = mapManager.getCurrentLevel().popStoryElement(getAveX());
+                    if (storyElement != null)
+                    {
+                        timeStoryElementStarted = gameTime.TotalGameTime.TotalMilliseconds;
+                        currentState.setState(GameState.Cutscene);
+                        storyBeings = new Dictionary<int, Being>();
+                    }
+                    #endregion
                     break;
                 #endregion
                 #region root menu
@@ -282,8 +332,6 @@ namespace BountyBandits
                     break;
                 #endregion
             }
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
             previousGameTime = gameTime;
             Thread.Sleep(5);
             base.Update(gameTime);
@@ -302,92 +350,24 @@ namespace BountyBandits
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
             switch (currentState.getState())
             {
+                #region Cutscene
+                case GameState.Cutscene:
+                    try
+                    {
+                        drawGameplay(getAveX() + storyElement.getCameraOffset(gameTime).X);
+                        foreach (Being storyBeing in storyBeings.Values)
+                            storyBeing.draw(1);
+                    }
+                    catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
+                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight-20), Color.Black);
+                    break;
+                #endregion
                 #region Gameplay
                 case GameState.Gameplay:
                     if (isEndLevel())
                         endLevel();
                     else
-                    {
-                        Level currentLevel = mapManager.getCurrentLevel();
-                        float aveX = getAveX();
-                        #region Gameworld
-                        if(mapManager.getCurrentLevel().horizon != null) 
-                            spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
-                        spriteBatch.Draw(mapManager.getCurrentLevel().background, new Vector2(-aveX, 0), Color.White);
-                        for (int currentDepth = 0; currentDepth < 4; currentDepth++)
-                        {
-                            foreach (GameItem gameItem in activeItems)
-                                if (currentDepth >= gameItem.startdepth &&
-                                    currentDepth < gameItem.width)
-                                {
-                                    Vector2 pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y);
-                                    if (gameItem.name.Contains("log") || gameItem.name.Contains("circle"))
-                                    {
-                                        Vector2 scale = new Vector2((float)gameItem.radius * 2 / (float)texMan.getTex("log").Width, (float)gameItem.radius * 2 / (float)texMan.getTex("log").Width);
-                                        drawItem(texMan.getTex("log"), pos, -gameItem.body.Rotation, currentDepth, scale, SpriteEffects.None, new Vector2(texMan.getTex("log").Width / 2, texMan.getTex("log").Height / 2));
-                                    }
-                                    else if (gameItem.name.Contains("box") || gameItem.name.Contains("crate"))
-                                        drawItem(texMan.getTex("box"), pos, -gameItem.body.Rotation, currentDepth, new Vector2((float)gameItem.radius / (float)texMan.getTex("box").Width, (float)gameItem.radius / (float)texMan.getTex("box").Width), SpriteEffects.None, new Vector2(texMan.getTex("box").Width / 2, texMan.getTex("box").Height / 2));
-                                    if (gameItem is DropItem)
-                                        drawItem(texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice), pos, gameItem.body.Rotation, currentDepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Width / 2, texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Height / 2));
-                                }
-                            foreach (Being enemy in spawnManager.enemies)
-                                if (currentDepth == enemy.getDepth())
-                                    enemy.draw(currentDepth);
-                            foreach (Being player in players)
-                                if (currentDepth == player.getDepth())
-                                {
-                                    player.draw(currentDepth);
-                                    DropItem item = getClosestDropItem(player);
-                                    if(item != null && Vector2.DistanceSquared(item.body.Position, player.body.Position) < DROP_ITEM_MAX_DISTANCE)
-                                        drawItemDescription(item);
-                                }
-                        }
-                        #endregion
-                        #region HUD
-                        for (int pIndex = 0; pIndex < players.Count; ++pIndex)
-                        {
-                            Being currPlayer = players[pIndex];
-                            if (currPlayer.menu.getMenuActive())
-                            {
-                                spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(24 + 16 + pIndex * 288 + 32 * pIndex, 63), new Color(255, 255, 255, 192));
-                                if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Data)
-                                {
-                                    spriteBatch.DrawString(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, 67), Color.Black);
-                                    spriteBatch.DrawString(vademecumFont18, "Current XP:     " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
-                                    spriteBatch.DrawString(vademecumFont18, "XP to Level:     " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
-                                    spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
-                                    spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
-                                    spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
-                                    spriteBatch.DrawString(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, 223), currPlayer.menu.getMenuColor(3));
-                                    spriteBatch.DrawString(vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, 249), currPlayer.menu.getMenuColor(4));
-                                }
-                                if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Inv)
-                                    spriteBatch.DrawString(vademecumFont18, "Inventory Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
-                                if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Stats)
-                                    spriteBatch.DrawString(vademecumFont18, "Data Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
-
-
-                            }
-                            if (currPlayer.controller.portrait != null)
-                            {
-                                int xLoc = 42 - currPlayer.controller.portrait.Width / 2 + pIndex * 288 + 32 * pIndex,
-                                    yLoc = 43 - currPlayer.controller.portrait.Height / 2;
-                                spriteBatch.Draw(currPlayer.controller.portrait, new Vector2(xLoc, yLoc), Color.White);
-                            }
-                            spriteBatch.Draw(texMan.getTex("portrait"), new Vector2(16 + pIndex * 288 + 32 * pIndex, 16), Color.White);
-
-                            for (int healthIndex = 0; healthIndex < currPlayer.currenthealth; ++healthIndex)
-                                spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
-                            spriteBatch.DrawString(vademecumFont12, currPlayer.currenthealth + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
-
-                            for (int specialIndex = 0; specialIndex < currPlayer.currentspecial; ++specialIndex)
-                                spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
-                            spriteBatch.DrawString(vademecumFont12, currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
-
-                        }
-                        #endregion
-                    }
+                        drawGameplay(getAveX());
                     break;
                 #endregion
                 #region root menu
@@ -433,6 +413,87 @@ namespace BountyBandits
             }
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+        public void drawGameplay(float aveX)
+        {
+            Level currentLevel = mapManager.getCurrentLevel();
+            #region Gameworld
+            if (mapManager.getCurrentLevel().horizon != null)
+                spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
+            spriteBatch.Draw(mapManager.getCurrentLevel().background, new Vector2(-aveX, 0), Color.White);
+            for (int currentDepth = 0; currentDepth < 4; currentDepth++)
+            {
+                foreach (GameItem gameItem in activeItems)
+                    if (currentDepth >= gameItem.startdepth &&
+                        currentDepth < gameItem.width)
+                    {
+                        Vector2 pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y);
+                        if (gameItem.name.Contains("log") || gameItem.name.Contains("circle"))
+                        {
+                            Vector2 scale = new Vector2((float)gameItem.radius * 2 / (float)texMan.getTex("log").Width, (float)gameItem.radius * 2 / (float)texMan.getTex("log").Width);
+                            drawItem(texMan.getTex("log"), pos, -gameItem.body.Rotation, currentDepth, scale, SpriteEffects.None, new Vector2(texMan.getTex("log").Width / 2, texMan.getTex("log").Height / 2));
+                        }
+                        else if (gameItem.name.Contains("box") || gameItem.name.Contains("crate"))
+                            drawItem(texMan.getTex("box"), pos, -gameItem.body.Rotation, currentDepth, new Vector2((float)gameItem.radius / (float)texMan.getTex("box").Width, (float)gameItem.radius / (float)texMan.getTex("box").Width), SpriteEffects.None, new Vector2(texMan.getTex("box").Width / 2, texMan.getTex("box").Height / 2));
+                        if (gameItem is DropItem)
+                            drawItem(texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice), pos, gameItem.body.Rotation, currentDepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Width / 2, texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Height / 2));
+                    }
+                foreach (Being enemy in spawnManager.enemies)
+                    if (currentDepth == enemy.getDepth())
+                        enemy.draw(currentDepth);
+                foreach (Being player in players)
+                    if (currentDepth == player.getDepth())
+                    {
+                        player.draw(currentDepth);
+                        DropItem item = getClosestDropItem(player);
+                        if (item != null && Vector2.DistanceSquared(item.body.Position, player.body.Position) < DROP_ITEM_MAX_DISTANCE)
+                            drawItemDescription(item);
+                    }
+            }
+            #endregion
+            #region HUD
+            for (int pIndex = 0; pIndex < players.Count; ++pIndex)
+            {
+                Being currPlayer = players[pIndex];
+                if (currPlayer.menu.getMenuActive())
+                {
+                    spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(24 + 16 + pIndex * 288 + 32 * pIndex, 63), new Color(255, 255, 255, 192));
+                    if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Data)
+                    {
+                        spriteBatch.DrawString(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, 67), Color.Black);
+                        spriteBatch.DrawString(vademecumFont18, "Current XP:     " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
+                        spriteBatch.DrawString(vademecumFont18, "XP to Level:     " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
+                        spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
+                        spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
+                        spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
+                        spriteBatch.DrawString(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, 223), currPlayer.menu.getMenuColor(3));
+                        spriteBatch.DrawString(vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, 249), currPlayer.menu.getMenuColor(4));
+                    }
+                    if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Inv)
+                        spriteBatch.DrawString(vademecumFont18, "Inventory Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
+                    if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Stats)
+                        spriteBatch.DrawString(vademecumFont18, "Data Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
+
+
+                }
+                if (currPlayer.controller.portrait != null)
+                {
+                    int xLoc = 42 - currPlayer.controller.portrait.Width / 2 + pIndex * 288 + 32 * pIndex,
+                        yLoc = 43 - currPlayer.controller.portrait.Height / 2;
+                    spriteBatch.Draw(currPlayer.controller.portrait, new Vector2(xLoc, yLoc), Color.White);
+                }
+                spriteBatch.Draw(texMan.getTex("portrait"), new Vector2(16 + pIndex * 288 + 32 * pIndex, 16), Color.White);
+
+                for (int healthIndex = 0; healthIndex < currPlayer.currenthealth; ++healthIndex)
+                    spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
+                spriteBatch.DrawString(vademecumFont12, currPlayer.currenthealth + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
+
+                for (int specialIndex = 0; specialIndex < currPlayer.currentspecial; ++specialIndex)
+                    spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
+                spriteBatch.DrawString(vademecumFont12, currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
+
+            }
+            #endregion
         }
         public void drawItem(Texture2D tex, Vector2 pos, float rot, int depth, Vector2 scale, SpriteEffects effects, Vector2 origin)
         {
@@ -606,6 +667,7 @@ namespace BountyBandits
             sideWall.IsStatic = true;
             #endregion
             spawnManager.newLevel(mapManager.getCurrentLevel());
+            mapManager.getCurrentLevel().resetStoryElements();
             currentState.setState(GameState.Gameplay);
         }
     }

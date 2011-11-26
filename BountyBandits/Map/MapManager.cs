@@ -20,10 +20,12 @@ namespace BountyBandits.Map
         private int currentLevelIndex;
         public Guid guid;
         public Texture2D worldBackground;
+        public String currentCampaignPath;
         public int getCurrentLevelIndex() { return currentLevelIndex; }
 
         public MapManager(Game gameref, String campaignPath){
             levels = new List<Level>();
+            currentCampaignPath =  campaignPath;
             FileStream fs = new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.Open, FileAccess.Read);
             XmlDocument mapdoc = new XmlDocument();
             mapdoc.Load(fs);

@@ -18,6 +18,8 @@ namespace BountyBandits.Story
         /// </summary>
         public int startTime;
 
+        public bool executed = false;
+
         public static AudioElement fromXML(XmlNode audioSegment)
         {
             AudioElement element = new AudioElement();

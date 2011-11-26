@@ -315,7 +315,6 @@ namespace BountyBandits
             beingElement.AppendChild(unlocked.asXML(beingElement));
             return beingElement;
         }
-
         public static Being fromXML(XmlElement element, Game gameref)
         {
             String name = element.GetAttribute("name"),
