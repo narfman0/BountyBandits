@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>seal</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>15</start>
+        <end>27</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>28</start>
+        <end>55</end>
+        <keyframe>41</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>15</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>55</start>
+        <end>74</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='2' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='10' />
+      <stat type='Speed' value='3' />
+      <stat type='Range' value='150' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
