@@ -101,8 +101,9 @@ namespace BountyBandits
             {
                 #region cutscene
                 case GameState.Cutscene:
+                    double elapsedCutsceneTime = gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted;
                     #region audio
-                    AudioElement audio = storyElement.popAudioElement(gameTime.TotalGameTime.TotalMilliseconds);
+                    AudioElement audio = storyElement.popAudioElement(elapsedCutsceneTime);
                     if (audio != null)
                         Content.Load<SoundEffect>(mapManager.currentCampaignPath + audio.audioPath).Play();
                     #endregion
@@ -110,7 +111,7 @@ namespace BountyBandits
                     foreach (BeingController controller in storyElement.beingControllers)
                     {
                         if(!storyBeings.ContainsKey(controller.entranceMS) &&
-                            controller.entranceMS >= gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted)
+                            controller.entranceMS >= elapsedCutsceneTime)
                         {
                             Being being = new Being(controller.entranceMS+"", 1, this, controller.animationController);
                             being.body.Position = controller.startLocation;
@@ -121,7 +122,23 @@ namespace BountyBandits
                         if (storyBeings.ContainsKey(controller.entranceMS))
                         {
                             Being being = storyBeings[controller.entranceMS];
-                            being.changeAnimation(controller.getCurrentAnimation(gameTime));
+                            being.changeAnimation(controller.getCurrentAnimation(elapsedCutsceneTime));
+                            ActionStruct currentAction = controller.getCurrentAction(elapsedCutsceneTime);
+                            if (currentAction != null)
+                            {
+                                switch (currentAction.action)
+                                {
+                                    case ActionEnum.Jump:
+                                        being.jump();
+                                        break;
+                                    case ActionEnum.Stop:
+                                        being.body.ApplyForce(-being.body.Force);
+                                        break;
+                                    case ActionEnum.Move:
+                                        being.move(new Vector2(currentAction.intensity,0));
+                                        break;
+                                }
+                            }
                         }
                     }
                     foreach (Being being in storyBeings.Values)

@@ -43,21 +43,29 @@ namespace BountyBandits.Story
             return controller;
         }
 
-        public String getCurrentAnimation(GameTime gameTime)
+        public String getCurrentAnimation(double elapsedCutsceneMS)
         {
             for (int i = animations.Count-1; i >= 0; i--)
-                if (gameTime.TotalGameTime.TotalMilliseconds - entranceMS > animations[i].time)
+                if (elapsedCutsceneMS - entranceMS > animations[i].time)
                     return animations[i].animationName;
             return "idle";
+        }
+
+        public ActionStruct getCurrentAction(double elapsedCutsceneMS)
+        {
+            for (int i = actions.Count - 1; i >= 0; i--)
+                if (elapsedCutsceneMS - entranceMS > actions[i].time)
+                    return actions[i];
+            return null;
         }
     }
 
     public enum ActionEnum
     {
-        WalkRight, WalkLeft, Jump, Stop
+        Move, Jump, Stop
     }
 
-    public struct ActionStruct
+    public class ActionStruct
     {
         public ActionEnum action;
         /// <summary>

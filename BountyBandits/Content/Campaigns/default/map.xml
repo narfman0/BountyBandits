@@ -67,7 +67,7 @@
       <element>
         <aveXTrigger>1</aveXTrigger>
         <startX>100</startX>
-        <cutsceneLength>5000</cutsceneLength>
+        <cutsceneLength>10000</cutsceneLength>
         <pathSegments>
           <pathSegment>
             <begin>
@@ -96,13 +96,18 @@
               <y>64</y>
             </startLocation>
             <action>
-              <actionEnum>WalkRight</actionEnum>
-              <time>200</time>
+              <actionEnum>Move</actionEnum>
+              <time>500</time>
               <intensity>30</intensity>
             </action>
             <action>
+              <actionEnum>Move</actionEnum>
+              <time>1500</time>
+              <intensity>-30</intensity>
+            </action>
+            <action>
               <actionEnum>Stop</actionEnum>
-              <time>1200</time>
+              <time>2500</time>
             </action>
           </animation>
         </animations>
