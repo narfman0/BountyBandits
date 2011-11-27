@@ -1,0 +1,51 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>pirate</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>20</start>
+        <end>50</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>50</start>
+        <end>70</end>
+        <keyframe>56</keyframe>
+      </animation>
+      <animation>
+        <name>attack2</name>
+        <start>70</start>
+        <end>126</end>
+        <keyframe>94</keyframe>
+      </animation>
+      <animation>
+        <name>attack2</name>
+        <start>125</start>
+        <end>155</end>
+        <keyframe>145</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>20</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>155</start>
+        <end>200</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='3' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='3' />
+      <stat type='Speed' value='3' />
+      <stat type='Range' value='50' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>

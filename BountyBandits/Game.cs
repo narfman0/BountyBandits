@@ -281,7 +281,7 @@ namespace BountyBandits
                                 characterSelectedIndex[index] = 0;
                             else
                             {
-                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("cowboy"));
+                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"));
                                 if(characterSelectedIndex[index] != 0){
                                     int charindex = characterSelectedIndex[index] - 1;
                                     String characterName = characterOptions[charindex];
