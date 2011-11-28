@@ -21,7 +21,7 @@
         <keyframe>94</keyframe>
       </animation>
       <animation>
-        <name>attack2</name>
+        <name>attack3</name>
         <start>125</start>
         <end>155</end>
         <keyframe>145</keyframe>

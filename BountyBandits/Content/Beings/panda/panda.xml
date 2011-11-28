@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>panda</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>15</start>
+        <end>45</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>45</start>
+        <end>75</end>
+        <keyframe>54</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>15</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>75</start>
+        <end>113</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='5' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='2' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='75' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>

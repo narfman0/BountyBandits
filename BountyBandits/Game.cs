@@ -186,8 +186,6 @@ namespace BountyBandits
                                     }
                                     currentplayer.jump();
                                 }
-                                if (input.getButtonHit(Buttons.Back))
-                                    currentState.setState(GameState.RootMenu);
                                 if (input.getButtonHit(Buttons.X))
                                     currentplayer.attack("attack1");
                                 if (input.getButtonHit(Buttons.Back))
@@ -227,7 +225,7 @@ namespace BountyBandits
                                 }
 #if DEBUG
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
-                                    spawnManager.spawnGroup("seal", 1, 1);
+                                    spawnManager.spawnGroup("panda", 1, 1);
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
                                     foreach (Being player in players)
                                         player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
@@ -328,8 +326,6 @@ namespace BountyBandits
                                 selected = 0;
                             characterSelectedIndex[index] = selected;
                         }
-                        if (index == PlayerIndex.One && input.getButtonDown(Buttons.Back))
-                            Exit();
                         if (players.Count > 1 && index == PlayerIndex.One && input.getButtonDown(Buttons.A))
                             currentState.setState(GameState.WorldMap);
                     }
