@@ -67,7 +67,7 @@
       <element>
         <aveXTrigger>1</aveXTrigger>
         <startX>100</startX>
-        <cutsceneLength>10000</cutsceneLength>
+        <cutsceneLength>4000</cutsceneLength>
         <pathSegments>
           <pathSegment>
             <begin>

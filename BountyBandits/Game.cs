@@ -19,6 +19,7 @@ using BountyBandits.Stats;
 using BountyBandits.Animation;
 using BountyBandits.Map;
 using BountyBandits.Story;
+using System.IO;
 
 namespace BountyBandits
 {
@@ -225,7 +226,9 @@ namespace BountyBandits
                                 }
 #if DEBUG
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
-                                    spawnManager.spawnGroup("panda", 1, 1);
+                                    spawnManager.spawnGroup("hippie", 1, 1);
+                                    //foreach(String dirname in Directory.GetDirectories(@"Content\Beings"))
+                                    //    spawnManager.spawnGroup(dirname.Substring(dirname.LastIndexOf('\\')+1), 1, 1);
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
                                     foreach (Being player in players)
                                         player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
@@ -237,7 +240,7 @@ namespace BountyBandits
                                     item.body.Rotation = 100f * (float)(rand.NextDouble() - .5f);
                                     item.body.AngularVelocity = (float)(rand.NextDouble() - .5f);
                                     item.body.LinearVelocity = 50f * new Vector2((float)rand.NextDouble() - .5f, 1);
-                                    #region geometry setup
+                                #region geometry setup
                                     Geom geom = new Geom();
                                     geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
                                     geom.FrictionCoefficient = .6f;

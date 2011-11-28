@@ -1,0 +1,74 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>hippie</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>15</start>
+        <end>45</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>45</start>
+        <end>75</end>
+        <keyframe>54</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>15</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>75</start>
+        <end>113</end>
+      </animation>
+    </animations>
+    <colorPermutations>
+      <permutation>
+        <base>
+          <r>153</r>
+          <g>000</g>
+          <b>153</b>
+        </base>
+        <permutation>
+          <r>10</r>
+          <g>10</g>
+          <b>224</b>
+        </permutation>
+        <permutation>
+          <r>78</r>
+          <g>198</g>
+          <b>57</b>
+        </permutation>
+        <permutation>
+          <r>255</r>
+          <g>163</g>
+          <b>0</b>
+        </permutation>
+      </permutation>
+      <permutation>
+        <base>
+          <r>0</r>
+          <g>204</g>
+          <b>255</b>
+        </base>
+        <permutation>
+          <r>57</r>
+          <g>168</g>
+          <b>26</b>
+        </permutation>
+      </permutation>
+    </colorPermutations>
+    <stats>
+      <stat type='Strength' value='5' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='2' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='75' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
