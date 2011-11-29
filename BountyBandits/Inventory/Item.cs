@@ -64,7 +64,6 @@ namespace BountyBandits.Inventory
         public String getTextureName() { return textureName; }
         public ItemType getItemType() { return type; }
         public ItemClass getItemClass() { return itemClass; }
-
         public XmlNode asXML(XmlNode parentNode)
         {
             XmlElement itemElement = parentNode.OwnerDocument.CreateElement("item");
@@ -75,7 +74,6 @@ namespace BountyBandits.Inventory
             itemElement.AppendChild(stats.asXML(itemElement));
             return itemElement;
         }
-
         public static Item fromXML(XmlElement element)
         {
             ItemType type = (ItemType)Enum.Parse(typeof(ItemType), element.GetAttribute("type"));

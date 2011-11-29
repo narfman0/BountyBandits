@@ -231,6 +231,9 @@ namespace BountyBandits
                     pos = body.Position;
                     gameref.physicsSimulator.Remove(body);
                     gameref.physicsSimulator.Remove(geom);
+                    if (controllerIndex != null && //check if being is player character. lame check
+                        gameref.rand.Next(20)==0)   //nodrop check. should query entity
+                        gameref.dropItem(pos, this);
                 }
                 #endregion
                 #region Change animation to idle/walk
@@ -331,7 +334,6 @@ namespace BountyBandits
                 being.myStats.setStatValue(stat.getType(), stat.getValue());
             return being;
         }
-
         public void setDepth(int depth)
         {
             switch (depth)

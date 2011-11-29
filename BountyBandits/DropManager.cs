@@ -15,16 +15,10 @@ namespace BountyBandits
             ItemClass itemClass = rollClass(being);
             StatSet stats = rollStats(being, itemClass, type);
             String name = rollName(being, itemClass, type, stats);
-            //Following: dirty stinking hack to get the names of the colors tacked on to texture name
-            //String primaryColor = new Item(name, stats, type, "", itemClass).getPrimaryColor();
-            //String secondaryColor = new Item(name, stats, type, "", itemClass).getSecondaryColor();
-            
             String textureName = Enum.GetName(typeof(ItemType), type) + rand.Next(4);
-            //if (itemClass != Class.Unique)
-            //    textureName += primaryColor + secondaryColor;
             return new Item(name, stats, type, textureName, itemClass);
         }
-        private static Inventory.ItemClass rollClass(Being being)
+        private static ItemClass rollClass(Being being)
         {
             //roll for item class/quality
             ItemClass itemClass = ItemClass.Normal;
@@ -37,12 +31,12 @@ namespace BountyBandits
                 itemClass = ItemClass.Magic;
             return itemClass;
         }
-        private static Inventory.ItemType rollType(Being being)
+        private static ItemType rollType(Being being)
         {
             ItemType[] values = (ItemType[])Enum.GetValues(typeof(ItemType));
             return values[rand.Next(0, values.Length)];
         }
-        private static Stats.StatSet rollStats(Being being, ItemClass itemClass, ItemType type)
+        private static StatSet rollStats(Being being, ItemClass itemClass, ItemType type)
         {
             StatSet stats = new StatSet();
             #region Calculate how many random stat modifiers there shall be

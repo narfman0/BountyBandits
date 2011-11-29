@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BountyBandits.Inventory;
 
 namespace BountyBandits
 {
     public class DropItem : GameItem
     {
-        private BountyBandits.Inventory.Item item;
-
-        public BountyBandits.Inventory.Item getItem() { return item; }
-        public void setItem(BountyBandits.Inventory.Item item) { this.item = item; }
+        private Item item;
+        public Item getItem() { return item; }
+        public void setItem(Item item) { this.item = item; }
     }
 }

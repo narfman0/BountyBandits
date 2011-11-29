@@ -234,23 +234,7 @@ namespace BountyBandits
                                         player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F5) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F5))
                                 {
-                                    DropItem item = new DropItem();
-                                    item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
-                                    item.body.Position = new Vector2(currentplayer.body.Position.X, currentplayer.body.Position.Y+25);
-                                    item.body.Rotation = 100f * (float)(rand.NextDouble() - .5f);
-                                    item.body.AngularVelocity = (float)(rand.NextDouble() - .5f);
-                                    item.body.LinearVelocity = 50f * new Vector2((float)rand.NextDouble() - .5f, 1);
-                                #region geometry setup
-                                    Geom geom = new Geom();
-                                    geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
-                                    geom.FrictionCoefficient = .6f;
-                                    geom.CollisionCategories = CollisionCategory.None;
-                                    for (uint depth = item.startdepth; depth < item.width; depth++)
-                                        geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
-                                    geom.CollidesWith = geom.CollisionCategories;
-                                    #endregion
-                                    item.setItem(DropManager.generateItem(currentplayer));
-                                    activeItems.Add(item);
+                                    dropItem(1*currentplayer.body.Position, currentplayer);
                                 }
 #endif
                                 currentplayer.prevGamePadState = GamePad.GetState(index);
@@ -356,6 +340,26 @@ namespace BountyBandits
             previousGameTime = gameTime;
             Thread.Sleep(5);
             base.Update(gameTime);
+        }
+        public void dropItem(Vector2 dropPosition, Being killedBeing)
+        {
+            DropItem item = new DropItem();
+            item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
+            item.body.Position = new Vector2(dropPosition.X, dropPosition.Y + 25);
+            item.body.Rotation = 100f * (float)(rand.NextDouble() - .5f);
+            item.body.AngularVelocity = (float)(rand.NextDouble() - .5f);
+            item.body.LinearVelocity = 50f * new Vector2((float)rand.NextDouble() - .5f, 1);
+            #region geometry setup
+            Geom geom = new Geom();
+            geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
+            geom.FrictionCoefficient = .6f;
+            geom.CollisionCategories = CollisionCategory.None;
+            for (uint depth = item.startdepth; depth < item.width; depth++)
+                geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
+            geom.CollidesWith = geom.CollisionCategories;
+            #endregion
+            item.setItem(DropManager.generateItem(killedBeing));
+            activeItems.Add(item);
         }
         private bool isUnlocked(int level)
         {
