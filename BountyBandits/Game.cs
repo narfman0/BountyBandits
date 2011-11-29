@@ -432,7 +432,7 @@ namespace BountyBandits
                     spriteBatch.DrawString(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128), Color.Black);
                     spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128 + 32), Color.Black);
                     spriteBatch.DrawString(vademecumFont24, "Level length:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 200), Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().background.Width.ToString(), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 200 + 32), Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().levelLength.ToString(), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 200 + 32), Color.Black);
                     break;
                 #endregion
             }
@@ -445,7 +445,8 @@ namespace BountyBandits
             #region Gameworld
             if (mapManager.getCurrentLevel().horizon != null)
                 spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
-            spriteBatch.Draw(mapManager.getCurrentLevel().background, new Vector2(-aveX, 0), Color.White);
+            foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
+                spriteBatch.Draw(texMan.getTex(item.texturePath), item.location - new Vector2(getAveX(), 0), Color.White);
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
                 foreach (GameItem gameItem in activeItems)
@@ -609,8 +610,8 @@ namespace BountyBandits
             aveX /= players.Count;
             if (aveX < res.ScreenWidth / 2)
                 aveX = res.ScreenWidth / 2;
-            else if (aveX > mapManager.getCurrentLevel().background.Width - res.ScreenWidth)
-                aveX = mapManager.getCurrentLevel().background.Width - res.ScreenWidth;
+            else if (aveX > mapManager.getCurrentLevel().levelLength - res.ScreenWidth)
+                aveX = mapManager.getCurrentLevel().levelLength - res.ScreenWidth;
             return aveX;
         }
         public DropItem getClosestDropItem(Being player)
@@ -640,7 +641,7 @@ namespace BountyBandits
         {
             bool endLevel = false;
             foreach (Being player in players)
-                if (player.getPos().X >= mapManager.getCurrentLevel().background.Width - res.ScreenWidth/2)
+                if (player.getPos().X >= mapManager.getCurrentLevel().levelLength - res.ScreenWidth/2)
                     endLevel = true;
             return endLevel;
         }

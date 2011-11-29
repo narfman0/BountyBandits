@@ -10,18 +10,30 @@ namespace BountyBandits
 {
     public class TextureManager
     {
-        readonly String[] textureDirectories = {@"Content\Textures\", @"Content\Textures\Inventory\"};
+        readonly String[] textureDirectories = {@"Content\Textures\", @"Content\Campaigns\"};
         Dictionary<String, Texture2D> textures = new Dictionary<String, Texture2D>();
         public TextureManager(ContentManager content)
         {
-            foreach(String textureDirectory in textureDirectories){
-                string[] fileEntries = Directory.GetFiles(textureDirectory);
-                foreach (string fileName in fileEntries)
+            foreach(String textureDirectory in textureDirectories)
+                addTextureDirectory(content, textureDirectory);
+        }
+        private void addTextureDirectory(ContentManager content, string path)
+        {
+            string[] fileEntries = Directory.GetFiles(path);
+            foreach (string fileName in fileEntries)
+            {
+                string name = fileName.Split('\\')[fileName.Split('\\').Length - 1].Split('.')[0];
+                try
                 {
-                    string name = fileName.Split('\\')[fileName.Split('\\').Length - 1].Split('.')[0];
-                    textures.Add(name, content.Load<Texture2D>(textureDirectory.Substring(8) + name));
+                    textures.Add(name, content.Load<Texture2D>(path.Substring(8) + name));
+                }
+                catch (Exception e) { 
+                    Console.WriteLine(e.StackTrace); 
                 }
             }
+            string[] dirs = Directory.GetDirectories(path);
+            foreach (string dir in Directory.GetDirectories(path))
+                addTextureDirectory(content, dir+@"\");
         }
         public Texture2D getTex(string name)
         {

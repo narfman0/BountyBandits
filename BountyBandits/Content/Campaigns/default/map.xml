@@ -1,9 +1,24 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level>
+  <level length='3500' name='levelOne'>
     <adj>1</adj>
-    <backgroundPath>backGround1</backgroundPath>
+    <background>
+      <graphic>
+        <path>background01_1</path>
+        <location>
+          <x>0</x>
+          <y>0</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>background01_2</path>
+        <location>
+          <x>2048</x>
+          <y>0</y>
+        </location>
+      </graphic>
+    </background>
     <horizonPath>horizon1</horizonPath>
     <items>
       <item>
@@ -113,14 +128,30 @@
         </animations>
       </element>
     </story>
-    <location>237,169</location>
-    <name>levelOne</name>
+    <location>
+      <x>237</x><y>169</y>
+    </location>
     <number>0</number>
     <prereq />
   </level>
-  <level>
+  <level length='3500' name='levelTwo'>
     <adj>0</adj>
-    <backgroundPath>backGround1</backgroundPath>
+    <background>
+      <graphic>
+        <path>background01_1</path>
+        <location>
+          <x>1024</x>
+          <y>360</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>background01_2</path>
+        <location>
+          <x>3072</x>
+          <y>360</y>
+        </location>
+      </graphic>
+    </background>
     <horizonPath>horizon1</horizonPath>
     <items>
       <item>
@@ -172,8 +203,10 @@
         <weight>1</weight>
       </item>
     </items>
-    <location>237,169</location>
-    <name>levelTwo</name>
+    <location>
+      <x>237</x>
+      <y>169</y>
+    </location>
     <number>1</number>
     <prereq>1</prereq>
   </level>

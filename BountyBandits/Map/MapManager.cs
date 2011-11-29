@@ -30,59 +30,8 @@ namespace BountyBandits.Map
             XmlDocument mapdoc = new XmlDocument();
             mapdoc.Load(fs);
             guid = new Guid(mapdoc.GetElementsByTagName("guid").Item(0).FirstChild.Value);
-            XmlNodeList xmlnode = mapdoc.GetElementsByTagName("level");
-            for(int i=0;i<xmlnode.Count;i++)
-            {
-                Level newLvl = new Level();
-                foreach (XmlNode node in xmlnode[i].ChildNodes)
-                    if (node.FirstChild != null)
-                        if (node.Name.Equals("number"))
-                            newLvl.number = Int32.Parse(node.FirstChild.Value);
-                        else if (node.Name.Equals("name"))
-                            newLvl.name = node.FirstChild.Value;
-                        else if (node.Name.Equals("adj"))
-                        {
-                            string[] adjacent = node.FirstChild.Value.Split(',');
-                            foreach (string singleAdj in adjacent)
-                                newLvl.adjacent.Add(Int32.Parse(singleAdj));
-                        }
-                        else if (node.Name.Equals("prereq"))
-                        {
-                            string[] prereq = node.FirstChild.Value.Split(',');
-                            foreach (string singlePrereq in prereq)
-                                newLvl.prereq.Add(Int32.Parse(singlePrereq));
-                        }
-                        else if (node.Name.Equals("location"))
-                        {
-                            string[] loc = node.FirstChild.Value.Split(',');
-                            foreach (string singlePrereq in loc)
-                                newLvl.loc = new Vector2(Int32.Parse(loc[0]), Int32.Parse(loc[1]));
-                        }
-                        else if (node.Name.Equals("backgroundPath"))
-                            newLvl.background = gameref.Content.Load<Texture2D>(campaignPath + node.FirstChild.Value);
-                        else if (node.Name.Equals("horizonPath"))
-                            newLvl.horizon = gameref.Content.Load<Texture2D>(campaignPath + node.FirstChild.Value);
-                        else if (node.Name.Equals("items"))
-                        {
-                            foreach (XmlNode item in node.ChildNodes)
-                            {
-                                string name = "";
-                                foreach (XmlNode itemChild in item.ChildNodes)
-                                    if (itemChild.Name.Equals("name"))
-                                        name = itemChild.FirstChild.Value;
-                                if (name.Equals("enemies"))
-                                    newLvl.spawns.Add(new SpawnPoint(item));
-                                else
-                                    newLvl.items.Add(new GameItem(item));
-                            }
-                        }
-                        else if (node.Name.Equals("story"))
-                            foreach (XmlNode item in node.ChildNodes)
-                                newLvl.storyElements.Add(StoryElement.fromXML(item, gameref));
-                if (newLvl.background == null)
-                    newLvl.background = gameref.easyLevel;
-                levels.Add(newLvl);
-            }
+            foreach(XmlElement node in mapdoc.GetElementsByTagName("level"))
+                levels.Add(Level.fromXML(node, gameref, campaignPath));
             worldBackground = gameref.Content.Load<Texture2D>(campaignPath + "worldBackground");
         }
         public List<Level> getLevels() { return levels; }

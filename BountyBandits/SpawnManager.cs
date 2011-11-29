@@ -36,7 +36,7 @@ namespace BountyBandits
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
                 if (gameref.getAveX() - gameref.res.ScreenWidth / 2 < 16) 
                     side = 1;
-                else if (gameref.mapManager.getCurrentLevel().background.Width - gameref.getAveX() < 128 + gameref.res.ScreenWidth) 
+                else if (gameref.mapManager.getCurrentLevel().levelLength - gameref.getAveX() < 128 + gameref.res.ScreenWidth) 
                     side = -1;
                 int lanesToMoveDown = gameref.rand.Next(4);
                 for (int laneDown = 0; laneDown < lanesToMoveDown; laneDown++)
