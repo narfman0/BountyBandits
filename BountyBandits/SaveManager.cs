@@ -14,6 +14,7 @@ namespace BountyBandits
 
         public static string[] getAvailableCharacterNames()
         {
+            Directory.CreateDirectory(SAVE_PATH);
             string[] files = Directory.GetFiles(SAVE_PATH, "*.xml");
             for (int i = 0; i < files.Length; i++)
                 files[i] = files[i].Substring(files[i].LastIndexOf(@"\")+1);
