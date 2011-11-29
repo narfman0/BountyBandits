@@ -46,8 +46,6 @@ namespace BountyBandits
                 while (gameref.physicsSimulator.Collide(new Vector2(gameref.getAveX() + posOffset.X, posOffset.Y)) != null)
                     posOffset.X += (float)(side * enemy.controller.frames[0].Width);
                 enemy.body.Position = new Vector2(gameref.getAveX() + posOffset.X, posOffset.Y);
-                //while (enemy.isTouchingGeom(false))
-                //    enemy.body.Position = new Vector2(enemy.body.Position.X + side * 32f, enemy.body.Position.Y);
                 enemies.Add(enemy);
             }
         }
