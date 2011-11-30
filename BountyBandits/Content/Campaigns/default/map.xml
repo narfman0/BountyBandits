@@ -1,21 +1,42 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length='3500' name='levelOne'>
+  <level length='4584' name='levelOne'>
     <adj>1</adj>
     <background>
       <graphic>
-        <path>background01_1</path>
+        <path>background01_3</path>
         <location>
           <x>0</x>
-          <y>0</y>
+          <y>212</y>
         </location>
       </graphic>
       <graphic>
-        <path>background01_2</path>
+        <path>calitree1</path>
         <location>
-          <x>2048</x>
-          <y>0</y>
+          <x>256</x>
+          <y>250</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>background01_3</path>
+        <location>
+          <x>1145</x>
+          <y>212</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>background01_3</path>
+        <location>
+          <x>2290</x>
+          <y>212</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>background01_3</path>
+        <location>
+          <x>3435</x>
+          <y>212</y>
         </location>
       </graphic>
     </background>
@@ -71,7 +92,7 @@
         <loc>800,454</loc>
         <count>4</count>
         <bosses>0</bosses>
-        <type>cow</type>
+        <type>cowboy</type>
         <weight>1</weight>
       </item>
       <item>
@@ -79,7 +100,47 @@
         <loc>1000,566</loc>
         <count>4</count>
         <bosses>0</bosses>
-        <type>cow</type>
+        <type>cowboy</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1000,566</loc>
+        <count>4</count>
+        <bosses>0</bosses>
+        <type>hippie</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1000,566</loc>
+        <count>4</count>
+        <bosses>0</bosses>
+        <type>nerd</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1600,566</loc>
+        <count>4</count>
+        <bosses>0</bosses>
+        <type>cowboy</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1600,566</loc>
+        <count>4</count>
+        <bosses>0</bosses>
+        <type>hippie</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1600,566</loc>
+        <count>4</count>
+        <bosses>0</bosses>
+        <type>nerd</type>
         <weight>1</weight>
       </item>
     </items>

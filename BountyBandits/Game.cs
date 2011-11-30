@@ -381,7 +381,7 @@ namespace BountyBandits
                     {
                         drawGameplay(getAveX() + storyElement.getCameraOffset(gameTime).X);
                         foreach (Being storyBeing in storyBeings.Values)
-                            storyBeing.draw(1);
+                            storyBeing.draw();
                     }
                     catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
                     spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight-40), Color.Black);
@@ -474,11 +474,11 @@ namespace BountyBandits
                     }
                 foreach (Being enemy in spawnManager.enemies)
                     if (currentDepth == enemy.getDepth())
-                        enemy.draw(currentDepth);
+                        enemy.draw();
                 foreach (Being player in players)
                     if (currentDepth == player.getDepth())
                     {
-                        player.draw(currentDepth);
+                        player.draw();
                         DropItem item = getClosestDropItem(player);
                         if (item != null && Vector2.DistanceSquared(item.body.Position, player.body.Position) < DROP_ITEM_MAX_DISTANCE)
                             drawItemDescription(item);

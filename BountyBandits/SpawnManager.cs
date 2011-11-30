@@ -36,16 +36,14 @@ namespace BountyBandits
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
                 if (gameref.getAveX() - gameref.res.ScreenWidth / 2 < 16) 
                     side = 1;
-                else if (gameref.mapManager.getCurrentLevel().levelLength - gameref.getAveX() < 128 + gameref.res.ScreenWidth) 
+                else if (gameref.mapManager.getCurrentLevel().levelLength - gameref.getAveX() < enemy.controller.frames[0].Width + gameref.res.ScreenWidth) 
                     side = -1;
-                int lanesToMoveDown = gameref.rand.Next(4);
-                for (int laneDown = 0; laneDown < lanesToMoveDown; laneDown++)
-                    enemy.setCollisionCategories((CollisionCategory)(2 * (int)enemy.geom.CollisionCategories));
+                enemy.setDepth(gameref.rand.Next(4));
 
-                Vector2 posOffset = new Vector2(side*(gameref.res.ScreenWidth / 2 + enemy.controller.frames[0].Width+18), enemy.controller.frames[0].Height+1);
-                while (gameref.physicsSimulator.Collide(new Vector2(gameref.getAveX() + posOffset.X, gameref.getAveY() - gameref.res.ScreenHeight / 2 + posOffset.Y)) != null)
-                    posOffset.X += (float)(side * enemy.controller.frames[0].Width);
-                enemy.body.Position = new Vector2(gameref.getAveX() + posOffset.X, gameref.getAveY() - gameref.res.ScreenHeight/2 + posOffset.Y);
+                Vector2 posOffset = new Vector2(side * (gameref.res.ScreenWidth / 2 + enemy.controller.frames[0].Width + 18), enemy.controller.frames[0].Height + 1);
+                enemy.body.Position = new Vector2(gameref.getAveX() + posOffset.X, gameref.getAveY() - gameref.res.ScreenHeight / 2 + posOffset.Y);
+                while (enemy.isTouchingGeom(false))
+                    enemy.body.Position = new Vector2(enemy.body.Position.X + side * enemy.controller.frames[0].Width, enemy.body.Position.Y);
                 enemies.Add(enemy);
             }
         }
@@ -65,8 +63,16 @@ namespace BountyBandits
             {
                 enemy.update(gameTime);
                 //BEGIN AI TODOjrob
-                if (enemy.targetPlayer == -1 || gameref.players[enemy.targetPlayer].currenthealth < 1)
-                    enemy.targetPlayer = gameref.rand.Next(gameref.players.Count-1);
+
+                //figure out if anyone is alive
+                bool someoneAlive = false;
+                foreach (Being player in gameref.players)
+                    if (player.currenthealth > 0)
+                        someoneAlive = true;
+                //and target that random alive person
+                while (someoneAlive && (enemy.targetPlayer == -1 || gameref.players[enemy.targetPlayer].currenthealth < 1))
+                    enemy.targetPlayer = gameref.rand.Next(gameref.players.Count);
+
                 Being targetPlayer = gameref.players[enemy.targetPlayer];
                 if (targetPlayer.getDepth() < enemy.getDepth())         enemy.lane(true);
                 else if (targetPlayer.getDepth() > enemy.getDepth())    enemy.lane(false);

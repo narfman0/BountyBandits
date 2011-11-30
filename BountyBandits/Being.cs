@@ -79,7 +79,7 @@ namespace BountyBandits
                 currFrame = currAnimation.start;
             }
         }
-        public void draw(int currentDepth)
+        public void draw()
         {
             Vector2 drawPoint = Vector2.Zero;
             ++currFrame;
@@ -115,7 +115,7 @@ namespace BountyBandits
                 drawPoint = new Vector2(getPos().X - (controller.frames[currFrame].Width / 2f), getPos().Y + controller.frames[currFrame].Height / 2f);
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            gameref.drawItem(controller.frames[currFrame], new Vector2(drawPoint.X - gameref.getAveX() + gameref.res.ScreenWidth / 2, drawPoint.Y - gameref.getAveY() + gameref.res.ScreenHeight / 2), 0, currentDepth, Vector2.One, effects, Vector2.Zero);
+            gameref.drawItem(controller.frames[currFrame], new Vector2(drawPoint.X - gameref.getAveX() + gameref.res.ScreenWidth / 2, drawPoint.Y - gameref.getAveY() + gameref.res.ScreenHeight / 2), 0, getDepth(), Vector2.One, effects, Vector2.Zero);
         }
         public int getDepth()
         {
@@ -157,11 +157,8 @@ namespace BountyBandits
                 if (geom != geometry &&
                     (geom.CollisionCategories & geometry.CollisionCategories) != CollisionCategory.None &&
                     AABB.Intersect(ref geom.AABB, ref geometry.AABB))
-                {
-                    if (countGround)    return true;
-                    else if (!geometry.Equals(gameref.groundGeom))
-                            return true;
-                }
+                    if (countGround || !geometry.Equals(gameref.groundGeom)) 
+                        return true;
             return false;
         }
         public void jump()
