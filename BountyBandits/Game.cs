@@ -454,9 +454,8 @@ namespace BountyBandits
                         currentDepth < gameItem.width)
                     {
                         Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y - getAveY() + res.ScreenHeight / 2);
-                        Texture2D tex = texMan.getTex(gameItem.name);
-                        if (gameItem is DropItem)
-                            tex = texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice);
+                        Texture2D tex = !(gameItem is DropItem) ? texMan.getTex(gameItem.name) :
+                            texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice);
                         Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 2);
                         float rotation = gameItem.body.Rotation;
                         if (!(gameItem is DropItem))
@@ -595,9 +594,9 @@ namespace BountyBandits
             #endregion
             #region Draw
             float aveX = getAveX() - res.ScreenWidth / 2;
-            float aveY = getAveY() - res.ScreenHeight;
+            float aveY = getAveY() - res.ScreenHeight / 2;
             int backgroundDrawHeight = (20 * numNewLines < (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3) ? (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3 : 20 * numNewLines;
-            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - aveX, res.ScreenHeight - aveY - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
+            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - aveX, res.ScreenHeight + aveY - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
             drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - aveX, item.body.Position.Y + 15f - aveY), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
             spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), nameColor);
             spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), Color.White);
