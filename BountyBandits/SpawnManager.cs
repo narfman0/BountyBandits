@@ -43,9 +43,9 @@ namespace BountyBandits
                     enemy.setCollisionCategories((CollisionCategory)(2 * (int)enemy.geom.CollisionCategories));
 
                 Vector2 posOffset = new Vector2(side*(gameref.res.ScreenWidth / 2 + enemy.controller.frames[0].Width+18), enemy.controller.frames[0].Height+1);
-                while (gameref.physicsSimulator.Collide(new Vector2(gameref.getAveX() + posOffset.X, posOffset.Y)) != null)
+                while (gameref.physicsSimulator.Collide(new Vector2(gameref.getAveX() + posOffset.X, gameref.getAveY() - gameref.res.ScreenHeight / 2 + posOffset.Y)) != null)
                     posOffset.X += (float)(side * enemy.controller.frames[0].Width);
-                enemy.body.Position = new Vector2(gameref.getAveX() + posOffset.X, posOffset.Y);
+                enemy.body.Position = new Vector2(gameref.getAveX() + posOffset.X, gameref.getAveY() - gameref.res.ScreenHeight/2 + posOffset.Y);
                 enemies.Add(enemy);
             }
         }
@@ -53,7 +53,8 @@ namespace BountyBandits
         {
             #region Activate spawns
             foreach (SpawnPoint spawnp in spawnPoints)
-                if (spawnp.loc.X < gameref.getAveX() && !spawnp.isSpawned)
+                if ((spawnp.loc.X < gameref.getAveX() || spawnp.loc.Y < gameref.getAveY() - gameref.res.ScreenHeight/2)
+                    && !spawnp.isSpawned)
                 {
                     spawnGroup(spawnp.type, spawnp.weight/*level*/, spawnp.count);
                     spawnp.isSpawned = true;

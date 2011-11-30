@@ -115,7 +115,7 @@ namespace BountyBandits
                 drawPoint = new Vector2(getPos().X - (controller.frames[currFrame].Width / 2f), getPos().Y + controller.frames[currFrame].Height / 2f);
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            gameref.drawItem(controller.frames[currFrame], new Vector2(drawPoint.X - gameref.getAveX() + gameref.res.ScreenWidth / 2, drawPoint.Y), 0, currentDepth, Vector2.One, effects, Vector2.Zero);
+            gameref.drawItem(controller.frames[currFrame], new Vector2(drawPoint.X - gameref.getAveX() + gameref.res.ScreenWidth / 2, drawPoint.Y - gameref.getAveY() + gameref.res.ScreenHeight / 2), 0, currentDepth, Vector2.One, effects, Vector2.Zero);
         }
         public int getDepth()
         {

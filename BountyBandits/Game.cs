@@ -446,23 +446,32 @@ namespace BountyBandits
             if (mapManager.getCurrentLevel().horizon != null)
                 spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
-                spriteBatch.Draw(texMan.getTex(item.texturePath), item.location - new Vector2(getAveX(), 0), Color.White);
+                spriteBatch.Draw(texMan.getTex(item.texturePath), item.location - new Vector2(getAveX(), -getAveY() + res.ScreenHeight/2), Color.White);
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
                 foreach (GameItem gameItem in activeItems)
                     if (currentDepth >= gameItem.startdepth &&
                         currentDepth < gameItem.width)
                     {
-                        Vector2 pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y);
-                        if (gameItem.name.Contains("log") || gameItem.name.Contains("circle"))
-                        {
-                            Vector2 scale = new Vector2((float)gameItem.radius * 2 / (float)texMan.getTex("log").Width, (float)gameItem.radius * 2 / (float)texMan.getTex("log").Width);
-                            drawItem(texMan.getTex("log"), pos, -gameItem.body.Rotation, currentDepth, scale, SpriteEffects.None, new Vector2(texMan.getTex("log").Width / 2, texMan.getTex("log").Height / 2));
-                        }
-                        else if (gameItem.name.Contains("box") || gameItem.name.Contains("crate"))
-                            drawItem(texMan.getTex("box"), pos, -gameItem.body.Rotation, currentDepth, new Vector2((float)gameItem.radius / (float)texMan.getTex("box").Width, (float)gameItem.radius / (float)texMan.getTex("box").Width), SpriteEffects.None, new Vector2(texMan.getTex("box").Width / 2, texMan.getTex("box").Height / 2));
+                        Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y - getAveY() + res.ScreenHeight / 2);
+                        Texture2D tex = texMan.getTex(gameItem.name);
                         if (gameItem is DropItem)
-                            drawItem(texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice), pos, gameItem.body.Rotation, currentDepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Width / 2, texMan.getTex(((DropItem)gameItem).getItem().getTextureName()).Height / 2));
+                            tex = texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice);
+                        Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 2);
+                        float rotation = gameItem.body.Rotation;
+                        if (!(gameItem is DropItem))
+                            switch(gameItem.polygonType)
+                            {
+                                case PhysicsPolygonType.Circle:
+                                    scale = new Vector2((float)gameItem.radius * 2 / (float)tex.Width, (float)gameItem.radius * 2 / (float)tex.Width);
+                                    rotation *= -1;
+                                    break;
+                                case PhysicsPolygonType.Rectangle:
+                                    scale = new Vector2((float)gameItem.radius / (float)tex.Width, (float)gameItem.radius / (float)tex.Width);
+                                    rotation *= -1;
+                                    break;
+                            }
+                        drawItem(tex, pos, rotation, currentDepth, scale, SpriteEffects.None, origin);
                     }
                 foreach (Being enemy in spawnManager.enemies)
                     if (currentDepth == enemy.getDepth())
@@ -586,11 +595,12 @@ namespace BountyBandits
             #endregion
             #region Draw
             float aveX = getAveX() - res.ScreenWidth / 2;
+            float aveY = getAveY() - res.ScreenHeight;
             int backgroundDrawHeight = (20 * numNewLines < (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3) ? (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3 : 20 * numNewLines;
-            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - aveX, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
-            drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - aveX, item.body.Position.Y + 15f), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
-            spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), nameColor);
-            spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 45f - (20f*(name.Length/20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)))), Color.White);
+            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - aveX, res.ScreenHeight - aveY - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
+            drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - aveX, item.body.Position.Y + 15f - aveY), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
+            spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), nameColor);
+            spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), Color.White);
             #endregion
         }
         public void endLevel()
@@ -613,6 +623,15 @@ namespace BountyBandits
             else if (aveX > mapManager.getCurrentLevel().levelLength - res.ScreenWidth)
                 aveX = mapManager.getCurrentLevel().levelLength - res.ScreenWidth;
             return aveX;
+        }
+        public float getAveY()
+        {
+            float aveY = 0;
+            foreach (Being player in players) aveY += player.getPos().Y;
+            aveY /= players.Count;
+            if (aveY < res.ScreenHeight/2)
+                aveY = res.ScreenHeight / 2;
+            return aveY;
         }
         public DropItem getClosestDropItem(Being player)
         {
@@ -647,7 +666,7 @@ namespace BountyBandits
         }
         public void newLevel()
         {
-            physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
+            physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
             #region add gameitems
             activeItems = new List<GameItem>();
             foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
@@ -658,15 +677,16 @@ namespace BountyBandits
             foreach (GameItem item in mapManager.getCurrentLevel().items)
             {
                 Geom geom = new Geom();
-                if (item.name.Contains("box"))
+                switch (item.polygonType)
                 {
-                    item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
-                    geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
-                }
-                else if (item.name.Contains("circle") || item.name.Contains("log"))
-                {
-                    item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
-                    geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 8);
+                    case PhysicsPolygonType.Circle:
+                        item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
+                        geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
+                        break;
+                    case PhysicsPolygonType.Rectangle:
+                        item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
+                        geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
+                        break;
                 }
                 geom.FrictionCoefficient = .6f;
                 #region Collision Categories

@@ -10,15 +10,21 @@ using System.Xml;
 
 namespace BountyBandits
 {
+    public enum PhysicsPolygonType
+    {
+        Rectangle, Circle
+    }
+
     public class GameItem
     {
-        public string name = "default";
+        public string name;
         public uint weight = 1;
         public uint radius = 10;
         public uint startdepth = 0;
         public uint width = 1;
         public Vector2 loc = Vector2.Zero;
         public Body body;
+        public PhysicsPolygonType polygonType;
         protected GameItem() 
         {
         }
@@ -44,6 +50,8 @@ namespace BountyBandits
                     weight = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("width"))
                     width = uint.Parse(itemChild.FirstChild.Value);
+                else if (itemChild.Name.Equals("polygonType"))
+                    polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
         }
     }
 }

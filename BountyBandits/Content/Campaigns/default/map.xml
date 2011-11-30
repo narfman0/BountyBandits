@@ -28,6 +28,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>1</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -36,6 +37,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -44,6 +46,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>4</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -52,6 +55,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>5</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -60,6 +64,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>8</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>enemies</name>
@@ -140,43 +145,46 @@
       <graphic>
         <path>background01_1</path>
         <location>
-          <x>1024</x>
-          <y>360</y>
+          <x>0</x>
+          <y>0</y>
         </location>
       </graphic>
       <graphic>
         <path>background01_2</path>
         <location>
-          <x>3072</x>
-          <y>360</y>
+          <x>2048</x>
+          <y>0</y>
         </location>
       </graphic>
     </background>
     <horizonPath>horizon1</horizonPath>
     <items>
       <item>
-        <name>circle</name>
+        <name>log</name>
         <loc>139,541</loc>
         <radius>30</radius>
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>1</weight>
+        <polygonType>Circle</polygonType>
       </item>
       <item>
-        <name>circle</name>
+        <name>log</name>
         <loc>175,530</loc>
         <radius>50</radius>
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>2</weight>
+        <polygonType>Circle</polygonType>
       </item>
       <item>
-        <name>circle</name>
+        <name>log</name>
         <loc>235,520</loc>
         <radius>70</radius>
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>4</weight>
+        <polygonType>Circle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -185,6 +193,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>5</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>box</name>
@@ -193,6 +202,7 @@
         <startdepth>0</startdepth>
         <width>1</width>
         <weight>8</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>enemies</name>
