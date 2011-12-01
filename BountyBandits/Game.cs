@@ -446,7 +446,10 @@ namespace BountyBandits
             if (mapManager.getCurrentLevel().horizon != null)
                 spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
-                spriteBatch.Draw(texMan.getTex(item.texturePath), item.location - new Vector2(getAveX(), -getAveY() + res.ScreenHeight/2), Color.White);
+            {
+                Vector2 position = item.location - new Vector2(getAveX() - res.ScreenWidth / 2, -getAveY() + res.ScreenHeight / 2);
+                spriteBatch.Draw(texMan.getTex(item.texturePath), position, Color.White);
+            }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
                 foreach (GameItem gameItem in activeItems)
