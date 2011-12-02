@@ -1,0 +1,62 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>tikiTeeth</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>30</start>
+        <end>60</end>
+        <keyframe>47</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>1</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>60</start>
+        <end>99</end>
+      </animation>
+    </animations>
+    <colorPermutations>
+      <permutation>
+        <base>
+          <r>102</r>
+          <g>102</g>
+          <b>0</b>
+        </base>
+        <permutation>
+          <r>35</r>
+          <g>82</g>
+          <b>35</b>
+        </permutation>
+        <permutation>
+          <r>227</r>
+          <g>66</g>
+          <b>66</b>
+        </permutation>
+        <permutation>
+          <r>210</r>
+          <g>210</g>
+          <b>0</b>
+        </permutation>
+      </permutation>
+    </colorPermutations>
+    <stats>
+      <stat type='Strength' value='2' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='10' />
+      <stat type='Speed' value='3' />
+      <stat type='Range' value='150' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>

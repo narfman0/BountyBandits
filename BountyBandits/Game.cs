@@ -226,7 +226,7 @@ namespace BountyBandits
                                 }
 #if DEBUG
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
-                                    spawnManager.spawnGroup("tikiSmile", 1, 1);
+                                    spawnManager.spawnGroup("tikiTeeth", 1, 1);
                                     //foreach(String dirname in Directory.GetDirectories(@"Content\Beings"))
                                     //    spawnManager.spawnGroup(dirname.Substring(dirname.LastIndexOf('\\')+1), 1, 1);
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
@@ -244,7 +244,7 @@ namespace BountyBandits
                     spawnManager.update(gameTime);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     #region initiate cutscene
-                    storyElement = mapManager.getCurrentLevel().popStoryElement(getAveX());
+                    storyElement = mapManager.getCurrentLevel().popStoryElement(getAvePosition().X);
                     if (storyElement != null)
                     {
                         timeStoryElementStarted = gameTime.TotalGameTime.TotalMilliseconds;
@@ -379,7 +379,7 @@ namespace BountyBandits
                 case GameState.Cutscene:
                     try
                     {
-                        drawGameplay(getAveX() + storyElement.getCameraOffset(gameTime).X);
+                        drawGameplay(getAvePosition() + new Vector2(storyElement.getCameraOffset(gameTime).X,0f));
                         foreach (Being storyBeing in storyBeings.Values)
                             storyBeing.draw();
                     }
@@ -392,7 +392,7 @@ namespace BountyBandits
                     if (isEndLevel())
                         endLevel();
                     else
-                        drawGameplay(getAveX());
+                        drawGameplay(getAvePosition());
                     break;
                 #endregion
                 #region root menu
@@ -439,7 +439,7 @@ namespace BountyBandits
             spriteBatch.End();
             base.Draw(gameTime);
         }
-        public void drawGameplay(float aveX)
+        public void drawGameplay(Vector2 avePosition)
         {
             Level currentLevel = mapManager.getCurrentLevel();
             #region Gameworld
@@ -447,7 +447,7 @@ namespace BountyBandits
                 spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
-                Vector2 position = item.location - new Vector2(getAveX() - res.ScreenWidth / 2, -getAveY() + res.ScreenHeight / 2);
+                Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
                 spriteBatch.Draw(texMan.getTex(item.texturePath), position, Color.White);
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
@@ -456,7 +456,7 @@ namespace BountyBandits
                     if (currentDepth >= gameItem.startdepth &&
                         currentDepth < gameItem.width)
                     {
-                        Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - aveX + res.ScreenWidth / 2, gameItem.body.Position.Y - getAveY() + res.ScreenHeight / 2);
+                        Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - avePosition.X + res.ScreenWidth / 2, gameItem.body.Position.Y - avePosition.Y + res.ScreenHeight / 2);
                         Texture2D tex = !(gameItem is DropItem) ? texMan.getTex(gameItem.name) :
                             texMan.getTexColored(((DropItem)gameItem).getItem().getTextureName(), ((DropItem)gameItem).getItem().getPrimaryColor(), ((DropItem)gameItem).getItem().getSecondaryColor(), this.graphics.GraphicsDevice);
                         Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 2);
@@ -596,13 +596,12 @@ namespace BountyBandits
             }*/
             #endregion
             #region Draw
-            float aveX = getAveX() - res.ScreenWidth / 2;
-            float aveY = getAveY() - res.ScreenHeight / 2;
+            Vector2 avePosition = getAvePosition() - new Vector2(res.ScreenWidth / 2, res.ScreenHeight / 2);
             int backgroundDrawHeight = (20 * numNewLines < (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3) ? (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3 : 20 * numNewLines;
-            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - aveX, res.ScreenHeight + aveY - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
-            drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - aveX, item.body.Position.Y + 15f - aveY), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
-            spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), nameColor);
-            spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - aveX, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - aveY)), Color.White);
+            spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - avePosition.X, res.ScreenHeight + avePosition.Y - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
+            drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - avePosition.X, item.body.Position.Y + 15f - avePosition.Y), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
+            spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), nameColor);
+            spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White);
             #endregion
         }
         public void endLevel()
@@ -615,25 +614,29 @@ namespace BountyBandits
             mapManager.incrementCurrentLevel(true);
             currentState.setState(GameState.WorldMap);
         }
-        public float getAveX()
+        public Vector2 getAvePosition()
         {
-            float aveX = 0;
-            foreach (Being player in players) aveX += player.getPos().X;
-            aveX /= players.Count;
-            if (aveX < res.ScreenWidth / 2)
-                aveX = res.ScreenWidth / 2;
-            else if (aveX > mapManager.getCurrentLevel().levelLength - res.ScreenWidth)
-                aveX = mapManager.getCurrentLevel().levelLength - res.ScreenWidth;
-            return aveX;
-        }
-        public float getAveY()
-        {
-            float aveY = 0;
-            foreach (Being player in players) aveY += player.getPos().Y;
-            aveY /= players.Count;
-            if (aveY < res.ScreenHeight/2)
-                aveY = res.ScreenHeight / 2;
-            return aveY;
+            int aliveCount = 0;
+            Vector2 ave = Vector2.Zero;
+            foreach (Being player in players)
+            {
+                if (player.currenthealth > 0)
+                {
+                    ave += player.getPos();
+                    aliveCount++;
+                }
+            }
+            if (aliveCount == 0)
+                players[0].getPos();
+            else
+                ave /= aliveCount;
+            if (ave.Y < res.ScreenHeight / 2)
+                ave.Y = res.ScreenHeight / 2;
+            if (ave.X < res.ScreenWidth / 2)
+                ave.X = res.ScreenWidth / 2;
+            else if (ave.X > mapManager.getCurrentLevel().levelLength - res.ScreenWidth)
+                ave.X = mapManager.getCurrentLevel().levelLength - res.ScreenWidth;
+            return ave;
         }
         public DropItem getClosestDropItem(Being player)
         {
