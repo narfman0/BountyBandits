@@ -19,10 +19,10 @@ namespace BountyBandits
     {
         public string name;
         public uint weight = 1;
-        public uint radius = 10;
+        public uint radius;
         public uint startdepth = 0;
         public uint width = 1;
-        public Vector2 loc = Vector2.Zero;
+        public Vector2 loc, sideLengths;
         public Body body;
         public Vertices vertices;
         public bool immovable = false;
@@ -54,6 +54,8 @@ namespace BountyBandits
                     width = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("immovable"))
                     immovable = bool.Parse(itemChild.FirstChild.Value);
+                else if (itemChild.Name.Equals("sideLengths"))
+                    sideLengths = XMLUtil.fromXMLVector2(itemChild);
                 else if (itemChild.Name.Equals("polygonType"))
                     polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("vertices")){

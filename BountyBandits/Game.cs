@@ -469,7 +469,7 @@ namespace BountyBandits
                                     rotation *= -1;
                                     break;
                                 case PhysicsPolygonType.Rectangle:
-                                    scale = new Vector2((float)gameItem.radius / (float)tex.Width, (float)gameItem.radius / (float)tex.Width);
+                                    scale = new Vector2((float)gameItem.sideLengths.X / (float)tex.Width, (float)gameItem.sideLengths.Y / (float)tex.Width);
                                     rotation *= -1;
                                     break;
                             }
@@ -689,8 +689,8 @@ namespace BountyBandits
                         geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
                         break;
                     case PhysicsPolygonType.Rectangle:
-                        item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
-                        geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
+                        item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
+                        geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
                         break;
                     case PhysicsPolygonType.Polygon:
                         item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
