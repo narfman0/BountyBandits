@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length='4584' name='levelOne'>
+  <level length='5500' name='levelOne'>
     <adj>1</adj>
     <background>
       <graphic>
@@ -19,24 +19,157 @@
         </location>
       </graphic>
       <graphic>
-        <path>background01_3</path>
+        <path>paintedLadyBlue</path>
         <location>
           <x>1145</x>
-          <y>212</y>
+          <y>-460</y>
         </location>
       </graphic>
       <graphic>
-        <path>background01_3</path>
+        <path>paintedLadyRed</path>
         <location>
-          <x>2290</x>
-          <y>212</y>
+          <x>1797</x>
+          <y>-460</y>
         </location>
       </graphic>
       <graphic>
-        <path>background01_3</path>
+        <path>paintedLadyGreen</path>
         <location>
-          <x>3435</x>
-          <y>212</y>
+          <x>2449</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyYellow</path>
+        <location>
+          <x>3101</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyLightBlue</path>
+        <location>
+          <x>3753</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyBlue</path>
+        <location>
+          <x>4405</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyRed</path>
+        <location>
+          <x>5057</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyGreen</path>
+        <location>
+          <x>5709</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyYellow</path>
+        <location>
+          <x>6361</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>paintedLadyLightBlue</path>
+        <location>
+          <x>7013</x>
+          <y>-460</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>1143</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>1618</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>2093</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>2568</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>3043</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>3518</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>3993</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>4468</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>4937</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>5438</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>5915</x>
+          <y>561</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>road</path>
+        <location>
+          <x>6392</x>
+          <y>561</y>
         </location>
       </graphic>
     </background>
