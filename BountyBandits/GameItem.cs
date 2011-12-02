@@ -12,7 +12,7 @@ namespace BountyBandits
 {
     public enum PhysicsPolygonType
     {
-        Rectangle, Circle
+        Rectangle, Circle, Polygon
     }
 
     public class GameItem
@@ -24,6 +24,8 @@ namespace BountyBandits
         public uint width = 1;
         public Vector2 loc = Vector2.Zero;
         public Body body;
+        public Vertices vertices;
+        public bool immovable = false;
         public PhysicsPolygonType polygonType;
         protected GameItem() 
         {
@@ -34,7 +36,7 @@ namespace BountyBandits
         }
         void fromXML(XmlNode itemnode)
         {
-            foreach (XmlNode itemChild in itemnode)
+            foreach (XmlElement itemChild in itemnode)
                 if (itemChild.Name.Equals("name"))
                     name = itemChild.FirstChild.Value;
                 else if (itemChild.Name.Equals("loc"))
@@ -50,8 +52,15 @@ namespace BountyBandits
                     weight = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("width"))
                     width = uint.Parse(itemChild.FirstChild.Value);
+                else if (itemChild.Name.Equals("immovable"))
+                    immovable = bool.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("polygonType"))
                     polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
+                else if (itemChild.Name.Equals("vertices")){
+                    vertices = new Vertices();
+                    foreach (XmlElement vertexElement in itemChild.GetElementsByTagName("vertex"))
+                        vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
+                }
         }
     }
 }

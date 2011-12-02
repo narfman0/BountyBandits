@@ -692,7 +692,13 @@ namespace BountyBandits
                         item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.radius, item.radius, item.weight);
                         geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
                         break;
+                    case PhysicsPolygonType.Polygon:
+                        item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
+                        geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
+                        break;
                 }
+                if (item.immovable)
+                    item.body.IsStatic = item.immovable;
                 geom.FrictionCoefficient = .6f;
                 #region Collision Categories
                 geom.CollisionCategories = CollisionCategory.None;

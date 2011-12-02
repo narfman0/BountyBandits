@@ -221,6 +221,16 @@
         <polygonType>Rectangle</polygonType>
       </item>
       <item>
+        <name>box</name>
+        <loc>540,80</loc>
+        <radius>110</radius>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>8</weight>
+        <polygonType>Rectangle</polygonType>
+        <immovable>true</immovable>
+      </item>
+      <item>
         <name>enemies</name>
         <loc>800,454</loc>
         <count>4</count>
