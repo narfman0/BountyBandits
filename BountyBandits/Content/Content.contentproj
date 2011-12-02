@@ -5550,6 +5550,398 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Beings\tikiSmile\tikiSmile0001.png">
+      <Name>tikiSmile0001</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0002.png">
+      <Name>tikiSmile0002</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0003.png">
+      <Name>tikiSmile0003</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0004.png">
+      <Name>tikiSmile0004</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0005.png">
+      <Name>tikiSmile0005</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0006.png">
+      <Name>tikiSmile0006</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0007.png">
+      <Name>tikiSmile0007</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0008.png">
+      <Name>tikiSmile0008</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0009.png">
+      <Name>tikiSmile0009</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0010.png">
+      <Name>tikiSmile0010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0011.png">
+      <Name>tikiSmile0011</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0012.png">
+      <Name>tikiSmile0012</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0013.png">
+      <Name>tikiSmile0013</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0014.png">
+      <Name>tikiSmile0014</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0015.png">
+      <Name>tikiSmile0015</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0016.png">
+      <Name>tikiSmile0016</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0017.png">
+      <Name>tikiSmile0017</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0018.png">
+      <Name>tikiSmile0018</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0019.png">
+      <Name>tikiSmile0019</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0020.png">
+      <Name>tikiSmile0020</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0021.png">
+      <Name>tikiSmile0021</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0022.png">
+      <Name>tikiSmile0022</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0023.png">
+      <Name>tikiSmile0023</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0024.png">
+      <Name>tikiSmile0024</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0025.png">
+      <Name>tikiSmile0025</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0026.png">
+      <Name>tikiSmile0026</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0027.png">
+      <Name>tikiSmile0027</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0028.png">
+      <Name>tikiSmile0028</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0029.png">
+      <Name>tikiSmile0029</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0030.png">
+      <Name>tikiSmile0030</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0031.png">
+      <Name>tikiSmile0031</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0032.png">
+      <Name>tikiSmile0032</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0033.png">
+      <Name>tikiSmile0033</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0034.png">
+      <Name>tikiSmile0034</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0035.png">
+      <Name>tikiSmile0035</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0036.png">
+      <Name>tikiSmile0036</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0037.png">
+      <Name>tikiSmile0037</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0038.png">
+      <Name>tikiSmile0038</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0039.png">
+      <Name>tikiSmile0039</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0040.png">
+      <Name>tikiSmile0040</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0041.png">
+      <Name>tikiSmile0041</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0042.png">
+      <Name>tikiSmile0042</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0043.png">
+      <Name>tikiSmile0043</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0044.png">
+      <Name>tikiSmile0044</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0045.png">
+      <Name>tikiSmile0045</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0046.png">
+      <Name>tikiSmile0046</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0047.png">
+      <Name>tikiSmile0047</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0048.png">
+      <Name>tikiSmile0048</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0049.png">
+      <Name>tikiSmile0049</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0050.png">
+      <Name>tikiSmile0050</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0051.png">
+      <Name>tikiSmile0051</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0052.png">
+      <Name>tikiSmile0052</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0053.png">
+      <Name>tikiSmile0053</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0054.png">
+      <Name>tikiSmile0054</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0055.png">
+      <Name>tikiSmile0055</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0056.png">
+      <Name>tikiSmile0056</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0057.png">
+      <Name>tikiSmile0057</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0058.png">
+      <Name>tikiSmile0058</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0059.png">
+      <Name>tikiSmile0059</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0060.png">
+      <Name>tikiSmile0060</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0061.png">
+      <Name>tikiSmile0061</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0062.png">
+      <Name>tikiSmile0062</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0063.png">
+      <Name>tikiSmile0063</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0064.png">
+      <Name>tikiSmile0064</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0065.png">
+      <Name>tikiSmile0065</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0066.png">
+      <Name>tikiSmile0066</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0067.png">
+      <Name>tikiSmile0067</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0068.png">
+      <Name>tikiSmile0068</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0069.png">
+      <Name>tikiSmile0069</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0070.png">
+      <Name>tikiSmile0070</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0071.png">
+      <Name>tikiSmile0071</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0072.png">
+      <Name>tikiSmile0072</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0073.png">
+      <Name>tikiSmile0073</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0074.png">
+      <Name>tikiSmile0074</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\tikiSmile\tikiSmile0075.png">
+      <Name>tikiSmile0075</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Beings\tikiSmile\tikiSmile.xml">
+      <Name>tikiSmile</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Beings\tikiSmile\portrait.png">
+      <Name>portrait</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
