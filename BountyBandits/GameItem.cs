@@ -19,7 +19,7 @@ namespace BountyBandits
     {
         public string name;
         public uint weight = 1;
-        public uint radius;
+        public uint radius = 10;
         public uint startdepth = 0;
         public uint width = 1;
         public Vector2 loc, sideLengths;

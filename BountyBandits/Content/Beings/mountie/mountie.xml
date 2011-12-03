@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>mountie</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>19</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>50</start>
+        <end>83</end>
+        <keyframe>63</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>20</start>
+        <end>49</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>83</start>
+        <end>117</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='4' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='4' />
+      <stat type='Speed' value='5' />
+      <stat type='Range' value='125' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
