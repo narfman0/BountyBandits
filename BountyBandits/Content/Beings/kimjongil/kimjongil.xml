@@ -1,0 +1,52 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>kimjongil</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>50</start>
+        <end>85</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>85</start>
+        <end>130</end>
+        <keyframe>111</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>50</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>130</start>
+        <end>190</end>
+      </animation>
+    </animations>
+    <colorPermutations>
+      <permutation>
+        <base>
+          <r>191</r>
+          <g>162</g>
+          <b>128</b>
+        </base>
+        <permutation>
+          <r>50</r>
+          <g>82</g>
+          <b>135</b>
+        </permutation>
+      </permutation>
+    </colorPermutations>
+    <stats>
+      <stat type='Strength' value='6' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='2' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='75' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
