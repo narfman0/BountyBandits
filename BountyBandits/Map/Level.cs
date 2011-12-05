@@ -82,11 +82,14 @@ namespace BountyBandits.Map
     {
         public string texturePath;
         public Vector2 location;
+        public float rotation, scale;
         public static BackgroundItemStruct fromXML(XmlElement element)
         {
             BackgroundItemStruct str = new BackgroundItemStruct();
             str.location = XMLUtil.fromXMLVector2(element.GetElementsByTagName("location")[0]);
             str.texturePath = element.GetElementsByTagName("path")[0].FirstChild.Value;
+            str.rotation = element.GetAttribute("rotation") != "" ? float.Parse(element.GetAttribute("rotation")) : 0f;
+            str.scale = element.GetAttribute("scale") == "" ? 1f : float.Parse(element.GetAttribute("scale"));
             return str;
         }
     }

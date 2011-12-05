@@ -448,7 +448,7 @@ namespace BountyBandits
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
                 Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
-                spriteBatch.Draw(texMan.getTex(item.texturePath), position, Color.White);
+                spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1 );
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {

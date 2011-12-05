@@ -18,74 +18,74 @@
           <y>250</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyBlue</path>
         <location>
           <x>1145</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyRed</path>
         <location>
           <x>1797</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyGreen</path>
         <location>
           <x>2449</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyYellow</path>
         <location>
           <x>3101</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyLightBlue</path>
         <location>
           <x>3753</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyBlue</path>
         <location>
           <x>4405</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyRed</path>
         <location>
           <x>5057</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyGreen</path>
         <location>
           <x>5709</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyYellow</path>
         <location>
           <x>6361</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic scale='.3'>
         <path>paintedLadyLightBlue</path>
         <location>
           <x>7013</x>
-          <y>-460</y>
+          <y>100</y>
         </location>
       </graphic>
       <graphic>
