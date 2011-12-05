@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>sloth</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>80</start>
+        <end>143</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>143</start>
+        <end>222</end>
+        <keyframe>189</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>80</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>222</start>
+        <end>280</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='10' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='1' />
+      <stat type='Speed' value='1' />
+      <stat type='Range' value='50' />
+      <stat type='Life' value='10' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
