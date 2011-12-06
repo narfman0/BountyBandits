@@ -10258,6 +10258,1271 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0001.png">
+      <Name>buddhistmonk0001</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0002.png">
+      <Name>buddhistmonk0002</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0003.png">
+      <Name>buddhistmonk0003</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0004.png">
+      <Name>buddhistmonk0004</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0005.png">
+      <Name>buddhistmonk0005</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0006.png">
+      <Name>buddhistmonk0006</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0007.png">
+      <Name>buddhistmonk0007</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0008.png">
+      <Name>buddhistmonk0008</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0009.png">
+      <Name>buddhistmonk0009</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0010.png">
+      <Name>buddhistmonk0010</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0011.png">
+      <Name>buddhistmonk0011</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0012.png">
+      <Name>buddhistmonk0012</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0013.png">
+      <Name>buddhistmonk0013</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0014.png">
+      <Name>buddhistmonk0014</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0015.png">
+      <Name>buddhistmonk0015</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0016.png">
+      <Name>buddhistmonk0016</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0017.png">
+      <Name>buddhistmonk0017</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0018.png">
+      <Name>buddhistmonk0018</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0019.png">
+      <Name>buddhistmonk0019</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0020.png">
+      <Name>buddhistmonk0020</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0021.png">
+      <Name>buddhistmonk0021</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0022.png">
+      <Name>buddhistmonk0022</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0023.png">
+      <Name>buddhistmonk0023</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0024.png">
+      <Name>buddhistmonk0024</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0025.png">
+      <Name>buddhistmonk0025</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0026.png">
+      <Name>buddhistmonk0026</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0027.png">
+      <Name>buddhistmonk0027</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0028.png">
+      <Name>buddhistmonk0028</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0029.png">
+      <Name>buddhistmonk0029</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0030.png">
+      <Name>buddhistmonk0030</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0031.png">
+      <Name>buddhistmonk0031</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0032.png">
+      <Name>buddhistmonk0032</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0033.png">
+      <Name>buddhistmonk0033</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0034.png">
+      <Name>buddhistmonk0034</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0035.png">
+      <Name>buddhistmonk0035</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0036.png">
+      <Name>buddhistmonk0036</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0037.png">
+      <Name>buddhistmonk0037</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0038.png">
+      <Name>buddhistmonk0038</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0039.png">
+      <Name>buddhistmonk0039</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0040.png">
+      <Name>buddhistmonk0040</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0041.png">
+      <Name>buddhistmonk0041</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0042.png">
+      <Name>buddhistmonk0042</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0043.png">
+      <Name>buddhistmonk0043</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0044.png">
+      <Name>buddhistmonk0044</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0045.png">
+      <Name>buddhistmonk0045</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0046.png">
+      <Name>buddhistmonk0046</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0047.png">
+      <Name>buddhistmonk0047</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0048.png">
+      <Name>buddhistmonk0048</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0049.png">
+      <Name>buddhistmonk0049</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0050.png">
+      <Name>buddhistmonk0050</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0051.png">
+      <Name>buddhistmonk0051</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0052.png">
+      <Name>buddhistmonk0052</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0053.png">
+      <Name>buddhistmonk0053</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0054.png">
+      <Name>buddhistmonk0054</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0055.png">
+      <Name>buddhistmonk0055</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0056.png">
+      <Name>buddhistmonk0056</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0057.png">
+      <Name>buddhistmonk0057</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0058.png">
+      <Name>buddhistmonk0058</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0059.png">
+      <Name>buddhistmonk0059</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0060.png">
+      <Name>buddhistmonk0060</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0061.png">
+      <Name>buddhistmonk0061</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0062.png">
+      <Name>buddhistmonk0062</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0063.png">
+      <Name>buddhistmonk0063</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0064.png">
+      <Name>buddhistmonk0064</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0065.png">
+      <Name>buddhistmonk0065</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0066.png">
+      <Name>buddhistmonk0066</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0067.png">
+      <Name>buddhistmonk0067</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0068.png">
+      <Name>buddhistmonk0068</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0069.png">
+      <Name>buddhistmonk0069</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0070.png">
+      <Name>buddhistmonk0070</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0071.png">
+      <Name>buddhistmonk0071</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0072.png">
+      <Name>buddhistmonk0072</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0073.png">
+      <Name>buddhistmonk0073</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0074.png">
+      <Name>buddhistmonk0074</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0075.png">
+      <Name>buddhistmonk0075</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0076.png">
+      <Name>buddhistmonk0076</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0077.png">
+      <Name>buddhistmonk0077</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0078.png">
+      <Name>buddhistmonk0078</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0079.png">
+      <Name>buddhistmonk0079</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0080.png">
+      <Name>buddhistmonk0080</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0081.png">
+      <Name>buddhistmonk0081</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0082.png">
+      <Name>buddhistmonk0082</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0083.png">
+      <Name>buddhistmonk0083</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0084.png">
+      <Name>buddhistmonk0084</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0085.png">
+      <Name>buddhistmonk0085</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0086.png">
+      <Name>buddhistmonk0086</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0087.png">
+      <Name>buddhistmonk0087</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0088.png">
+      <Name>buddhistmonk0088</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0089.png">
+      <Name>buddhistmonk0089</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0090.png">
+      <Name>buddhistmonk0090</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0091.png">
+      <Name>buddhistmonk0091</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0092.png">
+      <Name>buddhistmonk0092</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0093.png">
+      <Name>buddhistmonk0093</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0094.png">
+      <Name>buddhistmonk0094</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0095.png">
+      <Name>buddhistmonk0095</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0096.png">
+      <Name>buddhistmonk0096</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0097.png">
+      <Name>buddhistmonk0097</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0098.png">
+      <Name>buddhistmonk0098</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0099.png">
+      <Name>buddhistmonk0099</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0100.png">
+      <Name>buddhistmonk0100</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0101.png">
+      <Name>buddhistmonk0101</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0102.png">
+      <Name>buddhistmonk0102</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0103.png">
+      <Name>buddhistmonk0103</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0104.png">
+      <Name>buddhistmonk0104</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0105.png">
+      <Name>buddhistmonk0105</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0106.png">
+      <Name>buddhistmonk0106</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0107.png">
+      <Name>buddhistmonk0107</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0108.png">
+      <Name>buddhistmonk0108</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0109.png">
+      <Name>buddhistmonk0109</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0110.png">
+      <Name>buddhistmonk0110</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0111.png">
+      <Name>buddhistmonk0111</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0112.png">
+      <Name>buddhistmonk0112</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0113.png">
+      <Name>buddhistmonk0113</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0114.png">
+      <Name>buddhistmonk0114</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0115.png">
+      <Name>buddhistmonk0115</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0116.png">
+      <Name>buddhistmonk0116</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0117.png">
+      <Name>buddhistmonk0117</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0118.png">
+      <Name>buddhistmonk0118</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0119.png">
+      <Name>buddhistmonk0119</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0120.png">
+      <Name>buddhistmonk0120</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0121.png">
+      <Name>buddhistmonk0121</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0122.png">
+      <Name>buddhistmonk0122</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0123.png">
+      <Name>buddhistmonk0123</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0124.png">
+      <Name>buddhistmonk0124</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0125.png">
+      <Name>buddhistmonk0125</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0126.png">
+      <Name>buddhistmonk0126</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0127.png">
+      <Name>buddhistmonk0127</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0128.png">
+      <Name>buddhistmonk0128</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0129.png">
+      <Name>buddhistmonk0129</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0130.png">
+      <Name>buddhistmonk0130</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0131.png">
+      <Name>buddhistmonk0131</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0132.png">
+      <Name>buddhistmonk0132</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0133.png">
+      <Name>buddhistmonk0133</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0134.png">
+      <Name>buddhistmonk0134</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0135.png">
+      <Name>buddhistmonk0135</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0136.png">
+      <Name>buddhistmonk0136</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0137.png">
+      <Name>buddhistmonk0137</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0138.png">
+      <Name>buddhistmonk0138</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0139.png">
+      <Name>buddhistmonk0139</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0140.png">
+      <Name>buddhistmonk0140</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0141.png">
+      <Name>buddhistmonk0141</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0142.png">
+      <Name>buddhistmonk0142</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0143.png">
+      <Name>buddhistmonk0143</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0144.png">
+      <Name>buddhistmonk0144</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0145.png">
+      <Name>buddhistmonk0145</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0146.png">
+      <Name>buddhistmonk0146</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0147.png">
+      <Name>buddhistmonk0147</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0148.png">
+      <Name>buddhistmonk0148</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0149.png">
+      <Name>buddhistmonk0149</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0150.png">
+      <Name>buddhistmonk0150</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0151.png">
+      <Name>buddhistmonk0151</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0152.png">
+      <Name>buddhistmonk0152</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0153.png">
+      <Name>buddhistmonk0153</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0154.png">
+      <Name>buddhistmonk0154</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0155.png">
+      <Name>buddhistmonk0155</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0156.png">
+      <Name>buddhistmonk0156</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0157.png">
+      <Name>buddhistmonk0157</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0158.png">
+      <Name>buddhistmonk0158</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0159.png">
+      <Name>buddhistmonk0159</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0160.png">
+      <Name>buddhistmonk0160</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0161.png">
+      <Name>buddhistmonk0161</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0162.png">
+      <Name>buddhistmonk0162</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0163.png">
+      <Name>buddhistmonk0163</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0164.png">
+      <Name>buddhistmonk0164</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0165.png">
+      <Name>buddhistmonk0165</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0166.png">
+      <Name>buddhistmonk0166</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0167.png">
+      <Name>buddhistmonk0167</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0168.png">
+      <Name>buddhistmonk0168</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0169.png">
+      <Name>buddhistmonk0169</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0170.png">
+      <Name>buddhistmonk0170</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0171.png">
+      <Name>buddhistmonk0171</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0172.png">
+      <Name>buddhistmonk0172</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0173.png">
+      <Name>buddhistmonk0173</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0174.png">
+      <Name>buddhistmonk0174</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0175.png">
+      <Name>buddhistmonk0175</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0176.png">
+      <Name>buddhistmonk0176</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0177.png">
+      <Name>buddhistmonk0177</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0178.png">
+      <Name>buddhistmonk0178</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0179.png">
+      <Name>buddhistmonk0179</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0180.png">
+      <Name>buddhistmonk0180</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0181.png">
+      <Name>buddhistmonk0181</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0182.png">
+      <Name>buddhistmonk0182</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0183.png">
+      <Name>buddhistmonk0183</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0184.png">
+      <Name>buddhistmonk0184</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0185.png">
+      <Name>buddhistmonk0185</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0186.png">
+      <Name>buddhistmonk0186</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0187.png">
+      <Name>buddhistmonk0187</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0188.png">
+      <Name>buddhistmonk0188</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0189.png">
+      <Name>buddhistmonk0189</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0190.png">
+      <Name>buddhistmonk0190</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0191.png">
+      <Name>buddhistmonk0191</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0192.png">
+      <Name>buddhistmonk0192</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0193.png">
+      <Name>buddhistmonk0193</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0194.png">
+      <Name>buddhistmonk0194</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0195.png">
+      <Name>buddhistmonk0195</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0196.png">
+      <Name>buddhistmonk0196</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0197.png">
+      <Name>buddhistmonk0197</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0198.png">
+      <Name>buddhistmonk0198</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0199.png">
+      <Name>buddhistmonk0199</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0200.png">
+      <Name>buddhistmonk0200</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0201.png">
+      <Name>buddhistmonk0201</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0202.png">
+      <Name>buddhistmonk0202</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0203.png">
+      <Name>buddhistmonk0203</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0204.png">
+      <Name>buddhistmonk0204</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0205.png">
+      <Name>buddhistmonk0205</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0206.png">
+      <Name>buddhistmonk0206</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0207.png">
+      <Name>buddhistmonk0207</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0208.png">
+      <Name>buddhistmonk0208</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0209.png">
+      <Name>buddhistmonk0209</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0210.png">
+      <Name>buddhistmonk0210</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0211.png">
+      <Name>buddhistmonk0211</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0212.png">
+      <Name>buddhistmonk0212</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0213.png">
+      <Name>buddhistmonk0213</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0214.png">
+      <Name>buddhistmonk0214</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0215.png">
+      <Name>buddhistmonk0215</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0216.png">
+      <Name>buddhistmonk0216</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0217.png">
+      <Name>buddhistmonk0217</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0218.png">
+      <Name>buddhistmonk0218</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0219.png">
+      <Name>buddhistmonk0219</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0220.png">
+      <Name>buddhistmonk0220</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0221.png">
+      <Name>buddhistmonk0221</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0222.png">
+      <Name>buddhistmonk0222</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0223.png">
+      <Name>buddhistmonk0223</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0224.png">
+      <Name>buddhistmonk0224</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0225.png">
+      <Name>buddhistmonk0225</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0226.png">
+      <Name>buddhistmonk0226</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0227.png">
+      <Name>buddhistmonk0227</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0228.png">
+      <Name>buddhistmonk0228</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0229.png">
+      <Name>buddhistmonk0229</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0230.png">
+      <Name>buddhistmonk0230</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0231.png">
+      <Name>buddhistmonk0231</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0232.png">
+      <Name>buddhistmonk0232</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0233.png">
+      <Name>buddhistmonk0233</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0234.png">
+      <Name>buddhistmonk0234</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0235.png">
+      <Name>buddhistmonk0235</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0236.png">
+      <Name>buddhistmonk0236</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0237.png">
+      <Name>buddhistmonk0237</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0238.png">
+      <Name>buddhistmonk0238</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0239.png">
+      <Name>buddhistmonk0239</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0240.png">
+      <Name>buddhistmonk0240</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0241.png">
+      <Name>buddhistmonk0241</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0242.png">
+      <Name>buddhistmonk0242</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0243.png">
+      <Name>buddhistmonk0243</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0244.png">
+      <Name>buddhistmonk0244</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0245.png">
+      <Name>buddhistmonk0245</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0246.png">
+      <Name>buddhistmonk0246</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0247.png">
+      <Name>buddhistmonk0247</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0248.png">
+      <Name>buddhistmonk0248</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0249.png">
+      <Name>buddhistmonk0249</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\buddhistmonk0250.png">
+      <Name>buddhistmonk0250</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Beings\buddhistmonk\portrait.png">
+      <Name>portrait</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Beings\buddhistmonk\buddhistmonk.xml">
+      <Name>buddhistmonk</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

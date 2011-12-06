@@ -21,6 +21,18 @@ namespace BountyBandits
             return vec;
         }
 
+        public static XmlElement asXMLVector2(XmlNode parentNode, Vector2 vector, String name)
+        {
+            XmlElement vectorElement = parentNode.OwnerDocument.CreateElement(name),
+                xElement = parentNode.OwnerDocument.CreateElement("x"),
+                yElement = parentNode.OwnerDocument.CreateElement("y");
+            xElement.Value = vector.X.ToString();
+            yElement.Value = vector.Y.ToString();
+            vectorElement.AppendChild(xElement);
+            vectorElement.AppendChild(yElement);
+            return vectorElement;
+        }
+
         public static Color fromXMLColor(XmlNode xmlNode)
         {
             byte r = 0, g = 0, b = 0;

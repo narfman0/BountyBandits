@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>buddhistmonk</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>110</start>
+        <end>139</end>
+        <keyframe>121</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>30</start>
+        <end>110</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>140</start>
+        <end>250</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='1' />
+      <stat type='Magic' value='7' />
+      <stat type='Agility' value='5' />
+      <stat type='Speed' value='4' />
+      <stat type='Range' value='200' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
