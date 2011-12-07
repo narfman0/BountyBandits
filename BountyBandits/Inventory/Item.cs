@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Stats;
 using System.Xml;
+using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Inventory
 {

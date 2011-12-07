@@ -6,6 +6,7 @@ using System.Xml;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Stats;
+using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Animation
 {
@@ -107,7 +108,7 @@ namespace BountyBandits.Animation
         /// <param name="tex"></param>
         public static void getAlphaFromTex(ref Texture2D tex)
         {
-            replaceColor(ref tex, Color.Magenta, Color.TransparentBlack);
+            replaceColor(ref tex, Color.Magenta, Color.Transparent);
         }
 
         public static void replaceColor(ref Texture2D tex, Color src, Color dst)

@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 using FarseerGames.FarseerPhysics;
 using FarseerGames.FarseerPhysics.Collisions;
 using FarseerGames.FarseerPhysics.Dynamics;
@@ -97,7 +96,7 @@ namespace BountyBandits
         }
         protected override void Update(GameTime gameTime)
         {
-            float timeElapsed = (float)(gameTime.ElapsedRealTime.Milliseconds - previousGameTime.ElapsedRealTime.Milliseconds);
+            float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
             switch (currentState.getState())
             {
                 #region cutscene
@@ -372,7 +371,7 @@ namespace BountyBandits
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             Vector2 fontPos;
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             switch (currentState.getState())
             {
                 #region Cutscene
