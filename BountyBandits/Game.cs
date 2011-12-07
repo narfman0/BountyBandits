@@ -226,7 +226,7 @@ namespace BountyBandits
                                 }
 #if DEBUG
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
-                                    spawnManager.spawnGroup("amish", 1, 1);
+                                    spawnManager.spawnGroup("obama", 1, 1);
                                     //foreach(String dirname in Directory.GetDirectories(@"Content\Beings"))
                                     //    spawnManager.spawnGroup(dirname.Substring(dirname.LastIndexOf('\\')+1), 1, 1);
                                 if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
