@@ -162,10 +162,14 @@ namespace BountyBandits
                 #endregion
                 #region gameplay
                 case GameState.Gameplay:
+                    if (isEndLevel())
+                        endLevel(true);
                     foreach (PlayerIndex index in System.Enum.GetValues(typeof(PlayerIndex)))
                         foreach (Being currentplayer in players)
                             if (currentplayer.controllerIndex == index)
                             {
+                                if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width/2)
+                                    endLevel(false);
                                 currentplayer.update(gameTime);
                                 #region Input
                                 input.setCurrentInput(Keyboard.GetState(index), currentplayer.prevKeyboardState,
@@ -388,10 +392,7 @@ namespace BountyBandits
                 #endregion
                 #region Gameplay
                 case GameState.Gameplay:
-                    if (isEndLevel())
-                        endLevel();
-                    else
-                        drawGameplay(getAvePosition());
+                    drawGameplay(getAvePosition());
                     break;
                 #endregion
                 #region root menu
@@ -603,14 +604,15 @@ namespace BountyBandits
             spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White);
             #endregion
         }
-        public void endLevel()
+        public void endLevel(bool increment)
         {
             foreach (Being player in players)
             {
-                player.unlocked.add(mapManager, difficulty);
+                if(increment)
+                    player.unlocked.add(mapManager, difficulty);
                 SaveManager.saveCharacter(player);
             }
-            mapManager.incrementCurrentLevel(true);
+            mapManager.incrementCurrentLevel(increment);
             currentState.setState(GameState.WorldMap);
         }
         public Vector2 getAvePosition()
@@ -662,11 +664,10 @@ namespace BountyBandits
         }
         public bool isEndLevel()
         {
-            bool endLevel = false;
             foreach (Being player in players)
                 if (player.getPos().X >= mapManager.getCurrentLevel().levelLength - res.ScreenWidth/2)
-                    endLevel = true;
-            return endLevel;
+                    return true;
+            return false;
         }
         public void newLevel()
         {
@@ -717,10 +718,6 @@ namespace BountyBandits
             groundGeom.FrictionCoefficient = 1;
             ground.Position = new Vector2(GROUND_WIDTH / 2 - 32, -GROUND_HEIGHT/2);
             ground.IsStatic = true;
-            Body sideWall = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, 100, 1000, 100);
-            Geom sideWallGeom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, sideWall, 100, 1000);
-            sideWall.Position = new Vector2(-42, 500);
-            sideWall.IsStatic = true;
             #endregion
             spawnManager.newLevel(mapManager.getCurrentLevel());
             mapManager.getCurrentLevel().resetStoryElements();

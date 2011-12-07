@@ -203,7 +203,7 @@ namespace BountyBandits
         {
             Texture2D tex = controller.frames[currFrame];
             body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 2, tex.Height, myStats.getStatValue(StatType.Strength) / 5f);
-            body.Position = new Vector2(10 + tex.Width / 2, 10 + tex.Height / 2);
+            body.Position = new Vector2(10 + tex.Width, 10 + tex.Height / 2);
             geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 2, tex.Height);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
