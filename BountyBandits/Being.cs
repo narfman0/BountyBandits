@@ -33,21 +33,23 @@ namespace BountyBandits
         public AnimationController controller; 
         private int currFrame; 
         public AnimationInfo currAnimation;
-        public KeyboardState prevKeyboardState = new KeyboardState(); public GamePadState prevGamePadState = new GamePadState();
+        public Input input;
+        public bool isPlayer = false;
 
         //player specific fields
         public UnlockedManager unlocked = new UnlockedManager(); //first is difficulty, second is actual level
-        public PlayerIndex controllerIndex;
         public Menu menu = new Menu();
         //enemy specific fields
         public int targetPlayer = -1;
         #endregion
-        public Being(string name, int level, Game gameref, AnimationController controller)
+        public Being(string name, int level, Game gameref, AnimationController controller, Input input, bool isPlayer)
         {
             this.gameref = gameref;
             this.name = name;
             this.controller = controller;
             this.level = level;
+            this.isPlayer = isPlayer;
+            this.input = input;
             changeAnimation("idle");
             myStats.setStatValue(StatType.Strength, 5);
             myStats.setStatValue(StatType.Speed, 5);
@@ -207,7 +209,7 @@ namespace BountyBandits
             geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 2, tex.Height);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
-            setDepth((int)controllerIndex);
+            setDepth(input==null?gameref.rand.Next(4):(int)input.getPlayerIndex());
             currenthealth = getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
             
@@ -229,7 +231,7 @@ namespace BountyBandits
                     pos = body.Position;
                     gameref.physicsSimulator.Remove(body);
                     gameref.physicsSimulator.Remove(geom);
-                    if (controllerIndex != null && //check if being is player character. lame check
+                    if (isPlayer &&
                         gameref.rand.Next(20)==0)   //nodrop check. should query entity
                         gameref.dropItem(pos, this);
                 }
@@ -322,7 +324,7 @@ namespace BountyBandits
             String name = element.GetAttribute("name"),
                 controllerName = element.GetAttribute("animationControllerName");
             StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
-            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName));
+            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName), null, false);
             being.xp = int.Parse(element.GetAttribute("xp"));
             being.level = int.Parse(element.GetAttribute("level"));
             being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));

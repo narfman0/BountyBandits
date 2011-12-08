@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 
 namespace BountyBandits
 {
@@ -11,8 +12,11 @@ namespace BountyBandits
             xboxButtonToKeyboardKeySecondary = new Dictionary<Buttons, Keys>();
         KeyboardState keyState, keyPreviousState;
         GamePadState padState, padPreviousState;
-        public Input()
+        private PlayerIndex index;
+        public bool useKeyboard = false;
+        public Input(PlayerIndex index)
         {
+            this.index = index;
             xboxButtonToKeyboardKey.Add(Buttons.A, Keys.Space);
             xboxButtonToKeyboardKey.Add(Buttons.X, Keys.LeftControl);
             xboxButtonToKeyboardKey.Add(Buttons.Start, Keys.Escape);
@@ -29,6 +33,7 @@ namespace BountyBandits
             xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadUp, Keys.W);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadDown, Keys.S);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.A, Keys.Enter);
+            update();
         }
 
         private bool getButtonHit(Buttons target, KeyboardState keyCurrentState, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
@@ -47,12 +52,15 @@ namespace BountyBandits
             return false;
         }
 
-        public void setCurrentInput(KeyboardState keyState, KeyboardState keyPreviousState, GamePadState padState, GamePadState padPreviousState)
+        public void update()
         {
-            this.keyState = keyState;
-            this.keyPreviousState = keyPreviousState;
-            this.padState = padState;
-            this.padPreviousState = padPreviousState;
+            if (useKeyboard)
+            {
+                keyPreviousState = keyState;
+                keyState = Keyboard.GetState(index);
+            }
+            padPreviousState = padState;
+            padState = GamePad.GetState(index);
         }
 
         public bool getButtonHit(Buttons target)
@@ -64,6 +72,10 @@ namespace BountyBandits
         {
             return getButtonDown(target, keyState, padState);
         }
-        
+
+        public PlayerIndex getPlayerIndex()
+        {
+            return index;
+        }
     }
 }

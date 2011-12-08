@@ -52,10 +52,10 @@ namespace BountyBandits
         public TextureManager texMan;
         public XPManager xpManager = new XPManager();
         public static MarkovNameGenerator nameGenerator;
-        private Input input;
         //choosing characters
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
         Dictionary<PlayerIndex, int> characterSelectedIndex = new Dictionary<PlayerIndex, int>();
+        List<Input> inputs = new List<Input>();
         #endregion
         public Game()
         {
@@ -64,10 +64,12 @@ namespace BountyBandits
         }
         protected override void Initialize()
         {
-            input = new Input();
             res = new Resolution(graphics, ScreenMode.tv720p);
             spawnManager = new SpawnManager(this);
             rand = new Random();
+            foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
+                inputs.Add(new Input(playerIndex));
+            inputs[0].useKeyboard = true;
             base.Initialize();
         }
         protected override void LoadContent()
@@ -113,7 +115,7 @@ namespace BountyBandits
                         if(!storyBeings.ContainsKey(controller.entranceMS) &&
                             controller.entranceMS >= elapsedCutsceneTime)
                         {
-                            Being being = new Being(controller.entranceMS+"", 1, this, controller.animationController);
+                            Being being = new Being(controller.entranceMS + "", 1, this, controller.animationController, null, false);
                             being.body.Position = controller.startLocation;
                             being.changeAnimation(controller.animations[0].animationName);
                             being.setDepth(controller.startDepth);
@@ -147,7 +149,7 @@ namespace BountyBandits
                     #region quit cutscene
                     bool startPressed = false;
                     foreach (Being player in players)
-                        if (GamePad.GetState(player.controllerIndex).Buttons.Start == ButtonState.Pressed)
+                        if (player.input.getButtonHit(Buttons.Start))
                             startPressed = true;
                     double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
                     if (startPressed || storyElement.cutsceneLength + 500 < msTotal - timeStoryElementStarted)
@@ -164,21 +166,18 @@ namespace BountyBandits
                 case GameState.Gameplay:
                     if (isEndLevel())
                         endLevel(true);
-                    foreach (PlayerIndex index in System.Enum.GetValues(typeof(PlayerIndex)))
                         foreach (Being currentplayer in players)
-                            if (currentplayer.controllerIndex == index)
                             {
                                 if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width/2)
                                     endLevel(false);
                                 currentplayer.update(gameTime);
                                 #region Input
-                                input.setCurrentInput(Keyboard.GetState(index), currentplayer.prevKeyboardState,
-                                    GamePad.GetState(index), currentplayer.prevGamePadState);
-                                if (input.getButtonDown(Buttons.LeftThumbstickLeft))
+                                currentplayer.input.update();
+                                if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
                                     currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
-                                if (input.getButtonDown(Buttons.LeftThumbstickRight))
+                                if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
                                     currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
-                                if (input.getButtonHit(Buttons.A))
+                                if (currentplayer.input.getButtonHit(Buttons.A))
                                 {
                                     if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                                     {
@@ -190,26 +189,26 @@ namespace BountyBandits
                                     }
                                     currentplayer.jump();
                                 }
-                                if (input.getButtonHit(Buttons.X))
+                                if (currentplayer.input.getButtonHit(Buttons.X))
                                     currentplayer.attack("attack1");
-                                if (input.getButtonHit(Buttons.Back))
+                                if (currentplayer.input.getButtonHit(Buttons.Back))
                                     currentplayer.menu.toggleMenu();
-                                if (input.getButtonDown(Buttons.DPadDown))
+                                if (currentplayer.input.getButtonDown(Buttons.DPadDown))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(false);
                                     else
                                         currentplayer.lane(false);
-                                if (input.getButtonDown(Buttons.DPadUp))
+                                if (currentplayer.input.getButtonDown(Buttons.DPadUp))
                                     if (currentplayer.menu.getMenuActive())
                                         currentplayer.menu.changeMenuItem(true);
                                     else
                                         currentplayer.lane(true);
 
-                                if (input.getButtonHit(Buttons.DPadRight))
+                                if (currentplayer.input.getButtonHit(Buttons.DPadRight))
                                     currentplayer.menu.changeMenuScreen(true);
-                                if (input.getButtonHit(Buttons.DPadLeft))
+                                if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
                                     currentplayer.menu.changeMenuScreen(false);
-                                if (input.getButtonHit(Buttons.RightShoulder))
+                                if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
                                 {
                                     //pick up closest item and throw the equipped one on the ground
                                     DropItem dropItem = getClosestDropItem(currentplayer);
@@ -228,20 +227,16 @@ namespace BountyBandits
                                     }
                                 }
 #if DEBUG
-                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F3) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F3))
+                                if (Keyboard.GetState().IsKeyDown(Keys.F3))
                                     spawnManager.spawnGroup("obama", 1, 1);
-                                    //foreach(String dirname in Directory.GetDirectories(@"Content\Beings"))
-                                    //    spawnManager.spawnGroup(dirname.Substring(dirname.LastIndexOf('\\')+1), 1, 1);
-                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F4) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F4))
+                                if (Keyboard.GetState().IsKeyDown(Keys.F4))
                                     foreach (Being player in players)
                                         player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                                if (Keyboard.GetState(currentplayer.controllerIndex).IsKeyDown(Keys.F5) && currentplayer.prevKeyboardState.IsKeyUp(Keys.F5))
+                                if (Keyboard.GetState().IsKeyDown(Keys.F5))
                                 {
                                     dropItem(1*currentplayer.body.Position, currentplayer);
                                 }
 #endif
-                                currentplayer.prevGamePadState = GamePad.GetState(index);
-                                currentplayer.prevKeyboardState = Keyboard.GetState(index);
                                 #endregion
                             }
                     spawnManager.update(gameTime);
@@ -259,53 +254,65 @@ namespace BountyBandits
                 #endregion
                 #region root menu
                 case GameState.RootMenu:
-                    foreach (PlayerIndex index in Enum.GetValues(typeof(PlayerIndex)))
+                    foreach (Input input in inputs)
                     {
-                        input.setCurrentInput(Keyboard.GetState(index), Keyboard.GetState(index), 
-                            GamePad.GetState(index), GamePad.GetState(index));
-                        if (input.getButtonDown(Buttons.A))
+                        input.update();
+                        
+                        if (input.getButtonHit(Buttons.A))
                         {
-                            if (characterSelectedIndex[index] == -1)
-                                characterSelectedIndex[index] = 0;
+                            bool isPlayerOneAdded = false;
+                            foreach (Being player in players)
+                                if (player.input.useKeyboard)
+                                    isPlayerOneAdded = true;
+
+                            if (characterSelectedIndex[input.getPlayerIndex()] == -1)
+                                characterSelectedIndex[input.getPlayerIndex()] = 0;
                             else
                             {
-                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"));
-                                if(characterSelectedIndex[index] != 0){
-                                    int charindex = characterSelectedIndex[index] - 1;
+                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"), input, true);
+                                if (characterSelectedIndex[input.getPlayerIndex()] != 0)
+                                {
+                                    int charindex = characterSelectedIndex[input.getPlayerIndex()] - 1;
                                     String characterName = characterOptions[charindex];
                                     player = SaveManager.loadCharacter(characterName, this);
+                                    player.isPlayer = true;
+                                    player.input = input;
                                 }
                                 for (int extraPlayerIndex = 0; extraPlayerIndex < players.Count; extraPlayerIndex++)
-                                    if (players[extraPlayerIndex].controllerIndex == index)
+                                    if (players[extraPlayerIndex].input.getPlayerIndex() == input.getPlayerIndex())
                                         players.RemoveAt(extraPlayerIndex--);
                                 players.Add(player);
-                                players[players.Count - 1].controllerIndex = index;
                             }
+                            //go to worldmap if player one hits a
+                            if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
+                                foreach(Being player in players)
+                                    if(player.input.getButtonHit(Buttons.A))
+                                         currentState.setState(GameState.WorldMap);
                         }
-                        if (input.getButtonDown(Buttons.DPadDown) || input.getButtonDown(Buttons.LeftThumbstickDown))
+                        if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
                         {
-                            int selected = characterSelectedIndex[index] + 1;
+                            int selected = characterSelectedIndex[input.getPlayerIndex()] + 1;
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
-                                if (index != indices[playerIndex] && //same player
+                                if (input.getPlayerIndex() != indices[playerIndex] && //same player
                                     characterSelectedIndex[indices[playerIndex]] == selected)
                                 {
                                     selected++;
                                     playerIndex = 0;
                                 }
                             }
-                            characterSelectedIndex[index] = selected;
+                            characterSelectedIndex[input.getPlayerIndex()] = selected;
                             if (characterOptions.Count < selected)
-                                characterSelectedIndex[index] = 0;
+                                characterSelectedIndex[input.getPlayerIndex()] = 0;
                         }
-                        if (input.getButtonDown(Buttons.DPadUp) || input.getButtonDown(Buttons.LeftThumbstickUp))
+                        if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
                         {
-                            int selected = characterSelectedIndex[index] - 1;
+                            int selected = characterSelectedIndex[input.getPlayerIndex()] - 1;
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
-                                if (indices[playerIndex] != index && //same player
+                                if (indices[playerIndex] != input.getPlayerIndex() && //same player
                                     selected != 0 && characterSelectedIndex[indices[playerIndex]] == selected)
                                 {
                                     selected--;
@@ -314,10 +321,8 @@ namespace BountyBandits
                             }
                             if (selected <= 0)
                                 selected = 0;
-                            characterSelectedIndex[index] = selected;
+                            characterSelectedIndex[input.getPlayerIndex()] = selected;
                         }
-                        if (players.Count > 1 && index == PlayerIndex.One && input.getButtonDown(Buttons.A))
-                            currentState.setState(GameState.WorldMap);
                     }
                     break;
                 #endregion
@@ -325,16 +330,15 @@ namespace BountyBandits
                 case GameState.WorldMap:
                     foreach (Being player in players)
                     {
-                        input.setCurrentInput(Keyboard.GetState(), player.prevKeyboardState,
-                            GamePad.GetState(player.controllerIndex), player.prevGamePadState);
-                        if (input.getButtonHit(Buttons.Back))
+                        player.input.update();
+                        if (player.input.getButtonHit(Buttons.Back))
                             currentState.setState(GameState.RootMenu);
-                        if (input.getButtonHit(Buttons.A))
+                        if (player.input.getButtonHit(Buttons.A))
                             newLevel();
-                        if (input.getButtonHit(Buttons.DPadRight))
+                        if (player.input.getButtonHit(Buttons.DPadRight))
                             if (isUnlocked(mapManager.getCurrentLevelIndex() + 1))
                                 mapManager.incrementCurrentLevel(true);
-                        if (input.getButtonHit(Buttons.DPadLeft))
+                        if (player.input.getButtonHit(Buttons.DPadLeft))
                             mapManager.incrementCurrentLevel(false);
                     }
                     break;
