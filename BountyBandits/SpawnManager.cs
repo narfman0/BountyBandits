@@ -29,7 +29,7 @@ namespace BountyBandits
             for (int i = 0; i < amount; ++i)
             {
                 Being enemy = new Being(type, (int)level, gameref, 
-                    gameref.animationManager.getController(type), null, false);
+                    gameref.animationManager.getController(type), null, false, false);
                 enemy.currenthealth = enemy.getStat(StatType.Life);
                 enemy.currentspecial = enemy.getStat(StatType.Special);
 

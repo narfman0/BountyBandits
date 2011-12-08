@@ -81,6 +81,9 @@ namespace BountyBandits.Network
                             case (int)MessageType.PlayersUpdate:
                                 receivePlayersUpdate(im);
                                 break;
+                            case (int)MessageType.LevelIndexChange:
+                                receiveLevelIndexChange(im);
+                                break;
                         }
 						break;
 					default:
@@ -110,6 +113,9 @@ namespace BountyBandits.Network
                                     gameref.players.Add(being);
                                 }
                                 break;
+                            case (int)MessageType.LevelIndexChange:
+                                receiveIncrementLevelRequest(im);
+                                break;
                         }
                         break;
                     default:
@@ -125,6 +131,39 @@ namespace BountyBandits.Network
             stateUpdate.Write((int)MessageType.GameState);
             stateUpdate.Write((int)gameref.currentState.getState());
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+        }
+        public void sendIncrementLevelRequest(bool up)
+        {
+            if (!gameref.network.isClient())
+                return;
+            NetOutgoingMessage msg = client.CreateMessage();
+            msg.Write((int)MessageType.IncrementLevelRequest);
+            msg.Write(up);
+            client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
+        }
+        public void receiveIncrementLevelRequest(NetIncomingMessage im)
+        {
+            if (!gameref.network.isServer())
+                return;
+            gameref.mapManager.incrementCurrentLevel(im.ReadBoolean());
+            sendLevelIndexChange(gameref.mapManager.getCurrentLevelIndex());
+        }
+        public void sendLevelIndexChange(int newLevelIndex)
+        {
+            if (!gameref.network.isServer() || server.ConnectionsCount < 1)
+                return;
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.LevelIndexChange);
+            msg.Write(newLevelIndex);
+            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+        }
+        public void receiveLevelIndexChange(NetIncomingMessage im)
+        {
+            if (!gameref.network.isClient())
+                return;
+            int newLevelIndex = im.ReadInt32();
+            while(gameref.mapManager.getCurrentLevelIndex() != newLevelIndex)
+                gameref.mapManager.incrementCurrentLevel(gameref.mapManager.getCurrentLevelIndex() < newLevelIndex);
         }
         public void sendPlayersUpdate()
         {

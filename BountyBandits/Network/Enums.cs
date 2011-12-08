@@ -7,6 +7,6 @@ namespace BountyBandits.Network
 {
     public enum MessageType
     {
-        InitialSendCharacter, GameState, PlayersUpdate
+        InitialSendCharacter, GameState, PlayersUpdate, IncrementLevelRequest, LevelIndexChange
     }
 }

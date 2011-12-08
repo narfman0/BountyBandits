@@ -34,7 +34,7 @@ namespace BountyBandits
         private int currFrame; 
         public AnimationInfo currAnimation;
         public Input input;
-        public bool isPlayer = false;
+        public bool isPlayer, isLocal;
         public Guid guid;
 
         //player specific fields
@@ -43,13 +43,15 @@ namespace BountyBandits
         //enemy specific fields
         public int targetPlayer = -1;
         #endregion
-        public Being(string name, int level, Game gameref, AnimationController controller, Input input, bool isPlayer)
+        public Being(string name, int level, Game gameref, AnimationController controller, 
+            Input input, bool isPlayer, bool isLocal)
         {
             this.gameref = gameref;
             this.name = name;
             this.controller = controller;
             this.level = level;
             this.isPlayer = isPlayer;
+            this.isLocal = isLocal;
             this.input = input;
             changeAnimation("idle");
             myStats.setStatValue(StatType.Strength, 5);
@@ -326,7 +328,7 @@ namespace BountyBandits
             String name = element.GetAttribute("name"),
                 controllerName = element.GetAttribute("animationControllerName");
             StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
-            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName), null, false);
+            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName), null, false, false);
             being.xp = int.Parse(element.GetAttribute("xp"));
             being.level = int.Parse(element.GetAttribute("level"));
             being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));

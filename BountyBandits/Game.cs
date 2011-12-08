@@ -99,6 +99,7 @@ namespace BountyBandits
         protected override void Update(GameTime gameTime)
         {
             float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
+            network.update();
             switch (currentState.getState())
             {
                 #region RootMenu
@@ -208,7 +209,7 @@ namespace BountyBandits
                         if(!storyBeings.ContainsKey(controller.entranceMS) &&
                             controller.entranceMS >= elapsedCutsceneTime)
                         {
-                            Being being = new Being(controller.entranceMS + "", 1, this, controller.animationController, null, false);
+                            Being being = new Being(controller.entranceMS + "", 1, this, controller.animationController, null, false, true);
                             being.body.Position = controller.startLocation;
                             being.changeAnimation(controller.animations[0].animationName);
                             being.setDepth(controller.startDepth);
@@ -265,71 +266,74 @@ namespace BountyBandits
                             endLevel(false);
                         currentplayer.update(gameTime);
                         #region Input
-                        currentplayer.input.update();
-                        if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
-                            currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
-                        if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
-                            currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
-                        if (currentplayer.input.getButtonHit(Buttons.A))
+                        if (currentplayer.isLocal)
                         {
-                            if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
+                            currentplayer.input.update();
+                            if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
+                                currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
+                            if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
+                                currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
+                            if (currentplayer.input.getButtonHit(Buttons.A))
                             {
-                                if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
-                                else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
-                                else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
-                                else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
-                                currentplayer.unusedAttr--;
-                            }
-                            currentplayer.jump();
-                        }
-                        if (currentplayer.input.getButtonHit(Buttons.X))
-                            currentplayer.attack("attack1");
-                        if (currentplayer.input.getButtonHit(Buttons.Back))
-                            currentplayer.menu.toggleMenu();
-                        if (currentplayer.input.getButtonDown(Buttons.DPadDown))
-                            if (currentplayer.menu.getMenuActive())
-                                currentplayer.menu.changeMenuItem(false);
-                            else
-                                currentplayer.lane(false);
-                        if (currentplayer.input.getButtonDown(Buttons.DPadUp))
-                            if (currentplayer.menu.getMenuActive())
-                                currentplayer.menu.changeMenuItem(true);
-                            else
-                                currentplayer.lane(true);
-
-                        if (currentplayer.input.getButtonHit(Buttons.DPadRight))
-                            currentplayer.menu.changeMenuScreen(true);
-                        if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
-                            currentplayer.menu.changeMenuScreen(false);
-                        if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
-                        {
-                            //pick up closest item and throw the equipped one on the ground
-                            DropItem dropItem = getClosestDropItem(currentplayer);
-                            if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
-                            {
-                                BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
-                                currentplayer.getItemManager().putItem(dropItem.getItem());
-                                if (playerItem != null)
+                                if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                                 {
-                                    dropItem.setItem(playerItem);
-                                    dropItem.body.LinearVelocity.Y += 100f;
-                                    dropItem.body.ApplyTorque((float)rand.NextDouble() - .5f);
+                                    if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
+                                    else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
+                                    else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
+                                    else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
+                                    currentplayer.unusedAttr--;
                                 }
-                                else
-                                    activeItems.Remove(dropItem);
+                                currentplayer.jump();
                             }
-                        }
+                            if (currentplayer.input.getButtonHit(Buttons.X))
+                                currentplayer.attack("attack1");
+                            if (currentplayer.input.getButtonHit(Buttons.Back))
+                                currentplayer.menu.toggleMenu();
+                            if (currentplayer.input.getButtonDown(Buttons.DPadDown))
+                                if (currentplayer.menu.getMenuActive())
+                                    currentplayer.menu.changeMenuItem(false);
+                                else
+                                    currentplayer.lane(false);
+                            if (currentplayer.input.getButtonDown(Buttons.DPadUp))
+                                if (currentplayer.menu.getMenuActive())
+                                    currentplayer.menu.changeMenuItem(true);
+                                else
+                                    currentplayer.lane(true);
+
+                            if (currentplayer.input.getButtonHit(Buttons.DPadRight))
+                                currentplayer.menu.changeMenuScreen(true);
+                            if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
+                                currentplayer.menu.changeMenuScreen(false);
+                            if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
+                            {
+                                //pick up closest item and throw the equipped one on the ground
+                                DropItem dropItem = getClosestDropItem(currentplayer);
+                                if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
+                                {
+                                    BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
+                                    currentplayer.getItemManager().putItem(dropItem.getItem());
+                                    if (playerItem != null)
+                                    {
+                                        dropItem.setItem(playerItem);
+                                        dropItem.body.LinearVelocity.Y += 100f;
+                                        dropItem.body.ApplyTorque((float)rand.NextDouble() - .5f);
+                                    }
+                                    else
+                                        activeItems.Remove(dropItem);
+                                }
+                            }
 #if DEBUG
-                        if (Keyboard.GetState().IsKeyDown(Keys.F3))
-                            spawnManager.spawnGroup("obama", 1, 1);
-                        if (Keyboard.GetState().IsKeyDown(Keys.F4))
-                            foreach (Being player in players)
-                                player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                        if (Keyboard.GetState().IsKeyDown(Keys.F5))
-                        {
-                            dropItem(1*currentplayer.body.Position, currentplayer);
-                        }
+                            if (Keyboard.GetState().IsKeyDown(Keys.F3))
+                                spawnManager.spawnGroup("obama", 1, 1);
+                            if (Keyboard.GetState().IsKeyDown(Keys.F4))
+                                foreach (Being player in players)
+                                    player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
+                            if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                            {
+                                dropItem(1 * currentplayer.body.Position, currentplayer);
+                            }
 #endif
+                        }
                         #endregion
                     }
                     spawnManager.update(gameTime);
@@ -362,12 +366,13 @@ namespace BountyBandits
                                 selectedMenuIndex[input.getPlayerIndex()] = 0;
                             else
                             {
-                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"), input, true);
+                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"), input, true, true);
                                 if (selectedMenuIndex[input.getPlayerIndex()] != 0)
                                 {
                                     int charindex = selectedMenuIndex[input.getPlayerIndex()] - 1;
                                     String characterName = characterOptions[charindex];
                                     player = SaveManager.loadCharacter(characterName, this);
+                                    player.isLocal = true;
                                     player.isPlayer = true;
                                     player.input = input;
                                 }
@@ -429,10 +434,35 @@ namespace BountyBandits
                         if (player.input.getButtonHit(Buttons.A))
                             newLevel();
                         if (player.input.getButtonHit(Buttons.DPadRight))
-                            if (isUnlocked(mapManager.getCurrentLevelIndex() + 1))
-                                mapManager.incrementCurrentLevel(true);
+                        {
+                            int newLevelIndex = mapManager.getCurrentLevelIndex() + 1;
+                            if (isUnlocked(newLevelIndex))
+                            {
+                                if (network.isClient())
+                                    network.sendIncrementLevelRequest(true);
+                                else
+                                {
+                                    mapManager.incrementCurrentLevel(true);
+                                    if (network.isServer())
+                                        network.sendLevelIndexChange(newLevelIndex);
+                                }
+                            }
+                        }
                         if (player.input.getButtonHit(Buttons.DPadLeft))
-                            mapManager.incrementCurrentLevel(false);
+                        {
+                            int newLevelIndex = mapManager.getCurrentLevelIndex() - 1;
+                            if (isUnlocked(newLevelIndex))
+                            {
+                                if (network.isClient())
+                                    network.sendIncrementLevelRequest(false);
+                                else
+                                {
+                                    mapManager.incrementCurrentLevel(false);
+                                    if (network.isServer())
+                                        network.sendLevelIndexChange(newLevelIndex);
+                                }
+                            }
+                        }
                     }
                     break;
                 #endregion
@@ -798,55 +828,59 @@ namespace BountyBandits
         public void newLevel()
         {
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
+            foreach (Being player in players)
+                if(player.isLocal)
+                    player.newLevel();
             #region add gameitems
             activeItems = new List<GameItem>();
-            foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
-                if (spawn.type != null)
-                    animationManager.getController(spawn.type);
-            foreach (Being player in players)
-                player.newLevel();
-            foreach (GameItem item in mapManager.getCurrentLevel().items)
+            if (!network.isClient())
             {
-                Geom geom = new Geom();
-                switch (item.polygonType)
+                foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
+                    if (spawn.type != null)
+                        animationManager.getController(spawn.type);
+                foreach (GameItem item in mapManager.getCurrentLevel().items)
                 {
-                    case PhysicsPolygonType.Circle:
-                        item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
-                        geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
-                        break;
-                    case PhysicsPolygonType.Rectangle:
-                        item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
-                        geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
-                        break;
-                    case PhysicsPolygonType.Polygon:
-                        item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
-                        geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
-                        break;
+                    Geom geom = new Geom();
+                    switch (item.polygonType)
+                    {
+                        case PhysicsPolygonType.Circle:
+                            item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
+                            geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
+                            break;
+                        case PhysicsPolygonType.Rectangle:
+                            item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
+                            geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
+                            break;
+                        case PhysicsPolygonType.Polygon:
+                            item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
+                            geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
+                            break;
+                    }
+                    if (item.immovable)
+                        item.body.IsStatic = item.immovable;
+                    geom.FrictionCoefficient = .6f;
+                    #region Collision Categories
+                    geom.CollisionCategories = CollisionCategory.None;
+                    for (uint depth = item.startdepth; depth < item.width; depth++)
+                        geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
+                    geom.CollidesWith = geom.CollisionCategories;
+                    #endregion
+                    item.body.Position = item.loc;
+                    activeItems.Add(item);
                 }
-                if (item.immovable)
-                    item.body.IsStatic = item.immovable;
-                geom.FrictionCoefficient = .6f;
-                #region Collision Categories
-                geom.CollisionCategories = CollisionCategory.None;
-                for (uint depth = item.startdepth; depth < item.width; depth++)
-                    geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
-                geom.CollidesWith = geom.CollisionCategories;
-                #endregion
-                item.body.Position = item.loc;
-                activeItems.Add(item);
+                spawnManager.newLevel(mapManager.getCurrentLevel());
             }
             #endregion
+            mapManager.getCurrentLevel().resetStoryElements();
             #region physics - add ground and side wall
             const int GROUND_WIDTH = 10000;
             const int GROUND_HEIGHT = 100;
             Body ground = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, GROUND_WIDTH, GROUND_HEIGHT, 100);
             groundGeom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, ground, GROUND_WIDTH, GROUND_HEIGHT);
             groundGeom.FrictionCoefficient = 1;
-            ground.Position = new Vector2(GROUND_WIDTH / 2 - 32, -GROUND_HEIGHT/2);
+            ground.Position = new Vector2(GROUND_WIDTH / 2 - 32, -GROUND_HEIGHT / 2);
             ground.IsStatic = true;
             #endregion
-            spawnManager.newLevel(mapManager.getCurrentLevel());
-            mapManager.getCurrentLevel().resetStoryElements();
             currentState.setState(GameState.Gameplay);
         }
     }
