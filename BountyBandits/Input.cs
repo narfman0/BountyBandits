@@ -77,5 +77,18 @@ namespace BountyBandits
         {
             return index;
         }
+#if WINDOWS
+        public List<Keys> getKeysHit()
+        {
+            List<Keys> keys = new List<Keys>();
+            if (useKeyboard)
+            {
+                foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                    if (keyPreviousState.IsKeyUp(key) && keyState.IsKeyDown(key))
+                        keys.Add(key);
+            }
+            return keys;
+        }
+#endif
     }
 }

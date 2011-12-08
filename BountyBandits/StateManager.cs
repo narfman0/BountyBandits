@@ -7,11 +7,11 @@ namespace BountyBandits
 {
     class StateManager
     {
-        Game.GameState current = Game.GameState.RootMenu;
-        public bool setState(Game.GameState newState){
+        GameState current = GameState.RootMenu;
+        public bool setState(GameState newState){
             current = newState;
             return true;
         }
-        public Game.GameState getState() { return current; }
+        public GameState getState() { return current; }
     }
 }

@@ -19,17 +19,14 @@ using BountyBandits.Animation;
 using BountyBandits.Map;
 using BountyBandits.Story;
 using System.IO;
+using BountyBandits.Network;
+using System.Net;
+using Lidgren.Network;
 
 namespace BountyBandits
 {
     public class Game : Microsoft.Xna.Framework.Game
     {
-        public enum GameState
-        {
-            RootMenu,   //choose characters
-            WorldMap,
-            Gameplay, Cutscene
-        };
         #region Fields
         public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 4000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
@@ -52,9 +49,10 @@ namespace BountyBandits
         public TextureManager texMan;
         public XPManager xpManager = new XPManager();
         public static MarkovNameGenerator nameGenerator;
+        public NetworkManager network;
         //choosing characters
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
-        Dictionary<PlayerIndex, int> characterSelectedIndex = new Dictionary<PlayerIndex, int>();
+        Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem=0;
         List<Input> inputs = new List<Input>();
         #endregion
         public Game()
@@ -89,7 +87,7 @@ namespace BountyBandits
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
-                characterSelectedIndex.Add(playerIndex, -1);
+                selectedMenuIndex.Add(playerIndex, -1);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -101,6 +99,101 @@ namespace BountyBandits
             float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
             switch (currentState.getState())
             {
+                #region RootMenu
+                case GameState.RootMenu:
+                    foreach (Input input in inputs)
+                    {
+                        input.update();
+                        updateMenu(input, Enum.GetValues(typeof(RootMenuOptions)).Length);
+                        if (input.getButtonHit(Buttons.A))
+                        {
+                            switch (selectedMenuItem)
+                            {
+                                case 0:
+                                    currentState.setState(GameState.CharacterSelection);
+                                    break;
+                                case 1:
+                                    currentState.setState(GameState.Multiplayer);
+                                    break;
+                                case 2:
+                                    Exit();
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                #endregion
+                #region Multiplayer
+                case GameState.Multiplayer:
+                    foreach (Input input in inputs)
+                    {
+                        input.update();
+                        updateMenu(input, Enum.GetValues(typeof(MultiplayerMenuOptions)).Length);
+                        if (input.getButtonHit(Buttons.A))
+                        {
+                            switch (selectedMenuItem)
+                            {
+                                case 0:
+                                    network = new NetworkManager();
+                                    network.startServer();
+                                    currentState.setState(GameState.CharacterSelection);
+                                    break;
+                                case 1:
+                                    currentState.setState(GameState.JoinScreen);
+                                    break;
+                                case 2:
+                                    currentState.setState(GameState.RootMenu);
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                #endregion
+                #region JoinScreen
+                case GameState.JoinScreen:
+                    foreach (Input input in inputs)
+                    {
+                        input.update();
+                        updateMenu(input, Enum.GetValues(typeof(JoinMenuOptions)).Length);
+                        if (input.getButtonHit(Buttons.A))
+                        {
+                            switch (selectedMenuItem)
+                            {
+                                case 0://join
+                                    network = new NetworkManager();
+                                    network.startClient();
+                                    currentState.setState(GameState.CharacterSelection);
+                                    break;
+                                case 1:
+                                    currentState.setState(GameState.Multiplayer);
+                                    break;
+                            }
+                        }
+#if WINDOWS
+                        foreach (Keys key in input.getKeysHit())
+                        {
+                            try
+                            {
+                                if (key == Keys.Back)
+                                    NetworkManager.joinString = NetworkManager.joinString.Substring(0, NetworkManager.joinString.Length - 1);
+                                else if (key >= Keys.A && key <= Keys.Z)
+                                    NetworkManager.joinString += Convert.ToChar(key);
+                                else if (key == Keys.OemPeriod)
+                                    NetworkManager.joinString += ".";
+                                else if (key == Keys.OemMinus)
+                                    NetworkManager.joinString += "-";
+                            }
+                            catch (Exception e) { 
+                                Console.WriteLine(e.StackTrace);  
+                                NetworkManager.joinString = ""; 
+                            }
+                        }
+#else
+                        throw new NotImplementedException();
+#endif
+                    }
+                    break;
+                #endregion
                 #region cutscene
                 case GameState.Cutscene:
                     double elapsedCutsceneTime = gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted;
@@ -166,79 +259,79 @@ namespace BountyBandits
                 case GameState.Gameplay:
                     if (isEndLevel())
                         endLevel(true);
-                        foreach (Being currentplayer in players)
+                    foreach (Being currentplayer in players)
+                    {
+                        if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width/2)
+                            endLevel(false);
+                        currentplayer.update(gameTime);
+                        #region Input
+                        currentplayer.input.update();
+                        if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
+                            currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
+                        if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
+                            currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
+                        if (currentplayer.input.getButtonHit(Buttons.A))
+                        {
+                            if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
                             {
-                                if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width/2)
-                                    endLevel(false);
-                                currentplayer.update(gameTime);
-                                #region Input
-                                currentplayer.input.update();
-                                if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
-                                    currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
-                                if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
-                                    currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
-                                if (currentplayer.input.getButtonHit(Buttons.A))
-                                {
-                                    if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
-                                    {
-                                        if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
-                                        else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
-                                        currentplayer.unusedAttr--;
-                                    }
-                                    currentplayer.jump();
-                                }
-                                if (currentplayer.input.getButtonHit(Buttons.X))
-                                    currentplayer.attack("attack1");
-                                if (currentplayer.input.getButtonHit(Buttons.Back))
-                                    currentplayer.menu.toggleMenu();
-                                if (currentplayer.input.getButtonDown(Buttons.DPadDown))
-                                    if (currentplayer.menu.getMenuActive())
-                                        currentplayer.menu.changeMenuItem(false);
-                                    else
-                                        currentplayer.lane(false);
-                                if (currentplayer.input.getButtonDown(Buttons.DPadUp))
-                                    if (currentplayer.menu.getMenuActive())
-                                        currentplayer.menu.changeMenuItem(true);
-                                    else
-                                        currentplayer.lane(true);
-
-                                if (currentplayer.input.getButtonHit(Buttons.DPadRight))
-                                    currentplayer.menu.changeMenuScreen(true);
-                                if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
-                                    currentplayer.menu.changeMenuScreen(false);
-                                if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
-                                {
-                                    //pick up closest item and throw the equipped one on the ground
-                                    DropItem dropItem = getClosestDropItem(currentplayer);
-                                    if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
-                                    {
-                                        BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
-                                        currentplayer.getItemManager().putItem(dropItem.getItem());
-                                        if (playerItem != null)
-                                        {
-                                            dropItem.setItem(playerItem);
-                                            dropItem.body.LinearVelocity.Y += 100f;
-                                            dropItem.body.ApplyTorque((float)rand.NextDouble() - .5f);
-                                        }
-                                        else
-                                            activeItems.Remove(dropItem);
-                                    }
-                                }
-#if DEBUG
-                                if (Keyboard.GetState().IsKeyDown(Keys.F3))
-                                    spawnManager.spawnGroup("obama", 1, 1);
-                                if (Keyboard.GetState().IsKeyDown(Keys.F4))
-                                    foreach (Being player in players)
-                                        player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                                if (Keyboard.GetState().IsKeyDown(Keys.F5))
-                                {
-                                    dropItem(1*currentplayer.body.Position, currentplayer);
-                                }
-#endif
-                                #endregion
+                                if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
+                                else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
+                                else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
+                                else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
+                                currentplayer.unusedAttr--;
                             }
+                            currentplayer.jump();
+                        }
+                        if (currentplayer.input.getButtonHit(Buttons.X))
+                            currentplayer.attack("attack1");
+                        if (currentplayer.input.getButtonHit(Buttons.Back))
+                            currentplayer.menu.toggleMenu();
+                        if (currentplayer.input.getButtonDown(Buttons.DPadDown))
+                            if (currentplayer.menu.getMenuActive())
+                                currentplayer.menu.changeMenuItem(false);
+                            else
+                                currentplayer.lane(false);
+                        if (currentplayer.input.getButtonDown(Buttons.DPadUp))
+                            if (currentplayer.menu.getMenuActive())
+                                currentplayer.menu.changeMenuItem(true);
+                            else
+                                currentplayer.lane(true);
+
+                        if (currentplayer.input.getButtonHit(Buttons.DPadRight))
+                            currentplayer.menu.changeMenuScreen(true);
+                        if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
+                            currentplayer.menu.changeMenuScreen(false);
+                        if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
+                        {
+                            //pick up closest item and throw the equipped one on the ground
+                            DropItem dropItem = getClosestDropItem(currentplayer);
+                            if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
+                            {
+                                BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
+                                currentplayer.getItemManager().putItem(dropItem.getItem());
+                                if (playerItem != null)
+                                {
+                                    dropItem.setItem(playerItem);
+                                    dropItem.body.LinearVelocity.Y += 100f;
+                                    dropItem.body.ApplyTorque((float)rand.NextDouble() - .5f);
+                                }
+                                else
+                                    activeItems.Remove(dropItem);
+                            }
+                        }
+#if DEBUG
+                        if (Keyboard.GetState().IsKeyDown(Keys.F3))
+                            spawnManager.spawnGroup("obama", 1, 1);
+                        if (Keyboard.GetState().IsKeyDown(Keys.F4))
+                            foreach (Being player in players)
+                                player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
+                        if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                        {
+                            dropItem(1*currentplayer.body.Position, currentplayer);
+                        }
+#endif
+                        #endregion
+                    }
                     spawnManager.update(gameTime);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     #region initiate cutscene
@@ -252,8 +345,8 @@ namespace BountyBandits
                     #endregion
                     break;
                 #endregion
-                #region root menu
-                case GameState.RootMenu:
+                #region CharacterSelection
+                case GameState.CharacterSelection:
                     foreach (Input input in inputs)
                     {
                         input.update();
@@ -265,14 +358,14 @@ namespace BountyBandits
                                 if (player.input.useKeyboard)
                                     isPlayerOneAdded = true;
 
-                            if (characterSelectedIndex[input.getPlayerIndex()] == -1)
-                                characterSelectedIndex[input.getPlayerIndex()] = 0;
+                            if (selectedMenuIndex[input.getPlayerIndex()] == -1)
+                                selectedMenuIndex[input.getPlayerIndex()] = 0;
                             else
                             {
                                 Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"), input, true);
-                                if (characterSelectedIndex[input.getPlayerIndex()] != 0)
+                                if (selectedMenuIndex[input.getPlayerIndex()] != 0)
                                 {
-                                    int charindex = characterSelectedIndex[input.getPlayerIndex()] - 1;
+                                    int charindex = selectedMenuIndex[input.getPlayerIndex()] - 1;
                                     String characterName = characterOptions[charindex];
                                     player = SaveManager.loadCharacter(characterName, this);
                                     player.isPlayer = true;
@@ -291,29 +384,29 @@ namespace BountyBandits
                         }
                         if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
                         {
-                            int selected = characterSelectedIndex[input.getPlayerIndex()] + 1;
+                            int selected = selectedMenuIndex[input.getPlayerIndex()] + 1;
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
                                 if (input.getPlayerIndex() != indices[playerIndex] && //same player
-                                    characterSelectedIndex[indices[playerIndex]] == selected)
+                                    selectedMenuIndex[indices[playerIndex]] == selected)
                                 {
                                     selected++;
                                     playerIndex = 0;
                                 }
                             }
-                            characterSelectedIndex[input.getPlayerIndex()] = selected;
+                            selectedMenuIndex[input.getPlayerIndex()] = selected;
                             if (characterOptions.Count < selected)
-                                characterSelectedIndex[input.getPlayerIndex()] = 0;
+                                selectedMenuIndex[input.getPlayerIndex()] = 0;
                         }
                         if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
                         {
-                            int selected = characterSelectedIndex[input.getPlayerIndex()] - 1;
+                            int selected = selectedMenuIndex[input.getPlayerIndex()] - 1;
                             PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                             for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                             {
                                 if (indices[playerIndex] != input.getPlayerIndex() && //same player
-                                    selected != 0 && characterSelectedIndex[indices[playerIndex]] == selected)
+                                    selected != 0 && selectedMenuIndex[indices[playerIndex]] == selected)
                                 {
                                     selected--;
                                     playerIndex = 0;
@@ -321,7 +414,7 @@ namespace BountyBandits
                             }
                             if (selected <= 0)
                                 selected = 0;
-                            characterSelectedIndex[input.getPlayerIndex()] = selected;
+                            selectedMenuIndex[input.getPlayerIndex()] = selected;
                         }
                     }
                     break;
@@ -332,7 +425,7 @@ namespace BountyBandits
                     {
                         player.input.update();
                         if (player.input.getButtonHit(Buttons.Back))
-                            currentState.setState(GameState.RootMenu);
+                            currentState.setState(GameState.CharacterSelection);
                         if (player.input.getButtonHit(Buttons.A))
                             newLevel();
                         if (player.input.getButtonHit(Buttons.DPadRight))
@@ -347,6 +440,21 @@ namespace BountyBandits
             previousGameTime = gameTime;
             Thread.Sleep(5);
             base.Update(gameTime);
+        }
+        public void updateMenu(Input input, int menuItemCount)
+        {
+            if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
+            {
+                selectedMenuItem++;
+                if (selectedMenuItem >= menuItemCount)
+                    selectedMenuItem = menuItemCount - 1;
+            }
+            if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
+            {
+                selectedMenuItem--;
+                if (selectedMenuItem <= 0)
+                    selectedMenuItem = 0;
+            }
         }
         public void dropItem(Vector2 dropPosition, Being killedBeing)
         {
@@ -382,6 +490,20 @@ namespace BountyBandits
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
             switch (currentState.getState())
             {
+                case GameState.RootMenu:
+                    spriteBatch.DrawString(vademecumFont24, "Singleplayer", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 2 ? Color.DarkGray : Color.Black);
+                    break;
+                case GameState.Multiplayer:
+                    spriteBatch.DrawString(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 2 ? Color.DarkGray : Color.Black);
+                    break;
+                case GameState.JoinScreen:
+                    spriteBatch.DrawString(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
+                    break;
                 #region Cutscene
                 case GameState.Cutscene:
                     try
@@ -399,14 +521,14 @@ namespace BountyBandits
                     drawGameplay(getAvePosition());
                     break;
                 #endregion
-                #region root menu
-                case GameState.RootMenu:
+                #region CharacterSelection
+                case GameState.CharacterSelection:
                     fontPos = new Vector2(1.0f, 1.0f);
                     spriteBatch.DrawString(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black);
                     fontPos = new Vector2(1.0f, res.ScreenHeight/2);
                     foreach(PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                     {
-                        if (characterSelectedIndex[playerIndex] == -1)
+                        if (selectedMenuIndex[playerIndex] == -1)
                             spriteBatch.DrawString(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black);
                         else
                         {
@@ -415,7 +537,7 @@ namespace BountyBandits
                             saves.AddRange(SaveManager.getAvailableCharacterNames());
                             for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
                             {
-                                Color color = characterSelectedIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black;
+                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black;
                                 spriteBatch.DrawString(vademecumFont24, saves[saveIndex], fontPos, color);
                                 fontPos.Y += 28f;
                             }
