@@ -35,6 +35,7 @@ namespace BountyBandits
         public AnimationInfo currAnimation;
         public Input input;
         public bool isPlayer = false;
+        public Guid guid;
 
         //player specific fields
         public UnlockedManager unlocked = new UnlockedManager(); //first is difficulty, second is actual level
@@ -57,7 +58,7 @@ namespace BountyBandits
             myStats.setStatValue(StatType.Magic, 5);
             foreach (Stat stat in controller.statRatios.statsTable.Values)
                 myStats.addStatValue(stat.getType(), stat.getValue() * level);
-
+            guid = new Guid();
             newLevel();
         }
         ~Being()
@@ -314,6 +315,7 @@ namespace BountyBandits
             beingElement.SetAttribute("unusedAttr", unusedAttr.ToString());
             beingElement.SetAttribute("xpOfNextLevel", xpOfNextLevel.ToString());
             beingElement.SetAttribute("animationControllerName", controller.name);
+            beingElement.SetAttribute("guid", guid.ToString());
             beingElement.AppendChild(myStats.asXML(beingElement));
             beingElement.AppendChild(itemManager.asXML(beingElement));
             beingElement.AppendChild(unlocked.asXML(beingElement));
@@ -329,6 +331,7 @@ namespace BountyBandits
             being.level = int.Parse(element.GetAttribute("level"));
             being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
             being.xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
+            being.guid = new Guid(element.GetAttribute("guid"));
             being.unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
             foreach (Stat stat in stats.statsTable.Values)
                 being.myStats.setStatValue(stat.getType(), stat.getValue());

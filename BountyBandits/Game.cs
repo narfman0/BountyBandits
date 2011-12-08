@@ -35,7 +35,6 @@ namespace BountyBandits
         SpriteBatch spriteBatch;
         public List<Being> players = new List<Being>();
         List<GameItem> activeItems;
-        StateManager currentState = new StateManager();
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         private SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
@@ -50,6 +49,7 @@ namespace BountyBandits
         public XPManager xpManager = new XPManager();
         public static MarkovNameGenerator nameGenerator;
         public NetworkManager network;
+        public StateManager currentState;
         //choosing characters
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
         Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem=0;
@@ -68,6 +68,8 @@ namespace BountyBandits
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                 inputs.Add(new Input(playerIndex));
             inputs[0].useKeyboard = true;
+            currentState = new StateManager(this);
+            network = new NetworkManager(this);
             base.Initialize();
         }
         protected override void LoadContent()
@@ -134,7 +136,6 @@ namespace BountyBandits
                             switch (selectedMenuItem)
                             {
                                 case 0:
-                                    network = new NetworkManager();
                                     network.startServer();
                                     currentState.setState(GameState.CharacterSelection);
                                     break;
@@ -160,7 +161,6 @@ namespace BountyBandits
                             switch (selectedMenuItem)
                             {
                                 case 0://join
-                                    network = new NetworkManager();
                                     network.startClient();
                                     currentState.setState(GameState.CharacterSelection);
                                     break;

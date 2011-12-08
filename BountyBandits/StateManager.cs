@@ -5,12 +5,17 @@ using System.Text;
 
 namespace BountyBandits
 {
-    class StateManager
+    public class StateManager
     {
-        GameState current = GameState.RootMenu;
-        public bool setState(GameState newState){
+        private Game gameref;
+        private GameState current = GameState.RootMenu;
+        public StateManager(Game gameref)
+        {
+            this.gameref = gameref;
+        }
+        public void setState(GameState newState){
             current = newState;
-            return true;
+            gameref.network.sendGameStateUpdate();
         }
         public GameState getState() { return current; }
     }

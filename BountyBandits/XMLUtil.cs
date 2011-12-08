@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using System.Xml;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace BountyBandits
 {
@@ -59,6 +60,13 @@ namespace BountyBandits
             colorElement.AppendChild(gElement);
             colorElement.AppendChild(bElement);
             parentNode.AppendChild(colorElement);
+        }
+
+        public static XmlElement asXML(this string xml)
+        {
+            XmlDocumentFragment frag = new XmlDocument().CreateDocumentFragment();
+            frag.InnerXml = xml;
+            return frag.FirstChild as XmlElement;
         }
     }
 }
