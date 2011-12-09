@@ -12,6 +12,7 @@ namespace BountyBandits.Network
 {
     public class NetworkManager
     {
+        private const string APPID = "bountyBandits";
         private NetServer server;
         private NetClient client;
         private Game gameref;
@@ -21,15 +22,17 @@ namespace BountyBandits.Network
         {
             this.gameref = gameref;
         }
-        public bool isServer() { 
-            return server != null && server.Status == NetPeerStatus.Running; 
+        public bool isServer()
+        {
+            return server != null && server.Status != NetPeerStatus.NotRunning;
         }
-        public bool isClient() { 
-            return client != null && client.ConnectionStatus == NetConnectionStatus.Connected; 
+        public bool isClient()
+        {
+            return client != null && client.ConnectionStatus != NetConnectionStatus.Disconnected;
         }
         public void startServer()
         {
-            NetPeerConfiguration config = new NetPeerConfiguration("bountyBandits");
+            NetPeerConfiguration config = new NetPeerConfiguration(APPID);
             config.Port = Const.GameServerPort;
 
             server = new NetServer(config);
@@ -38,19 +41,18 @@ namespace BountyBandits.Network
             //if internet game, add sending registration ot master server
             //IPEndPoint masterServerEndpoint = NetUtility.Resolve("localhost", Const.GameServerPort);
         }
-        public bool startClient(){
-            NetPeerConfiguration config = new NetPeerConfiguration("bountyBandits");
-            config.EnableMessageType(NetIncomingMessageType.UnconnectedData);
-            config.EnableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
+        public bool startClient()
+        {
+            NetPeerConfiguration config = new NetPeerConfiguration(APPID);
             client = new NetClient(config);
             client.Start();
-			NetOutgoingMessage hail = client.CreateMessage();
-			hail.Write("Hello World *winkz*");
+            NetOutgoingMessage hail = client.CreateMessage();
+            hail.Write("Hello World *winkz*");
             client.Connect(joinString, Const.GameServerPort, hail);
             Log.write(LogType.NetworkClient, "Client connecting...");
 
-            int msUntilDisconnect = 750;
-            while (client.ConnectionStatus != NetConnectionStatus.Connected)
+            int msUntilDisconnect = 1000;
+            while (client.ConnectionsCount == 0)
                 if (msUntilDisconnect-- < 0)
                 {
                     Log.write(LogType.NetworkClient, "Client failed to conenct");
@@ -76,16 +78,17 @@ namespace BountyBandits.Network
         }
         public void updateClient()
         {
-			NetIncomingMessage im;
-			while ((im = client.ReadMessage()) != null)
-			{
-				switch (im.MessageType)
-				{
-					case NetIncomingMessageType.Data:
-						switch(im.ReadInt32())
+            NetIncomingMessage im;
+            while ((im = client.ReadMessage()) != null)
+            {
+                switch (im.MessageType)
+                {
+                    case NetIncomingMessageType.Data:
+                        switch (im.ReadInt32())
                         {
                             case (int)MessageType.GameState:
-                                gameref.currentState.setState((GameState)im.ReadInt32());
+                                if(gameref.currentState.getState() != GameState.CharacterSelection)
+                                    gameref.currentState.setState((GameState)im.ReadInt32());
                                 break;
                             case (int)MessageType.PlayersUpdate:
                                 receivePlayersUpdate(im);
@@ -97,12 +100,12 @@ namespace BountyBandits.Network
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
                                 break;
                         }
-						break;
-					default:
+                        break;
+                    default:
                         Log.write(LogType.NetworkClient, im.MessageType.ToString() + " received. " + im.LengthBytes + " bytes");
-						break;
-				}
-			}
+                        break;
+                }
+            }
         }
         public void updateServer()
         {
@@ -180,7 +183,7 @@ namespace BountyBandits.Network
             if (!gameref.network.isClient())
                 return;
             int newLevelIndex = im.ReadInt32();
-            while(gameref.mapManager.getCurrentLevelIndex() != newLevelIndex)
+            while (gameref.mapManager.getCurrentLevelIndex() != newLevelIndex)
                 gameref.mapManager.incrementCurrentLevel(gameref.mapManager.getCurrentLevelIndex() < newLevelIndex);
         }
         public void sendServerPlayersUpdate()
@@ -212,7 +215,7 @@ namespace BountyBandits.Network
             for (int i = 0; i < count; i++)
             {
                 BeingNetworkState state = BeingNetworkState.readBeingState(im);
-                foreach(Being player in gameref.players)
+                foreach (Being player in gameref.players)
                     if (player.guid == state.guid)
                     {
                         player.body.LinearVelocity = state.velocity;

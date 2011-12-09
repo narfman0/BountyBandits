@@ -382,13 +382,18 @@ namespace BountyBandits
                                 players.Add(player);
                             }
                             //go to worldmap if player one hits a
-                            if(network.isClient())
-                                network.sendClientPlayersUpdate();
-                            else
-                                if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
-                                    foreach(Being player in players)
-                                        if(player.input.getButtonHit(Buttons.A))
-                                             currentState.setState(GameState.WorldMap);
+                            if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
+                            {
+                                if (network.isClient())
+                                {
+                                    network.sendClientPlayersUpdate();
+                                    currentState.setState(GameState.WorldMap);
+                                }
+                                else
+                                    foreach (Being player in players)
+                                        if (player.input.getButtonHit(Buttons.A))
+                                            currentState.setState(GameState.WorldMap);
+                            }
                         }
                         if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
                         {
