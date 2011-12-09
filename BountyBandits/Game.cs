@@ -389,7 +389,7 @@ namespace BountyBandits
                             {
                                 if (network.isClient())
                                 {
-                                    network.sendClientPlayersUpdate();
+                                    network.sendFullPlayersUpdateClient();
                                     currentState.setState(GameState.WorldMap);
                                 }
                                 else

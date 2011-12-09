@@ -87,14 +87,18 @@ namespace BountyBandits.Network
                         switch (im.ReadInt32())
                         {
                             case (int)MessageType.GameState:
+                                int newState = im.ReadInt32();
                                 if (gameref.currentState.getState() != GameState.CharacterSelection)
-                                    gameref.currentState.setState((GameState)im.ReadInt32());
+                                    gameref.currentState.setState((GameState)newState);
                                 break;
                             case (int)MessageType.PlayersUpdate:
                                 receivePlayersUpdate(im);
                                 break;
                             case (int)MessageType.LevelIndexChange:
                                 receiveLevelIndexChange(im);
+                                break;
+                            case (int)MessageType.PlayerFullUpdateServer:
+                                receiveFullPlayersUpdate(im);
                                 break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
@@ -121,14 +125,9 @@ namespace BountyBandits.Network
                     case NetIncomingMessageType.Data:
                         switch (im.ReadInt32())
                         {
-                            case (int)MessageType.InitialSendCharacter:
-                                int count = im.ReadInt32();
-                                for (int i = 0; i < count; i++)
-                                {
-                                    String beingXML = im.ReadString();
-                                    Being being = Being.fromXML(XMLUtil.asXML(beingXML), gameref);
-                                    gameref.players.Add(being);
-                                }
+                            case (int)MessageType.PlayerFullUpdateClient:
+                                receiveFullPlayersUpdate(im);
+                                sendFullPlayersUpdateServer();
                                 break;
                             case (int)MessageType.LevelIndexChange:
                                 receiveIncrementLevelRequest(im);
@@ -162,7 +161,7 @@ namespace BountyBandits.Network
             msg.Write(up);
             client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
         }
-        public void receiveIncrementLevelRequest(NetIncomingMessage im)
+        private void receiveIncrementLevelRequest(NetIncomingMessage im)
         {
             if (!gameref.network.isServer())
                 return;
@@ -178,7 +177,7 @@ namespace BountyBandits.Network
             msg.Write(newLevelIndex);
             server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
-        public void receiveLevelIndexChange(NetIncomingMessage im)
+        private void receiveLevelIndexChange(NetIncomingMessage im)
         {
             if (!gameref.network.isClient())
                 return;
@@ -197,16 +196,7 @@ namespace BountyBandits.Network
                 BeingNetworkState.writeBeingState(stateUpdate, player);
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
         }
-        public void sendClientPlayersUpdate()
-        {
-            NetOutgoingMessage initialCharmsg = client.CreateMessage();
-            initialCharmsg.Write((int)MessageType.InitialSendCharacter);
-            initialCharmsg.Write(gameref.players.Count);
-            foreach (Being player in gameref.players)
-                initialCharmsg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
-            client.SendMessage(initialCharmsg, NetDeliveryMethod.ReliableUnordered);
-        }
-        public void receivePlayersUpdate(NetIncomingMessage im)
+        private void receivePlayersUpdate(NetIncomingMessage im)
         {
             int count = im.ReadInt32();
             for (int i = 0; i < count; i++)
@@ -221,6 +211,44 @@ namespace BountyBandits.Network
                         player.isFacingLeft = state.isFacingLeft;
                     }
             }
+        }
+        public void sendFullPlayersUpdateClient()
+        {
+            List<Being> localList = new List<Being>();
+            foreach (Being player in gameref.players)
+                if (player.isLocal)
+                    localList.Add(player);
+
+            NetOutgoingMessage msg = client.CreateMessage();
+            msg.Write((int)MessageType.PlayerFullUpdateClient);
+            msg.Write(localList.Count);
+            foreach (Being player in localList)
+                msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+            client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
+        }
+        private void receiveFullPlayersUpdate(NetIncomingMessage im)
+        {
+            int count = im.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                String beingXML = im.ReadString();
+                Being being = Being.fromXML(XMLUtil.asXML(beingXML), gameref);
+                bool found = false;
+                foreach (Being player in gameref.players)
+                    if (player.guid == being.guid)
+                        found = true;
+                if(!found)
+                    gameref.players.Add(being);
+            }
+        }
+        public void sendFullPlayersUpdateServer()
+        {
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.PlayerFullUpdateServer);
+            msg.Write(gameref.players.Count);
+            foreach (Being player in gameref.players)
+                msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
     }
 }
