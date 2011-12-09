@@ -59,7 +59,15 @@ namespace BountyBandits
                     foreach (XmlElement vertexElement in itemChild.GetElementsByTagName("vertex"))
                         gameItem.vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
                 }
-            gameItem.guid = Guid.Parse(itemnode.GetAttribute("guid"));
+            try
+            {
+                gameItem.guid = Guid.Parse(itemnode.GetAttribute("guid"));
+            }
+            catch (Exception e)
+            {
+                Log.write(LogType.Debug, "Guid exception, trace=" + e.StackTrace);
+                gameItem.guid = Guid.NewGuid();
+            }
             return gameItem;
         }
         public virtual XmlElement asXML(XmlNode parentNode)
