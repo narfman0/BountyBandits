@@ -6,6 +6,7 @@ using Lidgren.Network;
 using System.Net;
 using System.Xml;
 using Microsoft.Xna.Framework;
+using System.Threading;
 
 namespace BountyBandits.Network
 {
@@ -15,6 +16,7 @@ namespace BountyBandits.Network
         private NetClient client;
         private Game gameref;
         public static String joinString = "localhost";
+        private TimedActions timedActions = new TimedActions();
         public NetworkManager(Game gameref)
         {
             this.gameref = gameref;
@@ -27,7 +29,7 @@ namespace BountyBandits.Network
         }
         public void startServer()
         {
-            NetPeerConfiguration config = new NetPeerConfiguration("bountyBanditsServer");
+            NetPeerConfiguration config = new NetPeerConfiguration("bountyBandits");
             config.Port = Const.GameServerPort;
 
             server = new NetServer(config);
@@ -36,33 +38,41 @@ namespace BountyBandits.Network
             //if internet game, add sending registration ot master server
             //IPEndPoint masterServerEndpoint = NetUtility.Resolve("localhost", Const.GameServerPort);
         }
-        public void startClient(){
-            IPEndPoint point = new IPEndPoint(NetUtility.Resolve(joinString), Const.GameServerPort);
-            NetPeerConfiguration config = new NetPeerConfiguration("bountyBanditsClient");
-            config.Port = Const.GameClientPort;
+        public bool startClient(){
+            NetPeerConfiguration config = new NetPeerConfiguration("bountyBandits");
             config.EnableMessageType(NetIncomingMessageType.UnconnectedData);
             config.EnableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
             client = new NetClient(config);
             client.Start();
-            client.Connect(point);
+			NetOutgoingMessage hail = client.CreateMessage();
+			hail.Write("Hello World *winkz*");
+            client.Connect(joinString, Const.GameServerPort, hail);
             Log.write(LogType.NetworkClient, "Client connecting...");
 
-            NetOutgoingMessage initialCharmsg = client.CreateMessage();
-            initialCharmsg.Write((int)MessageType.InitialSendCharacter);
-            initialCharmsg.Write(gameref.players.Count);
-            foreach (Being player in gameref.players)
-            {
-                String playerStr = player.asXML(new XmlDocument().CreateDocumentFragment()).InnerXml;
-                initialCharmsg.Write(playerStr);
-            }
-            client.SendMessage(initialCharmsg, NetDeliveryMethod.ReliableUnordered);
+            int msUntilDisconnect = 750;
+            while (client.ConnectionStatus != NetConnectionStatus.Connected)
+                if (msUntilDisconnect-- < 0)
+                {
+                    Log.write(LogType.NetworkClient, "Client failed to conenct");
+                    return false;
+                }
+                else
+                    Thread.Sleep(1);
+            Log.write(LogType.NetworkClient, "Client connected");
+            return true;
         }
-        public void update()
+        public void update(GameTime gameTime)
         {
             if (isClient())
                 updateClient();
             if (isServer())
+            {
                 updateServer();
+                if (timedActions.isActionReady(gameTime, 1500, ServerTimedUpdate.State))
+                    sendGameStateUpdate();
+                if (timedActions.isActionReady(gameTime, 100, ServerTimedUpdate.PlayersUpdates))
+                    sendServerPlayersUpdate();
+            }
         }
         public void updateClient()
         {
@@ -83,10 +93,13 @@ namespace BountyBandits.Network
                             case (int)MessageType.LevelIndexChange:
                                 receiveLevelIndexChange(im);
                                 break;
+                            default:
+                                Log.write(LogType.NetworkClient, "Unknown data message received");
+                                break;
                         }
 						break;
 					default:
-                        Log.write(LogType.NetworkClient, im.MessageType.ToString() + " received.");
+                        Log.write(LogType.NetworkClient, im.MessageType.ToString() + " received. " + im.LengthBytes + " bytes");
 						break;
 				}
 			}
@@ -118,11 +131,12 @@ namespace BountyBandits.Network
                                 receiveIncrementLevelRequest(im);
                                 break;
                             default:
-                                Log.write(LogType.NetworkServer, im.MessageType.ToString() + " received.");
+                                Log.write(LogType.NetworkServer, "Unknown data message received");
                                 break;
                         }
                         break;
                     default:
+                        Log.write(LogType.NetworkServer, im.MessageType.ToString() + " received. " + im.LengthBytes + " bytes");
                         break;
                 }
             }
@@ -169,7 +183,7 @@ namespace BountyBandits.Network
             while(gameref.mapManager.getCurrentLevelIndex() != newLevelIndex)
                 gameref.mapManager.incrementCurrentLevel(gameref.mapManager.getCurrentLevelIndex() < newLevelIndex);
         }
-        public void sendPlayersUpdate()
+        public void sendServerPlayersUpdate()
         {
             if (!gameref.network.isServer() || server.ConnectionsCount < 1)
                 return;
@@ -179,6 +193,18 @@ namespace BountyBandits.Network
             foreach (Being player in gameref.players)
                 BeingNetworkState.writeBeingState(stateUpdate, player);
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+        }
+        public void sendClientPlayersUpdate()
+        {
+            NetOutgoingMessage initialCharmsg = client.CreateMessage();
+            initialCharmsg.Write((int)MessageType.InitialSendCharacter);
+            initialCharmsg.Write(gameref.players.Count);
+            foreach (Being player in gameref.players)
+            {
+                String playerStr = player.asXML(new XmlDocument().CreateDocumentFragment()).InnerXml;
+                initialCharmsg.Write(playerStr);
+            }
+            client.SendMessage(initialCharmsg, NetDeliveryMethod.ReliableUnordered);
         }
         public void receivePlayersUpdate(NetIncomingMessage im)
         {

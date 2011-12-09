@@ -99,7 +99,7 @@ namespace BountyBandits
         protected override void Update(GameTime gameTime)
         {
             float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
-            network.update();
+            network.update(gameTime);
             switch (currentState.getState())
             {
                 #region RootMenu
@@ -162,8 +162,8 @@ namespace BountyBandits
                             switch (selectedMenuItem)
                             {
                                 case 0://join
-                                    network.startClient();
-                                    currentState.setState(GameState.CharacterSelection);
+                                    if(network.startClient())
+                                        currentState.setState(GameState.CharacterSelection);
                                     break;
                                 case 1:
                                     currentState.setState(GameState.Multiplayer);
@@ -382,10 +382,13 @@ namespace BountyBandits
                                 players.Add(player);
                             }
                             //go to worldmap if player one hits a
-                            if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
-                                foreach(Being player in players)
-                                    if(player.input.getButtonHit(Buttons.A))
-                                         currentState.setState(GameState.WorldMap);
+                            if(network.isClient())
+                                network.sendClientPlayersUpdate();
+                            else
+                                if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
+                                    foreach(Being player in players)
+                                        if(player.input.getButtonHit(Buttons.A))
+                                             currentState.setState(GameState.WorldMap);
                         }
                         if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
                         {
