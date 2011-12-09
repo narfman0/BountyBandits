@@ -7,7 +7,7 @@ namespace BountyBandits
 {
     public class Const
     {
-        public const int GameServerPort = 14242;
+        public const int GameServerPort = 14242, GameClientPort = 14243;
     }
 
     public enum GameState

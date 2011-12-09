@@ -41,7 +41,7 @@ namespace BountyBandits.Network
         public void startClient(){
             IPEndPoint point = new IPEndPoint(NetUtility.Resolve(joinString), Const.GameServerPort);
             NetPeerConfiguration config = new NetPeerConfiguration("bountyBanditsClient");
-            config.Port = Const.GameServerPort;
+            config.Port = Const.GameClientPort;
             config.EnableMessageType(NetIncomingMessageType.UnconnectedData);
             config.EnableMessageType(NetIncomingMessageType.NatIntroductionSuccess);
             client = new NetClient(config);
