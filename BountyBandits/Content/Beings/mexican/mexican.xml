@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>mexican</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>30</start>
+        <end>63</end>
+        <keyframe>53</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>63</start>
+        <end>95</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>95</start>
+        <end>135</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='3' />
+      <stat type='Magic' value='2' />
+      <stat type='Agility' value='4' />
+      <stat type='Speed' value='3' />
+      <stat type='Range' value='65' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
