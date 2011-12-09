@@ -5,10 +5,10 @@ using System.Text;
 
 namespace BountyBandits.Network
 {
-    enum TimedUpdate { State, PlayersUpdates }
+    enum TimedUpdate { State, PlayersUpdate, ObjectsUpdate }
     public enum MessageType
     {
-        PlayerFullUpdateClient, PlayerFullUpdateServer, GameState, 
+        PlayerFullUpdateClient, PlayerFullUpdateServer, GameState, ObjectsFullUpdate, ObjectsUpdate,
         PlayersUpdate, PlayersUpdateClient, IncrementLevelRequest, LevelIndexChange
     }
 }

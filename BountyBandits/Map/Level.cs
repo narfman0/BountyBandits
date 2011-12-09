@@ -56,7 +56,7 @@ namespace BountyBandits.Map
                     newLvl.prereq.Add(Int32.Parse(singlePrereq));
             newLvl.loc = XMLUtil.fromXMLVector2(node.GetElementsByTagName("location")[0]);
             newLvl.horizon = gameref.Content.Load<Texture2D>(campaignPath + node.GetElementsByTagName("horizonPath")[0].FirstChild.Value);
-            foreach (XmlNode item in node.GetElementsByTagName("items")[0].ChildNodes)
+            foreach (XmlElement item in node.GetElementsByTagName("items")[0].ChildNodes)
             {
                 string name = "";
                 foreach (XmlNode itemChild in item.ChildNodes)

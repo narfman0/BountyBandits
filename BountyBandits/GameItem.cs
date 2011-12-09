@@ -29,7 +29,7 @@ namespace BountyBandits
         {
             guid = Guid.NewGuid();
         }
-        public static GameItem fromXML(XmlNode itemnode)
+        public static GameItem fromXML(XmlElement itemnode)
         {
             GameItem gameItem = new GameItem();
             foreach (XmlElement itemChild in itemnode)
@@ -59,7 +59,39 @@ namespace BountyBandits
                     foreach (XmlElement vertexElement in itemChild.GetElementsByTagName("vertex"))
                         gameItem.vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
                 }
+            gameItem.guid = Guid.Parse(itemnode.GetAttribute("guid"));
             return gameItem;
+        }
+        public XmlElement asXML(XmlNode parentNode)
+        {
+            XmlElement element = parentNode.OwnerDocument.CreateElement("gameItem"),
+                nameNode = parentNode.OwnerDocument.CreateElement("name"),
+                radiusNode = parentNode.OwnerDocument.CreateElement("radius"),
+                startDepthNode = parentNode.OwnerDocument.CreateElement("startDepth"),
+                weightNode = parentNode.OwnerDocument.CreateElement("weight"),
+                widthNode = parentNode.OwnerDocument.CreateElement("width"),
+                immovableNode = parentNode.OwnerDocument.CreateElement("immovable"),
+                polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType"),
+                verticesNode = parentNode.OwnerDocument.CreateElement("vertices");
+            XMLUtil.asXMLVector2(element, loc, "loc");
+            XMLUtil.asXMLVector2(element, sideLengths, "sideLengths");
+            element.SetAttribute("guid", guid.ToString());
+            nameNode.Value = name;
+            radiusNode.Value = radius.ToString();
+            startDepthNode.Value = startDepthNode.ToString();
+            weightNode.Value = weight.ToString();
+            widthNode.Value = width.ToString();
+            immovableNode.Value = immovable.ToString();
+            foreach(Vector2 vertex in vertices)
+                XMLUtil.asXMLVector2(verticesNode, vertex, "vertex");
+            element.AppendChild(nameNode);
+            element.AppendChild(radiusNode);
+            element.AppendChild(startDepthNode);
+            element.AppendChild(weightNode);
+            element.AppendChild(widthNode);
+            element.AppendChild(immovableNode);
+            element.AppendChild(verticesNode);
+            return element;
         }
     }
 }

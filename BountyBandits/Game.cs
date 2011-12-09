@@ -34,7 +34,7 @@ namespace BountyBandits
         GameTime previousGameTime = new GameTime();
         SpriteBatch spriteBatch;
         public List<Being> players = new List<Being>();
-        List<GameItem> activeItems;
+        public List<GameItem> activeItems;
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         private SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
@@ -853,35 +853,7 @@ namespace BountyBandits
                     if (spawn.type != null)
                         animationManager.getController(spawn.type);
                 foreach (GameItem item in mapManager.getCurrentLevel().items)
-                {
-                    Geom geom = new Geom();
-                    switch (item.polygonType)
-                    {
-                        case PhysicsPolygonType.Circle:
-                            item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
-                            geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
-                            break;
-                        case PhysicsPolygonType.Rectangle:
-                            item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
-                            geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
-                            break;
-                        case PhysicsPolygonType.Polygon:
-                            item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
-                            geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
-                            break;
-                    }
-                    if (item.immovable)
-                        item.body.IsStatic = item.immovable;
-                    geom.FrictionCoefficient = .6f;
-                    #region Collision Categories
-                    geom.CollisionCategories = CollisionCategory.None;
-                    for (uint depth = item.startdepth; depth < item.width; depth++)
-                        geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
-                    geom.CollidesWith = geom.CollisionCategories;
-                    #endregion
-                    item.body.Position = item.loc;
-                    activeItems.Add(item);
-                }
+                    addGameItem(item);
                 spawnManager.newLevel(mapManager.getCurrentLevel());
             }
             #endregion
@@ -896,6 +868,36 @@ namespace BountyBandits
             ground.IsStatic = true;
             #endregion
             currentState.setState(GameState.Gameplay);
+        }
+        public void addGameItem(GameItem item)
+        {
+            Geom geom = new Geom();
+            switch (item.polygonType)
+            {
+                case PhysicsPolygonType.Circle:
+                    item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
+                    geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
+                    break;
+                case PhysicsPolygonType.Rectangle:
+                    item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
+                    geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
+                    break;
+                case PhysicsPolygonType.Polygon:
+                    item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
+                    geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
+                    break;
+            }
+            if (item.immovable)
+                item.body.IsStatic = item.immovable;
+            geom.FrictionCoefficient = .6f;
+            #region Collision Categories
+            geom.CollisionCategories = CollisionCategory.None;
+            for (uint depth = item.startdepth; depth < item.width; depth++)
+                geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
+            geom.CollidesWith = geom.CollisionCategories;
+            #endregion
+            item.body.Position = item.loc;
+            activeItems.Add(item);
         }
     }
     static class Program

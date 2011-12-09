@@ -68,7 +68,7 @@ namespace BountyBandits.Network
             if (isClient())
             {
                 updateClient();
-                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdates))
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
                     sendPlayersUpdateClient();
             }
             if (isServer())
@@ -76,8 +76,10 @@ namespace BountyBandits.Network
                 updateServer();
                 if (timedActions.isActionReady(gameTime, 1500, TimedUpdate.State))
                     sendGameStateUpdate();
-                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdates))
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
                     sendPlayersUpdateServer();
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
+                    sendObjectsUpdate();
             }
         }
         public void updateClient()
@@ -101,6 +103,12 @@ namespace BountyBandits.Network
                                 break;
                             case (int)MessageType.PlayerFullUpdateServer:
                                 receiveFullPlayersUpdate(im);
+                                break;
+                            case (int)MessageType.ObjectsFullUpdate:
+                                receiveFullObjectsUpdate(im);
+                                break;
+                            case (int)MessageType.ObjectsUpdate:
+                                receiveObjectsUpdate(im);
                                 break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
@@ -156,6 +164,9 @@ namespace BountyBandits.Network
             stateUpdate.Write((int)MessageType.GameState);
             stateUpdate.Write((int)gameref.currentState.getState());
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+
+            if (gameref.currentState.getState() == GameState.Gameplay)
+                sendFullObjectsUpdate();
         }
         private void receiveGameStateUpdate(NetIncomingMessage im)
         {
@@ -213,7 +224,7 @@ namespace BountyBandits.Network
             msg.Write((int)MessageType.PlayersUpdateClient);
             msg.Write((int)localList.Count);
             foreach (Being player in localList)
-                BeingNetworkState.writeBeingState(msg, player);
+                BeingNetworkState.writeState(msg, player);
             client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
         }
         public void sendPlayersUpdateServer()
@@ -224,7 +235,7 @@ namespace BountyBandits.Network
             stateUpdate.Write((int)MessageType.PlayersUpdate);
             stateUpdate.Write((int)gameref.players.Count);
             foreach (Being player in gameref.players)
-                BeingNetworkState.writeBeingState(stateUpdate, player);
+                BeingNetworkState.writeState(stateUpdate, player);
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
         }
         private void receivePlayersUpdate(NetIncomingMessage im)
@@ -232,7 +243,7 @@ namespace BountyBandits.Network
             int count = im.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                BeingNetworkState state = BeingNetworkState.readBeingState(im);
+                BeingNetworkState state = BeingNetworkState.readState(im);
                 foreach (Being player in gameref.players)
                     if (!player.isLocal && player.guid == state.guid)
                     {
@@ -285,6 +296,87 @@ namespace BountyBandits.Network
             foreach (Being player in gameref.players)
                 msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+        }
+        private void sendFullObjectsUpdate()
+        {
+            List<GameItem> gameItems = new List<GameItem>();
+            foreach (GameItem item in gameref.activeItems)
+                if (!(item is DropItem))
+                    gameItems.Add(item);
+
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.ObjectsFullUpdate);
+            msg.Write(gameItems.Count);
+            foreach (GameItem item in gameItems)
+                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+
+            /*
+            List<DropItem> dropItems = new List<DropItem>();
+            foreach (DropItem item in gameref.activeItems)
+                if (item is DropItem)
+                    dropItems.Add(item);
+            msg.Write(dropItems.Count);
+            foreach (DropItem item in dropItems)
+                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);*/
+        }
+        private void receiveFullObjectsUpdate(NetIncomingMessage im)
+        {
+            int count = im.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                String gameItemXML = im.ReadString();
+                GameItem item = GameItem.fromXML(XMLUtil.asXML(gameItemXML));
+                bool found = false;
+                foreach (GameItem activeitem in gameref.activeItems)
+                    if (activeitem.guid == item.guid)
+                        found = true;
+                if (!found)
+                    gameref.addGameItem(item);
+            }
+            /*count = im.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                String gameItemXML = im.ReadString();
+                DropItem item = DropItem.fromXML(XMLUtil.asXML(gameItemXML));
+                bool found = false;
+                foreach (GameItem activeitem in gameref.activeItems)
+                    if (activeitem.guid == item.guid)
+                        found = true;
+                if (!found)
+                    gameref.addGameItem(item);
+            }*/
+        }
+        private void sendObjectsUpdate()
+        {
+            List<GameItem> gameItems = new List<GameItem>();
+            foreach (GameItem item in gameref.activeItems)
+                if (!item.immovable && !item.body.IsStatic && !(item is DropItem))
+                    gameItems.Add(item);
+
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.ObjectsUpdate);
+            msg.Write(gameItems.Count);
+            foreach (GameItem item in gameItems)
+                GameItemNetworkState.writeState(msg, item);
+        }
+        private void receiveObjectsUpdate(NetIncomingMessage im)
+        {
+            int count = im.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                GameItemNetworkState state = GameItemNetworkState.readState(im);
+                foreach (GameItem item in gameref.activeItems)
+                    if (item.guid == state.guid)
+                    {
+                        Vector2 positiondifference = state.position - item.body.Position;
+                        float rotationDifference = state.rotation - item.body.Rotation;
+                        item.body.LinearVelocity = state.velocity;
+                        item.body.Position = item.body.Position + (positiondifference * .1f);
+                        item.body.Rotation = state.rotation + (rotationDifference * .1f);//this might not be right
+                        item.body.AngularVelocity = state.angularVelocity;
+                    }
+            }
         }
     }
 }

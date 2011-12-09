@@ -14,7 +14,7 @@ namespace BountyBandits.Network
         public bool isFacingLeft;
         public int depth;
 
-        public static void writeBeingState(NetOutgoingMessage msg, Being being)
+        public static void writeState(NetOutgoingMessage msg, Being being)
         {
             msg.Write(being.getPos().X);
             msg.Write(being.getPos().Y);
@@ -25,7 +25,7 @@ namespace BountyBandits.Network
             msg.Write((byte)being.getDepth());
         }
 
-        public static BeingNetworkState readBeingState(NetIncomingMessage msg)
+        public static BeingNetworkState readState(NetIncomingMessage msg)
         {
             BeingNetworkState state = new BeingNetworkState();
             state.position = new Vector2(msg.ReadFloat(), msg.ReadFloat());
@@ -33,6 +33,34 @@ namespace BountyBandits.Network
             state.guid = new Guid(msg.ReadString());
             state.isFacingLeft = msg.ReadBoolean();
             state.depth = msg.ReadByte();
+            return state;
+        }
+    }
+    public struct GameItemNetworkState
+    {
+        public Guid guid;
+        public Vector2 position, velocity;
+        public float rotation, angularVelocity;
+
+        public static void writeState(NetOutgoingMessage msg, GameItem gameItem)
+        {
+            msg.Write(gameItem.body.Position.X);
+            msg.Write(gameItem.body.Position.Y);
+            msg.Write(gameItem.body.LinearVelocity.X);
+            msg.Write(gameItem.body.LinearVelocity.Y);
+            msg.Write(gameItem.body.TotalRotation);
+            msg.Write(gameItem.body.AngularVelocity);
+            msg.Write(gameItem.guid.ToString());
+        }
+
+        public static GameItemNetworkState readState(NetIncomingMessage msg)
+        {
+            GameItemNetworkState state = new GameItemNetworkState();
+            state.position = new Vector2(msg.ReadFloat(), msg.ReadFloat());
+            state.velocity = new Vector2(msg.ReadFloat(), msg.ReadFloat());
+            state.rotation = msg.ReadFloat();
+            state.angularVelocity = msg.ReadFloat();
+            state.guid = new Guid(msg.ReadString());
             return state;
         }
     }
