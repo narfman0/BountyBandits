@@ -87,7 +87,7 @@ namespace BountyBandits.Network
                         switch (im.ReadInt32())
                         {
                             case (int)MessageType.GameState:
-                                if(gameref.currentState.getState() != GameState.CharacterSelection)
+                                if (gameref.currentState.getState() != GameState.CharacterSelection)
                                     gameref.currentState.setState((GameState)im.ReadInt32());
                                 break;
                             case (int)MessageType.PlayersUpdate:
@@ -146,7 +146,7 @@ namespace BountyBandits.Network
         }
         public void sendGameStateUpdate()
         {
-            if (!gameref.network.isServer() || server.ConnectionsCount < 1)
+            if (!gameref.network.isServer() || server.ConnectionsCount < 1 || gameref.currentState.getState() == GameState.Cutscene)
                 return;
             NetOutgoingMessage stateUpdate = server.CreateMessage();
             stateUpdate.Write((int)MessageType.GameState);
