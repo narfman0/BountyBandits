@@ -52,7 +52,7 @@ namespace BountyBandits
         public StateManager currentState;
         //choosing characters
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
-        Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem=0;
+        Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem = 0;
         List<Input> inputs = new List<Input>();
         #endregion
         public Game()
@@ -62,6 +62,7 @@ namespace BountyBandits
         }
         protected override void Initialize()
         {
+            activeItems = new List<GameItem>();
             res = new Resolution(graphics, ScreenMode.tv720p);
             spawnManager = new SpawnManager(this);
             rand = new Random();
@@ -162,7 +163,7 @@ namespace BountyBandits
                             switch (selectedMenuItem)
                             {
                                 case 0://join
-                                    if(network.startClient())
+                                    if (network.startClient())
                                         currentState.setState(GameState.CharacterSelection);
                                     break;
                                 case 1:
@@ -184,9 +185,10 @@ namespace BountyBandits
                                 else if (key == Keys.OemMinus)
                                     NetworkManager.joinString += "-";
                             }
-                            catch (Exception e) { 
-                                Console.WriteLine(e.StackTrace);  
-                                NetworkManager.joinString = ""; 
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.StackTrace);
+                                NetworkManager.joinString = "";
                             }
                         }
 #else
@@ -206,14 +208,14 @@ namespace BountyBandits
                     #region characters
                     foreach (BeingController controller in storyElement.beingControllers)
                     {
-                        if(!storyBeings.ContainsKey(controller.entranceMS) &&
+                        if (!storyBeings.ContainsKey(controller.entranceMS) &&
                             controller.entranceMS >= elapsedCutsceneTime)
                         {
                             Being being = new Being(controller.entranceMS + "", 1, this, controller.animationController, null, false, true);
                             being.body.Position = controller.startLocation;
                             being.changeAnimation(controller.animations[0].animationName);
                             being.setDepth(controller.startDepth);
-                            storyBeings.Add(controller.entranceMS,being);
+                            storyBeings.Add(controller.entranceMS, being);
                         }
                         if (storyBeings.ContainsKey(controller.entranceMS))
                         {
@@ -231,7 +233,7 @@ namespace BountyBandits
                                         being.body.ApplyForce(-being.body.Force);
                                         break;
                                     case ActionEnum.Move:
-                                        being.move(new Vector2(currentAction.intensity,0));
+                                        being.move(new Vector2(currentAction.intensity, 0));
                                         break;
                                 }
                             }
@@ -243,7 +245,7 @@ namespace BountyBandits
                     #region quit cutscene
                     bool startPressed = false;
                     foreach (Being player in players)
-                        if (player.input.getButtonHit(Buttons.Start))
+                        if (player.isLocal && player.input.getButtonHit(Buttons.Start))
                             startPressed = true;
                     double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
                     if (startPressed || storyElement.cutsceneLength + 500 < msTotal - timeStoryElementStarted)
@@ -262,7 +264,7 @@ namespace BountyBandits
                         endLevel(true);
                     foreach (Being currentplayer in players)
                     {
-                        if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width/2)
+                        if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width / 2)
                             endLevel(false);
                         currentplayer.update(gameTime);
                         #region Input
@@ -336,7 +338,8 @@ namespace BountyBandits
                         }
                         #endregion
                     }
-                    spawnManager.update(gameTime);
+                    if(!network.isClient())
+                        spawnManager.update(gameTime);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     #region initiate cutscene
                     storyElement = mapManager.getCurrentLevel().popStoryElement(getAvePosition().X);
@@ -354,7 +357,7 @@ namespace BountyBandits
                     foreach (Input input in inputs)
                     {
                         input.update();
-                        
+
                         if (input.getButtonHit(Buttons.A))
                         {
                             bool isPlayerOneAdded = false;
@@ -436,38 +439,41 @@ namespace BountyBandits
                 case GameState.WorldMap:
                     foreach (Being player in players)
                     {
-                        player.input.update();
-                        if (player.input.getButtonHit(Buttons.Back))
-                            currentState.setState(GameState.CharacterSelection);
-                        if (player.input.getButtonHit(Buttons.A))
-                            newLevel();
-                        if (player.input.getButtonHit(Buttons.DPadRight))
+                        if (player.isLocal)
                         {
-                            int newLevelIndex = mapManager.getCurrentLevelIndex() + 1;
-                            if (isUnlocked(newLevelIndex))
+                            player.input.update();
+                            if (player.input.getButtonHit(Buttons.Back))
+                                currentState.setState(GameState.CharacterSelection);
+                            if (player.input.getButtonHit(Buttons.A))
+                                newLevel();
+                            if (player.input.getButtonHit(Buttons.DPadRight))
                             {
-                                if (network.isClient())
-                                    network.sendIncrementLevelRequest(true);
-                                else
+                                int newLevelIndex = mapManager.getCurrentLevelIndex() + 1;
+                                if (isUnlocked(newLevelIndex))
                                 {
-                                    mapManager.incrementCurrentLevel(true);
-                                    if (network.isServer())
-                                        network.sendLevelIndexChange(newLevelIndex);
+                                    if (network.isClient())
+                                        network.sendIncrementLevelRequest(true);
+                                    else
+                                    {
+                                        mapManager.incrementCurrentLevel(true);
+                                        if (network.isServer())
+                                            network.sendLevelIndexChange(newLevelIndex);
+                                    }
                                 }
                             }
-                        }
-                        if (player.input.getButtonHit(Buttons.DPadLeft))
-                        {
-                            int newLevelIndex = mapManager.getCurrentLevelIndex() - 1;
-                            if (isUnlocked(newLevelIndex))
+                            if (player.input.getButtonHit(Buttons.DPadLeft))
                             {
-                                if (network.isClient())
-                                    network.sendIncrementLevelRequest(false);
-                                else
+                                int newLevelIndex = mapManager.getCurrentLevelIndex() - 1;
+                                if (isUnlocked(newLevelIndex))
                                 {
-                                    mapManager.incrementCurrentLevel(false);
-                                    if (network.isServer())
-                                        network.sendLevelIndexChange(newLevelIndex);
+                                    if (network.isClient())
+                                        network.sendIncrementLevelRequest(false);
+                                    else
+                                    {
+                                        mapManager.incrementCurrentLevel(false);
+                                        if (network.isServer())
+                                            network.sendLevelIndexChange(newLevelIndex);
+                                    }
                                 }
                             }
                         }
@@ -546,12 +552,12 @@ namespace BountyBandits
                 case GameState.Cutscene:
                     try
                     {
-                        drawGameplay(getAvePosition() + new Vector2(storyElement.getCameraOffset(gameTime).X,0f));
+                        drawGameplay(getAvePosition() + new Vector2(storyElement.getCameraOffset(gameTime).X, 0f));
                         foreach (Being storyBeing in storyBeings.Values)
                             storyBeing.draw();
                     }
                     catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
-                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight-40), Color.Black);
+                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black);
                     break;
                 #endregion
                 #region Gameplay
@@ -563,8 +569,8 @@ namespace BountyBandits
                 case GameState.CharacterSelection:
                     fontPos = new Vector2(1.0f, 1.0f);
                     spriteBatch.DrawString(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black);
-                    fontPos = new Vector2(1.0f, res.ScreenHeight/2);
-                    foreach(PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
+                    fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
+                    foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                     {
                         if (selectedMenuIndex[playerIndex] == -1)
                             spriteBatch.DrawString(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black);
@@ -591,7 +597,7 @@ namespace BountyBandits
                     foreach (Level level in mapManager.getLevels())
                         spriteBatch.Draw(easyLevel, level.loc, Color.White);
                     const string chooseLevelStr = "Choose level, A to start game";
-                    spriteBatch.DrawString(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - chooseLevelStr.Length*12, 1.0f), Color.Black);
+                    spriteBatch.DrawString(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - chooseLevelStr.Length * 12, 1.0f), Color.Black);
                     spriteBatch.Draw(texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2), Color.White);
                     spriteBatch.DrawString(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128), Color.Black);
                     spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128 + 32), Color.Black);
@@ -612,7 +618,7 @@ namespace BountyBandits
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
                 Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
-                spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1 );
+                spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1);
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
@@ -626,7 +632,7 @@ namespace BountyBandits
                         Vector2 origin = new Vector2(tex.Width / 2, tex.Height / 2);
                         float rotation = gameItem.body.Rotation;
                         if (!(gameItem is DropItem))
-                            switch(gameItem.polygonType)
+                            switch (gameItem.polygonType)
                             {
                                 case PhysicsPolygonType.Circle:
                                     scale = new Vector2((float)gameItem.radius * 2 / (float)tex.Width, (float)gameItem.radius * 2 / (float)tex.Width);
@@ -706,15 +712,15 @@ namespace BountyBandits
             const int BUFFER_WIDTH = 36;
             #region Get color for item class
             Color nameColor = Color.White;
-            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Magic)   nameColor = Color.Yellow;
-            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Rare)    nameColor = Color.Orange;
-            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Unique)  nameColor = Color.Blue;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Magic) nameColor = Color.Yellow;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Rare) nameColor = Color.Orange;
+            if (item.getItem().getItemClass() == BountyBandits.Inventory.ItemClass.Unique) nameColor = Color.Blue;
             #endregion
             #region Get name string
             String name = item.getItem().getName();
             int numNewLines = 1, maxWidth = BUFFER_WIDTH + ((name.Length > 20) ? 20 : name.Length) * FONT_WIDTH;
             for (int insertIndex = 20; insertIndex < name.Length; insertIndex += 20, numNewLines++)
-                name = name.Substring(0, insertIndex) + "-\n" + name.Substring(insertIndex+1);
+                name = name.Substring(0, insertIndex) + "-\n" + name.Substring(insertIndex + 1);
             #endregion
             #region Get stats string
             int i = 0;
@@ -728,7 +734,7 @@ namespace BountyBandits
                     if (maxWidth < BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.StatType))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length)
                         maxWidth = BUFFER_WIDTH + FONT_WIDTH * (Enum.GetNames(typeof(BountyBandits.Stats.StatType))[i] + " " + item.getItem().getStats().getStat(type).getValue()).Length;
                 }
-                i++; 
+                i++;
             }
             #endregion
             #region Modify Texture to be correct color
@@ -772,7 +778,7 @@ namespace BountyBandits
         {
             foreach (Being player in players)
             {
-                if(increment)
+                if (increment)
                     player.unlocked.add(mapManager, difficulty);
                 SaveManager.saveCharacter(player);
             }
@@ -829,7 +835,7 @@ namespace BountyBandits
         public bool isEndLevel()
         {
             foreach (Being player in players)
-                if (player.getPos().X >= mapManager.getCurrentLevel().levelLength - res.ScreenWidth/2)
+                if (player.getPos().X >= mapManager.getCurrentLevel().levelLength - res.ScreenWidth / 2)
                     return true;
             return false;
         }
@@ -837,10 +843,10 @@ namespace BountyBandits
         {
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
             foreach (Being player in players)
-                if(player.isLocal)
+                if (player.isLocal)
                     player.newLevel();
             #region add gameitems
-            activeItems = new List<GameItem>();
+            activeItems.Clear();
             if (!network.isClient())
             {
                 foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)

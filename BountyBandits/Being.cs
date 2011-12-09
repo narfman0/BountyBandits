@@ -26,7 +26,8 @@ namespace BountyBandits
         public int currenthealth = 5, currentspecial = 5;
         int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0;
-        bool isFacingLeft = false, attackComputed = true;
+        public bool isFacingLeft = false;
+        private bool attackComputed = true;
         public bool isDead = false;
         public Body body; private Vector2 pos; //used to draw when dead
         public Geom geom;

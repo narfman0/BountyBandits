@@ -203,10 +203,7 @@ namespace BountyBandits.Network
             initialCharmsg.Write((int)MessageType.InitialSendCharacter);
             initialCharmsg.Write(gameref.players.Count);
             foreach (Being player in gameref.players)
-            {
-                String playerStr = player.asXML(new XmlDocument().CreateDocumentFragment()).InnerXml;
-                initialCharmsg.Write(playerStr);
-            }
+                initialCharmsg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             client.SendMessage(initialCharmsg, NetDeliveryMethod.ReliableUnordered);
         }
         public void receivePlayersUpdate(NetIncomingMessage im)
@@ -220,7 +217,8 @@ namespace BountyBandits.Network
                     {
                         player.body.LinearVelocity = state.velocity;
                         Vector2 difference = state.position - player.body.Position;
-                        player.body.Position = player.body.Position + difference * .1f;
+                        player.body.Position = player.body.Position + (difference * .1f);
+                        player.isFacingLeft = state.isFacingLeft;
                     }
             }
         }
