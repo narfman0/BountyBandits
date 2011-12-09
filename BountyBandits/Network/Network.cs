@@ -297,7 +297,7 @@ namespace BountyBandits.Network
                 msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
-        private void sendFullObjectsUpdate()
+        public void sendFullObjectsUpdate()
         {
             List<GameItem> gameItems = new List<GameItem>();
             foreach (GameItem item in gameref.activeItems)
@@ -310,7 +310,6 @@ namespace BountyBandits.Network
             foreach (GameItem item in gameItems)
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
 
-            /*
             List<DropItem> dropItems = new List<DropItem>();
             foreach (DropItem item in gameref.activeItems)
                 if (item is DropItem)
@@ -318,10 +317,11 @@ namespace BountyBandits.Network
             msg.Write(dropItems.Count);
             foreach (DropItem item in dropItems)
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
-            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);*/
+            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
         {
+            #region GameItems
             int count = im.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -334,24 +334,32 @@ namespace BountyBandits.Network
                 if (!found)
                     gameref.addGameItem(item);
             }
-            /*count = im.ReadInt32();
+            #endregion
+            #region DropItems
+            count = im.ReadInt32();
+            for (int j = 0; j < gameref.activeItems.Count; j++)
+            {
+                gameref.physicsSimulator.Remove(gameref.activeItems[j].body);
+                gameref.activeItems.RemoveAt(j--);
+            }
             for (int i = 0; i < count; i++)
             {
                 String gameItemXML = im.ReadString();
                 DropItem item = DropItem.fromXML(XMLUtil.asXML(gameItemXML));
-                bool found = false;
+                /*bool found = false;
                 foreach (GameItem activeitem in gameref.activeItems)
                     if (activeitem.guid == item.guid)
                         found = true;
-                if (!found)
+                if (!found)*/
                     gameref.addGameItem(item);
-            }*/
+            }
+            #endregion
         }
         private void sendObjectsUpdate()
         {
             List<GameItem> gameItems = new List<GameItem>();
             foreach (GameItem item in gameref.activeItems)
-                if (!item.immovable && !item.body.IsStatic && !(item is DropItem))
+                if (!item.immovable && !item.body.IsStatic)
                     gameItems.Add(item);
 
             NetOutgoingMessage msg = server.CreateMessage();

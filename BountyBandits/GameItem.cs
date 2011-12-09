@@ -62,7 +62,7 @@ namespace BountyBandits
             gameItem.guid = Guid.Parse(itemnode.GetAttribute("guid"));
             return gameItem;
         }
-        public XmlElement asXML(XmlNode parentNode)
+        public virtual XmlElement asXML(XmlNode parentNode)
         {
             XmlElement element = parentNode.OwnerDocument.CreateElement("gameItem"),
                 nameNode = parentNode.OwnerDocument.CreateElement("name"),

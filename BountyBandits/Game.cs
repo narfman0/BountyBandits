@@ -519,6 +519,8 @@ namespace BountyBandits
             #endregion
             item.setItem(DropManager.generateItem(killedBeing));
             activeItems.Add(item);
+            if(network.isServer())
+                network.sendFullObjectsUpdate();
         }
         private bool isUnlocked(int level)
         {

@@ -235,8 +235,7 @@ namespace BountyBandits
                     pos = body.Position;
                     gameref.physicsSimulator.Remove(body);
                     gameref.physicsSimulator.Remove(geom);
-                    if (isPlayer &&
-                        gameref.rand.Next(20)==0)   //nodrop check. should query entity
+                    if (!isPlayer && gameref.rand.Next(20)==0 && !gameref.network.isClient())   //nodrop check. should query entity
                         gameref.dropItem(pos, this);
                 }
                 #endregion
