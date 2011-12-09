@@ -32,12 +32,10 @@ namespace BountyBandits.Network
 
             server = new NetServer(config);
             server.Start();
+            Log.write(LogType.NetworkServer, "Server started");
             //if internet game, add sending registration ot master server
             //IPEndPoint masterServerEndpoint = NetUtility.Resolve("localhost", Const.GameServerPort);
         }
-        /// <summary>
-        /// Connect using joinString
-        /// </summary>
         public void startClient(){
             IPEndPoint point = new IPEndPoint(NetUtility.Resolve(joinString), Const.GameServerPort);
             NetPeerConfiguration config = new NetPeerConfiguration("bountyBanditsClient");
@@ -47,6 +45,7 @@ namespace BountyBandits.Network
             client = new NetClient(config);
             client.Start();
             client.Connect(point);
+            Log.write(LogType.NetworkClient, "Client connecting...");
 
             NetOutgoingMessage initialCharmsg = client.CreateMessage();
             initialCharmsg.Write((int)MessageType.InitialSendCharacter);
@@ -87,6 +86,7 @@ namespace BountyBandits.Network
                         }
 						break;
 					default:
+                        Log.write(LogType.NetworkClient, im.MessageType.ToString() + " received.");
 						break;
 				}
 			}
@@ -99,6 +99,7 @@ namespace BountyBandits.Network
                 switch (im.MessageType)
                 {
                     case NetIncomingMessageType.ConnectionApproval:
+                        Log.write(LogType.NetworkServer, "Connection approved from " + im.SenderEndpoint.ToString());
                         sendGameStateUpdate();
                         break;
                     case NetIncomingMessageType.Data:
@@ -115,6 +116,9 @@ namespace BountyBandits.Network
                                 break;
                             case (int)MessageType.LevelIndexChange:
                                 receiveIncrementLevelRequest(im);
+                                break;
+                            default:
+                                Log.write(LogType.NetworkServer, im.MessageType.ToString() + " received.");
                                 break;
                         }
                         break;

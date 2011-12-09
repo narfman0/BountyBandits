@@ -9,7 +9,7 @@ namespace BountyBandits
 {
     public class SaveManager
     {
-        private static String SAVE_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\Bounty Bandits\";
+        public static String SAVE_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\Bounty Bandits\";
         private static int NUM_BACKUPS = 10;
 
         public static string[] getAvailableCharacterNames()
@@ -49,6 +49,7 @@ namespace BountyBandits
                 XmlNode root = xmlDoc.DocumentElement;
                 root.AppendChild(being.asXML(root));
                 xmlDoc.Save(filename);
+                Log.write(LogType.Saves, "saved character: " + being.name);
             }
             catch (Exception ex)
             {
