@@ -50,7 +50,6 @@ namespace BountyBandits
         public static MarkovNameGenerator nameGenerator;
         public NetworkManager network;
         public StateManager currentState;
-        public Log log;
         //choosing characters
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
         Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem=0;
