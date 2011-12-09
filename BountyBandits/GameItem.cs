@@ -18,51 +18,48 @@ namespace BountyBandits
     public class GameItem
     {
         public string name;
-        public uint weight = 1;
-        public uint radius = 10;
-        public uint startdepth = 0;
-        public uint width = 1;
+        public uint weight = 1, radius = 10, startdepth = 0, width = 1;
+        public Guid guid;
         public Vector2 loc, sideLengths;
         public Body body;
         public Vertices vertices;
         public bool immovable = false;
         public PhysicsPolygonType polygonType;
-        protected GameItem() 
+        public GameItem() 
         {
+            guid = Guid.NewGuid();
         }
-        public GameItem(XmlNode itemnode) : this()
+        public static GameItem fromXML(XmlNode itemnode)
         {
-            fromXML(itemnode);
-        }
-        void fromXML(XmlNode itemnode)
-        {
+            GameItem gameItem = new GameItem();
             foreach (XmlElement itemChild in itemnode)
                 if (itemChild.Name.Equals("name"))
-                    name = itemChild.FirstChild.Value;
+                    gameItem.name = itemChild.FirstChild.Value;
                 else if (itemChild.Name.Equals("loc"))
                 {
                     string[] locStr = itemChild.FirstChild.Value.Split(',');
-                    loc = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
+                    gameItem.loc = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
                 }
                 else if (itemChild.Name.Equals("radius"))
-                    radius = uint.Parse(itemChild.FirstChild.Value);
+                    gameItem.radius = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("startdepth"))
-                    startdepth = uint.Parse(itemChild.FirstChild.Value);
+                    gameItem.startdepth = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("weight"))
-                    weight = uint.Parse(itemChild.FirstChild.Value);
+                    gameItem.weight = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("width"))
-                    width = uint.Parse(itemChild.FirstChild.Value);
+                    gameItem.width = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("immovable"))
-                    immovable = bool.Parse(itemChild.FirstChild.Value);
+                    gameItem.immovable = bool.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("sideLengths"))
-                    sideLengths = XMLUtil.fromXMLVector2(itemChild);
+                    gameItem.sideLengths = XMLUtil.fromXMLVector2(itemChild);
                 else if (itemChild.Name.Equals("polygonType"))
-                    polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
+                    gameItem.polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("vertices")){
-                    vertices = new Vertices();
+                    gameItem.vertices = new Vertices();
                     foreach (XmlElement vertexElement in itemChild.GetElementsByTagName("vertex"))
-                        vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
+                        gameItem.vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
                 }
+            return gameItem;
         }
     }
 }

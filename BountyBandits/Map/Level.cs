@@ -63,9 +63,9 @@ namespace BountyBandits.Map
                     if (itemChild.Name.Equals("name"))
                         name = itemChild.FirstChild.Value;
                 if (name.Equals("enemies"))
-                    newLvl.spawns.Add(new SpawnPoint(item));
+                    newLvl.spawns.Add(SpawnPoint.fromXML(item));
                 else
-                    newLvl.items.Add(new GameItem(item));
+                    newLvl.items.Add(GameItem.fromXML(item));
             }
             XmlNodeList storyNodes = node.GetElementsByTagName("story");
             if(storyNodes.Count>0 && storyNodes[0].ChildNodes.Count>0)

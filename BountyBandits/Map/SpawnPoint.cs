@@ -22,33 +22,31 @@ namespace BountyBandits.Map
         public uint weight = 1;
         public bool isSpawned = false;
         XmlNode fromNode;
-        public SpawnPoint(XmlNode spawnnode)
-        {
-            fromXML(spawnnode);
-        }
         public SpawnPoint Clone()
         {
-            return new SpawnPoint(fromNode);
+            return SpawnPoint.fromXML(fromNode);
         }
-        void fromXML(XmlNode node)
+        public static SpawnPoint fromXML(XmlNode node)
         {
-            fromNode = node;
+            SpawnPoint point = new SpawnPoint();
+            point.fromNode = node;
             foreach (XmlNode itemChild in node)
                 if (itemChild.Name.Equals("name"))
-                    name = itemChild.FirstChild.Value;
+                    point.name = itemChild.FirstChild.Value;
                 else if (itemChild.Name.Equals("loc"))
                 {
                     string[] locStr = itemChild.FirstChild.Value.Split(',');
-                    loc = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
+                    point.loc = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
                 }
                 else if (itemChild.Name.Equals("count"))
-                    count = uint.Parse(itemChild.FirstChild.Value);
+                    point.count = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("bosses"))
-                    bosses = uint.Parse(itemChild.FirstChild.Value);
+                    point.bosses = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("weight"))
-                    weight = uint.Parse(itemChild.FirstChild.Value);
+                    point.weight = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("type"))
-                    type = itemChild.FirstChild.Value;
+                    point.type = itemChild.FirstChild.Value;
+            return point;
         }
     }
 }
