@@ -23,12 +23,12 @@ namespace BountyBandits
         public string name;
         private StatSet myStats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
-        public int currenthealth = 5, currentspecial = 5;
-        int timeOfLastDepthChange = 0, timeOfLastJump = 0, timeToChangeDepths = 300, timeToNextHeal = 0, directionMoving = 0;
-        public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0;
-        public bool isFacingLeft = false;
+        private const int TIME_TO_CHANGE_DEPTHS = 300;
+        int timeOfLastJump = 0, timeToNextHeal = 0, directionMoving = 0;
+        public int currenthealth = 5, currentspecial = 5, xp = 0, level, xpOfNextLevel = 100, 
+            unusedAttr = 0, timeOfLastDepthChange = 0;
+        public bool isFacingLeft = false, isDead = false;
         private bool attackComputed = true;
-        public bool isDead = false;
         public Body body; private Vector2 pos; //used to draw when dead
         public Geom geom;
         public AnimationController controller; 
@@ -61,7 +61,7 @@ namespace BountyBandits
             myStats.setStatValue(StatType.Magic, 5);
             foreach (Stat stat in controller.statRatios.statsTable.Values)
                 myStats.addStatValue(stat.getType(), stat.getValue() * level);
-            guid = new Guid();
+            guid = Guid.NewGuid();
             newLevel();
         }
         ~Being()
@@ -99,11 +99,11 @@ namespace BountyBandits
                     currFrame = currAnimation.start;
             }
 
-            if (Environment.TickCount - timeOfLastDepthChange < timeToChangeDepths)
+            if (Environment.TickCount - timeOfLastDepthChange < TIME_TO_CHANGE_DEPTHS)
             {
                 int difference = Environment.TickCount - timeOfLastDepthChange;
-                float slidex = Game.DEPTH_X_OFFSET / timeToChangeDepths * difference;   // 0 < x < DEPTH_X_OFFSET
-                float slidey = Game.DEPTH_MULTIPLE / timeToChangeDepths * difference;   // 0 < y < DEPTH_MULTIPLE
+                float slidex = Game.DEPTH_X_OFFSET / TIME_TO_CHANGE_DEPTHS * difference;   // 0 < x < DEPTH_X_OFFSET
+                float slidey = Game.DEPTH_MULTIPLE / TIME_TO_CHANGE_DEPTHS * difference;   // 0 < y < DEPTH_MULTIPLE
                 slidex *= directionMoving; slidey *= directionMoving;
                 if (directionMoving == -1)
                 {
@@ -179,7 +179,7 @@ namespace BountyBandits
         }
 		public bool lane(bool up)
 		{
-			if (Environment.TickCount - timeOfLastDepthChange > timeToChangeDepths && !isDead &&
+			if (Environment.TickCount - timeOfLastDepthChange > TIME_TO_CHANGE_DEPTHS && !isDead &&
                 ((up && geom.CollisionCategories != CollisionCategory.Cat1) ||
                     (!up && geom.CollisionCategories != CollisionCategory.Cat4)))
             {

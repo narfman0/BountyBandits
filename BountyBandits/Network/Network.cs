@@ -66,14 +66,18 @@ namespace BountyBandits.Network
         public void update(GameTime gameTime)
         {
             if (isClient())
+            {
                 updateClient();
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdates))
+                    sendPlayersUpdateClient();
+            }
             if (isServer())
             {
                 updateServer();
-                if (timedActions.isActionReady(gameTime, 1500, ServerTimedUpdate.State))
+                if (timedActions.isActionReady(gameTime, 1500, TimedUpdate.State))
                     sendGameStateUpdate();
-                if (timedActions.isActionReady(gameTime, 100, ServerTimedUpdate.PlayersUpdates))
-                    sendServerPlayersUpdate();
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdates))
+                    sendPlayersUpdateServer();
             }
         }
         public void updateClient()
@@ -87,9 +91,7 @@ namespace BountyBandits.Network
                         switch (im.ReadInt32())
                         {
                             case (int)MessageType.GameState:
-                                int newState = im.ReadInt32();
-                                if (gameref.currentState.getState() != GameState.CharacterSelection)
-                                    gameref.currentState.setState((GameState)newState);
+                                receiveGameStateUpdate(im);
                                 break;
                             case (int)MessageType.PlayersUpdate:
                                 receivePlayersUpdate(im);
@@ -132,6 +134,9 @@ namespace BountyBandits.Network
                             case (int)MessageType.LevelIndexChange:
                                 receiveIncrementLevelRequest(im);
                                 break;
+                            case (int)MessageType.PlayersUpdateClient:
+                                receivePlayersUpdate(im);
+                                break;
                             default:
                                 Log.write(LogType.NetworkServer, "Unknown data message received");
                                 break;
@@ -151,6 +156,16 @@ namespace BountyBandits.Network
             stateUpdate.Write((int)MessageType.GameState);
             stateUpdate.Write((int)gameref.currentState.getState());
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+        }
+        private void receiveGameStateUpdate(NetIncomingMessage im)
+        {
+            int newState = im.ReadInt32();
+            if (gameref.currentState.getState() != GameState.CharacterSelection)
+            {
+                gameref.currentState.setState((GameState)newState);
+                if (gameref.currentState.getState() != GameState.Gameplay)
+                    gameref.newLevel();
+            }
         }
         public void sendIncrementLevelRequest(bool up)
         {
@@ -185,7 +200,23 @@ namespace BountyBandits.Network
             while (gameref.mapManager.getCurrentLevelIndex() != newLevelIndex)
                 gameref.mapManager.incrementCurrentLevel(gameref.mapManager.getCurrentLevelIndex() < newLevelIndex);
         }
-        public void sendServerPlayersUpdate()
+        private void sendPlayersUpdateClient()
+        {
+            if (!gameref.network.isClient())
+                return;
+            List<Being> localList = new List<Being>();
+            foreach (Being player in gameref.players)
+                if (player.isLocal)
+                    localList.Add(player);
+
+            NetOutgoingMessage msg = client.CreateMessage();
+            msg.Write((int)MessageType.PlayersUpdateClient);
+            msg.Write((int)localList.Count);
+            foreach (Being player in localList)
+                BeingNetworkState.writeBeingState(msg, player);
+            client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
+        }
+        public void sendPlayersUpdateServer()
         {
             if (!gameref.network.isServer() || server.ConnectionsCount < 1)
                 return;
@@ -203,12 +234,17 @@ namespace BountyBandits.Network
             {
                 BeingNetworkState state = BeingNetworkState.readBeingState(im);
                 foreach (Being player in gameref.players)
-                    if (player.guid == state.guid)
+                    if (!player.isLocal && player.guid == state.guid)
                     {
                         player.body.LinearVelocity = state.velocity;
                         Vector2 difference = state.position - player.body.Position;
                         player.body.Position = player.body.Position + (difference * .1f);
                         player.isFacingLeft = state.isFacingLeft;
+                        if (state.depth != player.getDepth())
+                        {
+                            player.timeOfLastDepthChange = Environment.TickCount;
+                            player.setDepth(state.depth);
+                        }
                     }
             }
         }

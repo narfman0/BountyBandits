@@ -444,7 +444,7 @@ namespace BountyBandits
                             player.input.update();
                             if (player.input.getButtonHit(Buttons.Back))
                                 currentState.setState(GameState.CharacterSelection);
-                            if (player.input.getButtonHit(Buttons.A))
+                            if (player.input.getButtonHit(Buttons.A) && !network.isClient())
                                 newLevel();
                             if (player.input.getButtonHit(Buttons.DPadRight))
                             {

@@ -8,13 +8,13 @@ namespace BountyBandits.Network
 {
     class TimedActions
     {
-        private Dictionary<ServerTimedUpdate, long> serverTimedUpdates;
+        private Dictionary<TimedUpdate, long> serverTimedUpdates;
         public TimedActions()
         {
-            serverTimedUpdates = new Dictionary<ServerTimedUpdate, long>();
+            serverTimedUpdates = new Dictionary<TimedUpdate, long>();
         }
 
-        public bool isActionReady(GameTime gameTime, int updateTime, ServerTimedUpdate updateType)
+        public bool isActionReady(GameTime gameTime, int updateTime, TimedUpdate updateType)
         {
             long stateChangeTime = updateTime;
             if (serverTimedUpdates.ContainsKey(updateType))
