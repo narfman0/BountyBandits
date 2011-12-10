@@ -74,12 +74,15 @@ namespace BountyBandits.Network
             if (isServer())
             {
                 updateServer();
-                if (timedActions.isActionReady(gameTime, 1500, TimedUpdate.State))
-                    sendGameStateUpdate();
-                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
-                    sendPlayersUpdateServer();
-                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
-                    sendObjectsUpdate();
+                if (gameref.network.isServer() && server.ConnectionsCount > 0)
+                {
+                    if (timedActions.isActionReady(gameTime, 1500, TimedUpdate.State))
+                        sendGameStateUpdate();
+                    if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
+                        sendPlayersUpdateServer();
+                    if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
+                        sendObjectsUpdate();
+                }
             }
         }
         public void updateClient()
@@ -229,8 +232,6 @@ namespace BountyBandits.Network
         }
         public void sendPlayersUpdateServer()
         {
-            if (!gameref.network.isServer() || server.ConnectionsCount < 1)
-                return;
             NetOutgoingMessage stateUpdate = server.CreateMessage();
             stateUpdate.Write((int)MessageType.PlayersUpdate);
             stateUpdate.Write((int)gameref.players.Count);
@@ -314,9 +315,11 @@ namespace BountyBandits.Network
             foreach (GameItem item in gameref.activeItems)
                 if (item is DropItem)
                     dropItems.Add((DropItem)item);
-            msg.Write(dropItems.Count);
-            foreach (DropItem item in dropItems)
-                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+            //Log.write(LogType.NetworkServer, "Sending full object update with " +
+            //    gameItems.Count + " gameItems and " + dropItems.Count + " drop items.");
+            //msg.Write(dropItems.Count);
+            //foreach (DropItem item in dropItems)
+            //    msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
@@ -336,7 +339,7 @@ namespace BountyBandits.Network
             }
             #endregion
             #region DropItems
-            count = im.ReadInt32();
+            /*count = im.ReadInt32();
             for (int j = 0; j < gameref.activeItems.Count; j++)
             {
                 gameref.physicsSimulator.Remove(gameref.activeItems[j].body);
@@ -346,13 +349,8 @@ namespace BountyBandits.Network
             {
                 String gameItemXML = im.ReadString();
                 DropItem item = DropItem.fromXML(XMLUtil.asXML(gameItemXML));
-                /*bool found = false;
-                foreach (GameItem activeitem in gameref.activeItems)
-                    if (activeitem.guid == item.guid)
-                        found = true;
-                if (!found)*/
-                    gameref.addGameItem(item);
-            }
+                gameref.addGameItem(item);
+            }*/
             #endregion
         }
         private void sendObjectsUpdate()
@@ -367,6 +365,7 @@ namespace BountyBandits.Network
             msg.Write(gameItems.Count);
             foreach (GameItem item in gameItems)
                 GameItemNetworkState.writeState(msg, item);
+            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
         private void receiveObjectsUpdate(NetIncomingMessage im)
         {
