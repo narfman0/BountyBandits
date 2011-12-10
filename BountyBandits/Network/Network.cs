@@ -311,9 +311,9 @@ namespace BountyBandits.Network
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
 
             List<DropItem> dropItems = new List<DropItem>();
-            foreach (DropItem item in gameref.activeItems)
+            foreach (GameItem item in gameref.activeItems)
                 if (item is DropItem)
-                    dropItems.Add(item);
+                    dropItems.Add((DropItem)item);
             msg.Write(dropItems.Count);
             foreach (DropItem item in dropItems)
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);

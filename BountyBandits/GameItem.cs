@@ -20,7 +20,7 @@ namespace BountyBandits
         public string name;
         public uint weight = 1, radius = 10, startdepth = 0, width = 1;
         public Guid guid;
-        public Vector2 loc, sideLengths;
+        public Vector2 loc, sideLengths = Vector2.One;
         public Body body;
         public Vertices vertices;
         public bool immovable = false;
@@ -84,14 +84,15 @@ namespace BountyBandits
             XMLUtil.asXMLVector2(element, loc, "loc");
             XMLUtil.asXMLVector2(element, sideLengths, "sideLengths");
             element.SetAttribute("guid", guid.ToString());
-            nameNode.Value = name;
-            radiusNode.Value = radius.ToString();
-            startDepthNode.Value = startDepthNode.ToString();
-            weightNode.Value = weight.ToString();
-            widthNode.Value = width.ToString();
-            immovableNode.Value = immovable.ToString();
-            foreach(Vector2 vertex in vertices)
-                XMLUtil.asXMLVector2(verticesNode, vertex, "vertex");
+            nameNode.InnerText = name;
+            radiusNode.InnerText = radius.ToString();
+            startDepthNode.InnerText = startdepth.ToString();
+            weightNode.InnerText = weight.ToString();
+            widthNode.InnerText = width.ToString();
+            immovableNode.InnerText = immovable.ToString();
+            if(vertices != null)
+                foreach(Vector2 vertex in vertices)
+                    XMLUtil.asXMLVector2(verticesNode, vertex, "vertex");
             element.AppendChild(nameNode);
             element.AppendChild(radiusNode);
             element.AppendChild(startDepthNode);

@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>frenchman</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>30</start>
+        <end>60</end>
+        <keyframe>48</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>60</start>
+        <end>110</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>110</start>
+        <end>170</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='2' />
+      <stat type='Magic' value='5' />
+      <stat type='Agility' value='2' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='80' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
