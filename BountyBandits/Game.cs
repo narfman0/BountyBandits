@@ -326,7 +326,7 @@ namespace BountyBandits
                             }
 #if DEBUG
                             if (Keyboard.GetState().IsKeyDown(Keys.F3))
-                                spawnManager.spawnGroup("frenchman", 1, 1);
+                                spawnManager.spawnGroup("pedobear", 1, 1);
                             if (Keyboard.GetState().IsKeyDown(Keys.F4))
                                 foreach (Being player in players)
                                     player.giveXP(xpManager.getXPToLevelUp(player.level - 1));

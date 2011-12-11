@@ -115,6 +115,7 @@ namespace BountyBandits
                     slidex -= Game.DEPTH_X_OFFSET;
                     slidey -= 4 * Game.DEPTH_MULTIPLE;
                 }
+                slidey -= ((controller.frames[currFrame].Height / 128) - 1) * 128f;
                 drawPoint = new Vector2(getPos().X - (controller.frames[currFrame].Width / 2f) - slidex, getPos().Y - (controller.frames[currFrame].Height / 2) - slidey);
             }
             else
