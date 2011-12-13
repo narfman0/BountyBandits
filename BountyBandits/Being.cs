@@ -75,6 +75,8 @@ namespace BountyBandits
             {
                 changeAnimation(attackName);
                 attackComputed = false;
+                if(isTouchingGeom(true))
+                    body.LinearVelocity /= 2f;
             }
         }
         public void changeAnimation(string name)
@@ -200,7 +202,8 @@ namespace BountyBandits
 		}
         public void move(Vector2 force)
         {
-            if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 + getStat(StatType.Speed) && isTouchingGeom(true))
+            if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 + getStat(StatType.Speed)
+                && isTouchingGeom(true) && !currAnimation.name.Contains("attack"))
             {
                 body.ApplyForce(new Vector2((float)getStat(StatType.Speed) * force.X, force.Y));
                 isFacingLeft = (force.X > 0) ? false : true;
