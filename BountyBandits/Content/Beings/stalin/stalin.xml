@@ -1,0 +1,45 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>stalin</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attack2</name>
+        <start>60</start>
+        <end>90</end>
+        <keyframe>75</keyframe>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>90</start>
+        <end>120</end>
+        <keyframe>106</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>30</start>
+        <end>60</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>120</start>
+        <end>152</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='8' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='3' />
+      <stat type='Speed' value='9' />
+      <stat type='Range' value='100' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
