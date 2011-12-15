@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>sumo</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>30</start>
+        <end>71</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>71</start>
+        <end>100</end>
+        <keyframe>82</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>100</start>
+        <end>140</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='9' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='1' />
+      <stat type='Speed' value='3' />
+      <stat type='Range' value='70' />
+      <stat type='Life' value='5' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>
