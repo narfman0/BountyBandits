@@ -63,7 +63,7 @@ namespace BountyBandits
         protected override void Initialize()
         {
             activeItems = new List<GameItem>();
-            res = new Resolution(graphics, ScreenMode.tv1080p);
+            res = new Resolution(graphics, ScreenMode.tv720p);
             spawnManager = new SpawnManager(this);
             rand = new Random();
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
@@ -616,11 +616,14 @@ namespace BountyBandits
             Level currentLevel = mapManager.getCurrentLevel();
             #region Gameworld
             if (mapManager.getCurrentLevel().horizon != null)
-                spriteBatch.Draw(mapManager.getCurrentLevel().horizon, Vector2.Zero, Color.White);
+            {
+                Vector2 currentResolution = new Vector2(res.ScreenWidth, res.ScreenHeight),
+                    origin = new Vector2(mapManager.getCurrentLevel().horizon.Width / 2f, mapManager.getCurrentLevel().horizon.Height / 2f);
+                drawItem(mapManager.getCurrentLevel().horizon, currentResolution/2f, 0f, 0f, Vector2.One, SpriteEffects.None, origin);
+            }
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
                 Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
-                //spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1);
                 Texture2D tex = texMan.getTex(item.texturePath);
                 drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width/2, tex.Height/2));
             }

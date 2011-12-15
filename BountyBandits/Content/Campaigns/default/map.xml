@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length='5500' name='levelOne'>
+  <level length='10000' name='Wine Country'>
     <adj>1</adj>
     <background>
       <graphic>
@@ -11,107 +11,155 @@
           <y>150</y>
         </location>
       </graphic>
-      
+      <graphic>
+        <path>goldhorizon</path>
+        <location>
+          <x>3072</x>
+          <y>150</y>
+        </location>
+      </graphic>
       <graphic>
         <path>goldgrasshorizon</path>
         <location>
-          <x>5092</x>
-          <y>1024</y>
+          <x>5120</x>
+          <y>150</y>
         </location>
       </graphic>
       <graphic>
-        <path>grassyhill</path>
+        <path>greenhorizon</path>
         <location>
-          <x>7140</x>
-          <y>0</y>
+          <x>7168</x>
+          <y>150</y>
         </location>
       </graphic>
       <graphic>
-        <path>grassyhill</path>
+        <path>greenhorizon</path>
         <location>
-          <x>9188</x>
-          <y>0</y>
+          <x>9216</x>
+          <y>150</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>goldenhill</path>
+        <location>
+          <x>150</x>
+          <y>300</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>grassflecks</path>
+        <location>
+          <x>300</x>
+          <y>100</y>
+        </location>
+      </graphic>
+      <graphic scale='.7'>
+        <path>grassflecks</path>
+        <location>
+          <x>700</x>
+          <y>200</y>
+        </location>
+      </graphic>
+      <graphic scale='.8'>
+        <path>grassflecks</path>
+        <location>
+          <x>1000</x>
+          <y>150</y>
+        </location>
+      </graphic>
+      <graphic scale='.8'>
+        <path>calitree1</path>
+        <location>
+          <x>7500</x>
+          <y>250</y>
         </location>
       </graphic>
       <graphic>
         <path>calitree1</path>
         <location>
-          <x>256</x>
+          <x>7500</x>
+          <y>150</y>
+        </location>
+      </graphic>
+      <graphic scale='.8'>
+        <path>calitree1</path>
+        <location>
+          <x>7900</x>
           <y>250</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyBlue</path>
         <location>
-          <x>1145</x>
-          <y>100</y>
+          <x>7140</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyRed</path>
         <location>
-          <x>1797</x>
-          <y>100</y>
+          <x>7400</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyGreen</path>
         <location>
-          <x>2449</x>
-          <y>100</y>
+          <x>7640</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyYellow</path>
         <location>
-          <x>3101</x>
-          <y>100</y>
+          <x>7880</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyLightBlue</path>
         <location>
-          <x>3753</x>
-          <y>100</y>
+          <x>8100</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyBlue</path>
         <location>
-          <x>4405</x>
-          <y>100</y>
+          <x>8340</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyRed</path>
         <location>
-          <x>5057</x>
-          <y>100</y>
+          <x>8560</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyGreen</path>
         <location>
-          <x>5709</x>
-          <y>100</y>
+          <x>8780</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyYellow</path>
         <location>
-          <x>6361</x>
-          <y>100</y>
+          <x>9000</x>
+          <y>300</y>
         </location>
       </graphic>
       <graphic scale='.3'>
         <path>paintedLadyLightBlue</path>
         <location>
-          <x>7013</x>
-          <y>100</y>
+          <x>9240</x>
+          <y>300</y>
         </location>
       </graphic>
     </background>
-    <horizonPath>horizon1</horizonPath>
+    <horizonPath>desertysun</horizonPath>
     <items>
       <item>
         <name>box</name>
@@ -189,57 +237,9 @@
       <item>
         <name>enemies</name>
         <loc>800,454</loc>
-        <count>4</count>
+        <count>1</count>
         <bosses>0</bosses>
         <type>cowboy</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1000,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>cowboy</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1000,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>hippie</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1000,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>nerd</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1600,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>cowboy</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1600,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>hippie</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1600,566</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>nerd</type>
         <weight>1</weight>
       </item>
     </items>
