@@ -5,10 +5,32 @@
     <adj>1</adj>
     <background>
       <graphic>
-        <path>background01_3</path>
+        <path>goldhorizon</path>
         <location>
-          <x>0</x>
-          <y>212</y>
+          <x>1024</x>
+          <y>150</y>
+        </location>
+      </graphic>
+      
+      <graphic>
+        <path>goldgrasshorizon</path>
+        <location>
+          <x>5092</x>
+          <y>1024</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>grassyhill</path>
+        <location>
+          <x>7140</x>
+          <y>0</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>grassyhill</path>
+        <location>
+          <x>9188</x>
+          <y>0</y>
         </location>
       </graphic>
       <graphic>
@@ -86,90 +108,6 @@
         <location>
           <x>7013</x>
           <y>100</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>1143</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>1618</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>2093</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>2568</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>3043</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>3518</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>3993</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>4468</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>4937</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>5438</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>5915</x>
-          <y>561</y>
-        </location>
-      </graphic>
-      <graphic>
-        <path>road</path>
-        <location>
-          <x>6392</x>
-          <y>561</y>
         </location>
       </graphic>
     </background>

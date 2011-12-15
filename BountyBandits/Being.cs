@@ -125,7 +125,7 @@ namespace BountyBandits
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 avePos = gameref.getAvePosition();
-            gameref.drawItem(controller.frames[currFrame], new Vector2(drawPoint.X - avePos.X + gameref.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + gameref.res.ScreenHeight / 2), 0, getDepth(), Vector2.One, effects, Vector2.Zero);
+            gameref.drawGameItem(controller.frames[currFrame], new Vector2(drawPoint.X - avePos.X + gameref.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + gameref.res.ScreenHeight / 2), 0, getDepth(), Vector2.One, effects, Vector2.Zero);
         }
         public int getDepth()
         {

@@ -63,7 +63,7 @@ namespace BountyBandits
         protected override void Initialize()
         {
             activeItems = new List<GameItem>();
-            res = new Resolution(graphics, ScreenMode.tv720p);
+            res = new Resolution(graphics, ScreenMode.tv1080p);
             spawnManager = new SpawnManager(this);
             rand = new Random();
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
@@ -264,7 +264,7 @@ namespace BountyBandits
                         endLevel(true);
                     foreach (Being currentplayer in players)
                     {
-                        if (currentplayer.getPos().X < currentplayer.controller.frames[0].Width / 2)
+                        if (currentplayer.getPos().X < 0)
                             endLevel(false);
                         currentplayer.update(gameTime);
                         #region Input
@@ -620,7 +620,9 @@ namespace BountyBandits
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
                 Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
-                spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1);
+                //spriteBatch.Draw(texMan.getTex(item.texturePath), position, null, Color.White, item.rotation, Vector2.Zero, item.scale, SpriteEffects.None, 1);
+                Texture2D tex = texMan.getTex(item.texturePath);
+                drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width/2, tex.Height/2));
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
@@ -645,7 +647,7 @@ namespace BountyBandits
                                     rotation *= -1;
                                     break;
                             }
-                        drawItem(tex, pos, rotation, currentDepth, scale, SpriteEffects.None, origin);
+                        drawGameItem(tex, pos, rotation, currentDepth, scale, SpriteEffects.None, origin);
                     }
                 foreach (Being enemy in spawnManager.enemies)
                     if (currentDepth == enemy.getDepth())
@@ -704,9 +706,13 @@ namespace BountyBandits
             }
             #endregion
         }
-        public void drawItem(Texture2D tex, Vector2 pos, float rot, int depth, Vector2 scale, SpriteEffects effects, Vector2 origin)
+        public void drawGameItem(Texture2D tex, Vector2 pos, float rot, float depth, Vector2 scale, SpriteEffects effects, Vector2 origin)
         {
-            spriteBatch.Draw(tex, new Vector2(pos.X - DEPTH_X_OFFSET * depth, res.ScreenHeight - pos.Y - (DEPTH_MULTIPLE * (3 - depth))), null, Color.White, rot, origin, scale, effects, ((float)depth) / 10.0f);
+            drawItem(tex, new Vector2(pos.X - DEPTH_X_OFFSET * depth, pos.Y + (DEPTH_MULTIPLE * (3 - depth))), rot, depth / 10f, scale, effects, origin);
+        }
+        public void drawItem(Texture2D tex, Vector2 pos, float rot, float depth, Vector2 scale, SpriteEffects effects, Vector2 origin)
+        {
+            spriteBatch.Draw(tex, new Vector2(pos.X, res.ScreenHeight - pos.Y), null, Color.White, rot, origin, scale, effects, depth);
         }
         public void drawItemDescription(DropItem item)
         {
@@ -771,7 +777,7 @@ namespace BountyBandits
             Vector2 avePosition = getAvePosition() - new Vector2(res.ScreenWidth / 2, res.ScreenHeight / 2);
             int backgroundDrawHeight = (20 * numNewLines < (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3) ? (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3 : 20 * numNewLines;
             spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - avePosition.X, res.ScreenHeight + avePosition.Y - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
-            drawItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - avePosition.X, item.body.Position.Y + 15f - avePosition.Y), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
+            drawGameItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - avePosition.X, item.body.Position.Y + 15f - avePosition.Y), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
             spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), nameColor);
             spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White);
             #endregion
