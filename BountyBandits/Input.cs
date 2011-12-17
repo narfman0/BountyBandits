@@ -10,8 +10,8 @@ namespace BountyBandits
     {
         private Dictionary<Buttons, Keys> xboxButtonToKeyboardKey = new Dictionary<Buttons, Keys>(), 
             xboxButtonToKeyboardKeySecondary = new Dictionary<Buttons, Keys>();
-        KeyboardState keyState, keyPreviousState;
-        GamePadState padState, padPreviousState;
+        public KeyboardState keyState, keyPreviousState;
+        public GamePadState padState, padPreviousState;
         private PlayerIndex index;
         public bool useKeyboard = false;
         public Input(PlayerIndex index)

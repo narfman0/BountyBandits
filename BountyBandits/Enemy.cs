@@ -23,7 +23,8 @@ namespace BountyBandits
             //and target that random alive person
             while (someoneAlive && (targetPlayer == -1 || gameref.players[targetPlayer].currenthealth < 1))
                 targetPlayer = gameref.rand.Next(gameref.players.Count);
-
+            if (targetPlayer < 0)
+                return;
             Being targetBeing = gameref.players[targetPlayer];
             if (targetBeing.getDepth() < getDepth()) lane(true);
             else if (targetBeing.getDepth() > getDepth()) lane(false);

@@ -325,14 +325,33 @@ namespace BountyBandits
                                 }
                             }
 #if DEBUG
-                            if (Keyboard.GetState().IsKeyDown(Keys.F3))
+                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
                                 spawnManager.spawnGroup("sumo", 1, 1);
                             if (Keyboard.GetState().IsKeyDown(Keys.F4))
                                 foreach (Being player in players)
                                     player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                            if (Keyboard.GetState().IsKeyDown(Keys.F5))
+                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F5) && Keyboard.GetState().IsKeyDown(Keys.F5))
                             {
                                 dropItem(1 * currentplayer.body.Position, currentplayer);
+                            }
+                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F6) && Keyboard.GetState().IsKeyDown(Keys.F6))
+                            {
+                                string[] chartypes = {"amish","buddhistmonk","cow","cowboy","frenchman","godzilla",
+                                                         "governator","hippie","hitler","kimjongil","mexican","mountie",
+                                                     "nerd","obama","panda","pedobear","pirate","seal","shakespeare","sloth",
+                                                     "stalin","sumo","tikiSmile","tikiTeeth"};
+                                spawnManager.spawnGroup(chartypes[rand.Next(chartypes.Length)], 1, 1);
+                            }
+                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
+                            {
+                                GameItem gameItem = new GameItem();
+                                gameItem.loc = players[0].body.Position + new Vector2(32, res.ScreenHeight);
+                                gameItem.polygonType = PhysicsPolygonType.Rectangle;
+                                gameItem.sideLengths = new Vector2((float)rand.NextDouble() * 32f + 32f, (float)rand.NextDouble() * 32f + 32f);
+                                gameItem.weight = 1;
+                                gameItem.name = "box";
+                                gameItem.startdepth = (uint)players[0].getDepth() ;
+                                addGameItem(gameItem);
                             }
 #endif
                         }
@@ -618,12 +637,13 @@ namespace BountyBandits
             if (mapManager.getCurrentLevel().horizon != null)
             {
                 Vector2 currentResolution = new Vector2(res.ScreenWidth, res.ScreenHeight),
-                    origin = new Vector2(mapManager.getCurrentLevel().horizon.Width / 2f, mapManager.getCurrentLevel().horizon.Height / 2f);
-                drawItem(mapManager.getCurrentLevel().horizon, currentResolution/2f, 0f, 0f, Vector2.One, SpriteEffects.None, origin);
+                    origin = new Vector2(mapManager.getCurrentLevel().horizon.Width / 2f, mapManager.getCurrentLevel().horizon.Height / 2f),
+                    position = currentResolution / 2f - new Vector2(0, avePosition.Y - res.ScreenHeight / 2);
+                drawItem(mapManager.getCurrentLevel().horizon, position, 0f, 0f, Vector2.One, SpriteEffects.None, origin);
             }
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
-                Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, -avePosition.Y + res.ScreenHeight / 2);
+                Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, avePosition.Y - res.ScreenHeight / 2);
                 Texture2D tex = texMan.getTex(item.texturePath);
                 drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width/2, tex.Height/2));
             }
@@ -631,7 +651,7 @@ namespace BountyBandits
             {
                 foreach (GameItem gameItem in activeItems)
                     if (currentDepth >= gameItem.startdepth &&
-                        currentDepth < gameItem.width)
+                        currentDepth < gameItem.startdepth + gameItem.width)
                     {
                         Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - avePosition.X + res.ScreenWidth / 2, gameItem.body.Position.Y - avePosition.Y + res.ScreenHeight / 2);
                         Texture2D tex = !(gameItem is DropItem) ? texMan.getTex(gameItem.name) :
@@ -902,9 +922,10 @@ namespace BountyBandits
                 item.body.IsStatic = item.immovable;
             geom.FrictionCoefficient = .6f;
             #region Collision Categories
-            geom.CollisionCategories = CollisionCategory.None;
-            for (uint depth = item.startdepth; depth < item.width; depth++)
-                geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
+            geom.CollisionCategories = (CollisionCategory)(int)Math.Pow(2, item.startdepth);
+            //not doing multidepth for now
+            //for (uint depth = item.startdepth; depth < item.width + item.startdepth; depth++)
+            //    geom.CollisionCategories = (CollisionCategory)((int)geom.CollisionCategories) | ((int)Math.Pow(2, depth));
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;

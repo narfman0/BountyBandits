@@ -173,7 +173,7 @@ namespace BountyBandits
             {
                 timeOfLastJump = Environment.TickCount;
                 if (isTouchingGeom(true))
-                    body.ApplyForce(new Vector2(0, 150 + 4 * getStat(StatType.Strength) + 50 * getStat(StatType.Agility)));
+                    body.ApplyForce(new Vector2(0, 250 + 4 * getStat(StatType.Strength) + 4 * getStat(StatType.Agility)));
             }
         }
 		public bool lane(bool up)

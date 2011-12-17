@@ -74,13 +74,6 @@
           <y>250</y>
         </location>
       </graphic>
-      <graphic>
-        <path>calitree1</path>
-        <location>
-          <x>7500</x>
-          <y>150</y>
-        </location>
-      </graphic>
       <graphic scale='.8'>
         <path>calitree1</path>
         <location>
@@ -156,6 +149,13 @@
         <location>
           <x>9240</x>
           <y>300</y>
+        </location>
+      </graphic>
+      <graphic>
+        <path>calitree1</path>
+        <location>
+          <x>7500</x>
+          <y>250</y>
         </location>
       </graphic>
     </background>
@@ -235,9 +235,93 @@
         <immovable>true</immovable>
       </item>
       <item>
+        <name>box</name>
+        <loc>1000,32</loc>
+        <sideLengths>
+          <x>32</x>
+          <y>32</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>box</name>
+        <loc>1000,64</loc>
+        <sideLengths>
+          <x>32</x>
+          <y>32</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>box</name>
+        <loc>1000,96</loc>
+        <sideLengths>
+          <x>32</x>
+          <y>32</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>box</name>
+        <loc>1000,128</loc>
+        <sideLengths>
+          <x>32</x>
+          <y>32</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>box</name>
+        <loc>1000,160</loc>
+        <sideLengths>
+          <x>32</x>
+          <y>32</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>2</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
         <name>enemies</name>
         <loc>800,454</loc>
         <count>1</count>
+        <bosses>0</bosses>
+        <type>cowboy</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1200,454</loc>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>hippie</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1500,454</loc>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>nerd</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>2000,454</loc>
+        <count>4</count>
         <bosses>0</bosses>
         <type>cowboy</type>
         <weight>1</weight>
