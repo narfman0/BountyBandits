@@ -39,13 +39,13 @@
     </animations>
     <colorPermutations />
     <stats>
-      <stat type='Strength' value='3' />
-      <stat type='Magic' value='1' />
-      <stat type='Agility' value='3' />
-      <stat type='Speed' value='3' />
-      <stat type='Range' value='50' />
-      <stat type='Life' value='5' />
-      <stat type='Special' value='5' />
+      <stat type='Strength' value='5' />
+      <stat type='Magic' value='5' />
+      <stat type='Agility' value='5' />
+      <stat type='Speed' value='5' />
+      <stat type='Range' value='75' />
+      <stat type='Life' value='10' />
+      <stat type='Special' value='10' />
     </stats>
   </monster>
 </Root>

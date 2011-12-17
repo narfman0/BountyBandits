@@ -55,12 +55,8 @@ namespace BountyBandits
             this.isLocal = isLocal;
             this.input = input;
             changeAnimation("idle");
-            myStats.setStatValue(StatType.Strength, 5);
-            myStats.setStatValue(StatType.Speed, 5);
-            myStats.setStatValue(StatType.Agility, 5);
-            myStats.setStatValue(StatType.Magic, 5);
             foreach (Stat stat in controller.statRatios.statsTable.Values)
-                myStats.addStatValue(stat.getType(), stat.getValue() * level);
+                myStats.setStatValue(stat.getType(), stat.getValue() * level);
             guid = Guid.NewGuid();
             newLevel();
         }
@@ -212,7 +208,7 @@ namespace BountyBandits
         public void newLevel()
         {
             Texture2D tex = controller.frames[currFrame];
-            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 2, tex.Height, myStats.getStatValue(StatType.Strength) / 5f);
+            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 2, tex.Height, ((float)myStats.getStatValue(StatType.Strength)) / 5f);
             body.Position = new Vector2(10 + tex.Width, 10 + tex.Height / 2);
             geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 2, tex.Height);
             geom.FrictionCoefficient = .1f;
@@ -260,23 +256,31 @@ namespace BountyBandits
                     if (targetPlayer != -1) 
                         enemies = gameref.players;  //if being is an enemy
                     foreach (Being enemy in enemies)
-                        if ((!enemy.isDead &&
-                            (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None) &&
-                            enemy.geom.Collide(geom))
+                        if (!enemy.isDead && (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None)
                         {
-                            int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
-                            bool criticalHit = (getStat(StatType.Agility) - enemy.getStat(StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
-                            if (currAnimation.name.Contains("attack"))
+                            Vector2 dimensions = new Vector2(controller.frames[currFrame].Width + getStat(StatType.Range), 
+                                controller.frames[currFrame].Height + getStat(StatType.Range));
+                            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, dimensions.X, dimensions.Y);
+                            collisionGeom.CollisionCategories = geom.CollisionCategories;
+                            collisionGeom.CollidesWith = geom.CollidesWith;
+                            if (enemy.geom.Collide(collisionGeom))
                             {
-                                float damage = (float)getStat(StatType.Agility) / 8f + (float)getStat(StatType.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
-                                if (criticalHit) 
-                                    damage *= 2;
-                                if (damage > 0)
-                                    enemy.currenthealth -= (int)damage;
-                                if (enemy.currenthealth <= 0 && targetPlayer == -1)
-                                    foreach (Being being in gameref.players)
-                                        being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                                int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
+                                bool criticalHit = (getStat(StatType.Agility) - enemy.getStat(StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
+                                if (currAnimation.name.Contains("attack"))
+                                {
+                                    float damage = (float)getStat(StatType.Agility) / 8f + (float)getStat(StatType.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
+                                    if (criticalHit)
+                                        damage *= 2;
+                                    if (damage > 0)
+                                        enemy.currenthealth -= (int)damage;
+                                    if (enemy.currenthealth <= 0 && targetPlayer == -1)
+                                        foreach (Being being in gameref.players)
+                                            being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                                }
                             }
+                            gameref.physicsSimulator.Remove(collisionGeom);
+
                         }
                 }
                 #endregion

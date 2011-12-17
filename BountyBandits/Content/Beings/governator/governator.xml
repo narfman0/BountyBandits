@@ -33,11 +33,11 @@
     </animations>
     <colorPermutations />
     <stats>
-      <stat type='Strength' value='10' />
-      <stat type='Magic' value='10' />
-      <stat type='Agility' value='5' />
-      <stat type='Speed' value='3' />
-      <stat type='Range' value='150' />
+      <stat type='Strength' value='1' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='1' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='500' />
       <stat type='Life' value='10' />
       <stat type='Special' value='5' />
     </stats>
