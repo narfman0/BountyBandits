@@ -19,7 +19,7 @@ namespace BountyBandits
     public class Being
     {
         #region Fields
-        Game gameref;
+        protected Game gameref;
         public string name;
         private StatSet myStats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
@@ -223,7 +223,7 @@ namespace BountyBandits
             geom.CollisionCategories = newCat;
             geom.CollidesWith = newCat;
         }
-        public void update(GameTime gameTime)
+        public virtual void update(GameTime gameTime)
         {
             if (!isDead)
             {
@@ -252,14 +252,15 @@ namespace BountyBandits
                 else if (!attackComputed && currAnimation.keyframe <= currFrame)
                 {
                     attackComputed = true;
-                    List<Being> enemies = gameref.spawnManager.enemies;
+                    List<Being> enemies = new List<Being>();
+                    foreach (Enemy enemy in gameref.spawnManager.enemies)
+                        enemies.Add(enemy);
                     if (targetPlayer != -1) 
                         enemies = gameref.players;  //if being is an enemy
                     foreach (Being enemy in enemies)
                         if (!enemy.isDead && (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None)
                         {
-                            Vector2 dimensions = new Vector2(controller.frames[currFrame].Width + getStat(StatType.Range), 
-                                controller.frames[currFrame].Height + getStat(StatType.Range));
+                            Vector2 dimensions = new Vector2(getRange()*2, controller.frames[currFrame].Height + getStat(StatType.Range));
                             Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, dimensions.X, dimensions.Y);
                             collisionGeom.CollisionCategories = geom.CollisionCategories;
                             collisionGeom.CollidesWith = geom.CollidesWith;
@@ -316,6 +317,11 @@ namespace BountyBandits
             }
 			#endregion
         }
+        public float getRange()
+        {
+            //range of character from character midpoint
+            return controller.frames[currFrame].Width/2 + getStat(StatType.Range);
+        }
         public XmlElement asXML(XmlNode parentNode)
         {
             XmlElement beingElement = parentNode.OwnerDocument.CreateElement("being");
@@ -336,7 +342,7 @@ namespace BountyBandits
             String name = element.GetAttribute("name"),
                 controllerName = element.GetAttribute("animationControllerName");
             StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
-            Being being = new Being(name, -1, gameref, gameref.animationManager.getController(controllerName), null, false, false);
+            Being being = new Being(name, 1, gameref, gameref.animationManager.getController(controllerName), null, false, false);
             being.xp = int.Parse(element.GetAttribute("xp"));
             being.level = int.Parse(element.GetAttribute("level"));
             being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
