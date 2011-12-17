@@ -46,33 +46,17 @@ namespace BountyBandits
             if (textures.ContainsKey(name + primary.GetHashCode().ToString() + secondary.GetHashCode().ToString()))
                 return textures[name + primary.GetHashCode().ToString() + secondary.GetHashCode().ToString()];
             //create new texture by copying data, then changing black -> secondary and white -> primary
-            byte[] byteArr = new byte[textures[name].Width * textures[name].Height * 4];
-            textures[name].GetData(byteArr);
-            for (int texel = 0; texel < byteArr.Length; texel++)
+            Color[] colors = new Color[textures[name].Width * textures[name].Height];
+            textures[name].GetData(colors);
+            for (int texel = 0; texel < colors.Length; texel++)
             {
-                //if it is all alpha, quit
-                if (byteArr[texel + 3] == 255)
-                {
-                    if (byteArr[texel] == 255)
-                    {
-                        byteArr[texel++] = primary.R;
-                        byteArr[texel++] = primary.G;
-                        byteArr[texel++] = primary.B;
-                        byteArr[texel] = primary.A;
-                    }
-                    else if (byteArr[texel] == 0)
-                    {
-                        byteArr[texel++] = secondary.R;
-                        byteArr[texel++] = secondary.G;
-                        byteArr[texel++] = secondary.B;
-                        byteArr[texel] = secondary.A;
-                    }
-                }
-                else
-                    texel += 3;
+                if (colors[texel] == Color.White)
+                    colors[texel] = primary;
+                else if (colors[texel] == Color.Black)
+                    colors[texel] = secondary;
             }
             Texture2D newTex = new Texture2D(gdv, textures[name].Width, textures[name].Height);
-            newTex.SetData(byteArr);
+            newTex.SetData(colors);
             textures.Add(name + primary.GetHashCode().ToString() + secondary.GetHashCode().ToString(), newTex);
             return newTex;
         }
