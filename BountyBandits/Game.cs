@@ -63,7 +63,21 @@ namespace BountyBandits
         protected override void Initialize()
         {
             activeItems = new List<GameItem>();
-            res = new Resolution(graphics, ScreenMode.tv720p);
+            //set up resolution
+            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            if (displayMode.Width == 1920 && displayMode.Height == 1080)
+            {
+                res = new Resolution(graphics, ScreenMode.tv1080p);
+                graphics.IsFullScreen = true;
+            }
+            else if (displayMode.Width == 1280 && displayMode.Height == 720)
+            {
+                res = new Resolution(graphics, ScreenMode.tv720p);
+                graphics.IsFullScreen = true;
+            }
+            else
+                res = new Resolution(graphics, ScreenMode.tv480i);
+
             spawnManager = new SpawnManager(this);
             rand = new Random();
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
