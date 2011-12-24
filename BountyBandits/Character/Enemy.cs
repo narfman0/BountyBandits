@@ -10,6 +10,7 @@ namespace BountyBandits.Character
     public class Enemy : Being
     {
         public int targetPlayer = -1;
+        private long timeOfLastAttack = 0;
 
         public Enemy(string name, int level, Game gameref, AnimationController controller)
             :base(name, level, gameref, controller, null, false, false) { }
@@ -40,8 +41,18 @@ namespace BountyBandits.Character
                 bool isLeft = targetBeing.getPos().X < getPos().X;
                 move(new Vector2((isLeft ? -1 : 1) * Game.FORCE_AMOUNT, 0));
             }
-            if (Vector2.Distance(targetBeing.getPos(), getPos()) < getRange())
+            long attackWaitTime = getAttackWaitTime();
+            if (Environment.TickCount - timeOfLastAttack > getAttackWaitTime() &&
+                Vector2.Distance(targetBeing.getPos(), getPos()) < getRange())
+            {
+                timeOfLastAttack = Environment.TickCount;
                 attack("attack1");
+            }
+        }
+
+        private long getAttackWaitTime()
+        {
+            return (long)(4073.95 * Math.Pow(Math.E, -.0184674 * level));
         }
     }
 }

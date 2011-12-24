@@ -307,7 +307,7 @@ namespace BountyBandits.Character
                         enemies.AddRange(gameref.players);
                     else
                         enemies.AddRange(gameref.spawnManager.enemies);
-                    foreach (Being enemy in gameref.players)
+                    foreach (Being enemy in enemies)
                         attackCompute(enemy);
                 }
                 #endregion
