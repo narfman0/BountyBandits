@@ -51,7 +51,7 @@ namespace BountyBandits.Character
                         break;
                 }
                 text.yOffset += (Environment.TickCount - text.time) / 20;
-                gameref.drawText(text.text, drawPos + new Vector2(0,text.yOffset), color, depth);
+                gameref.drawTextBorder(gameref.vademecumFont12, text.text, drawPos + new Vector2(0, text.yOffset), color, Color.Black, depth);
             }
         }
 

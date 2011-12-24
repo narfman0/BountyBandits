@@ -38,7 +38,7 @@ namespace BountyBandits
         public List<Being> players = new List<Being>();
         public List<GameItem> activeItems;
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
-        private SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
+        public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
         public AnimationManager animationManager;
         public SpawnManager spawnManager;
@@ -583,18 +583,18 @@ namespace BountyBandits
             switch (currentState.getState())
             {
                 case GameState.RootMenu:
-                    spriteBatch.DrawString(vademecumFont24, "Singleplayer", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 2 ? Color.DarkGray : Color.Black);
+                    drawTextBorder(vademecumFont24, "Single Player", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.DarkGray : Color.Black, selectedMenuItem == 2 ? Color.Black : Color.DarkGray, 0);
                     break;
                 case GameState.Multiplayer:
-                    spriteBatch.DrawString(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 2 ? Color.DarkGray : Color.Black);
+                    drawTextBorder(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.DarkGray : Color.Black, selectedMenuItem == 2 ? Color.Black : Color.DarkGray, 0);
                     break;
                 case GameState.JoinScreen:
-                    spriteBatch.DrawString(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black);
+                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
                     break;
                 #region Cutscene
                 case GameState.Cutscene:
@@ -605,7 +605,7 @@ namespace BountyBandits
                             storyBeing.draw();
                     }
                     catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
-                    spriteBatch.DrawString(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black);
+                    drawTextBorder(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black, Color.White, 0);
                     break;
                 #endregion
                 #region Gameplay
@@ -616,12 +616,12 @@ namespace BountyBandits
                 #region CharacterSelection
                 case GameState.CharacterSelection:
                     fontPos = new Vector2(1.0f, 1.0f);
-                    spriteBatch.DrawString(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black);
+                    drawTextBorder(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black, Color.DarkGray, 0);
                     fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
                     foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                     {
                         if (selectedMenuIndex[playerIndex] == -1)
-                            spriteBatch.DrawString(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black);
+                            drawTextBorder(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black, Color.DarkGray, 0);
                         else
                         {
                             List<String> saves = new List<string>();
@@ -629,9 +629,10 @@ namespace BountyBandits
                             saves.AddRange(SaveManager.getAvailableCharacterNames());
                             for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
                             {
-                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black;
-                                spriteBatch.DrawString(vademecumFont24, saves[saveIndex], fontPos, color);
-                                fontPos.Y += 28f;
+                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black,
+                                    outline = color == Color.Black ? Color.DarkGray : Color.Black;
+                                drawTextBorder(vademecumFont24, saves[saveIndex], fontPos, color, outline, 0);
+                                fontPos.Y -= 28f;
                             }
                             fontPos.Y = res.ScreenHeight / 2;
                         }
@@ -645,12 +646,12 @@ namespace BountyBandits
                     foreach (Level level in mapManager.getLevels())
                         spriteBatch.Draw(easyLevel, level.loc, Color.White);
                     const string chooseLevelStr = "Choose level, A to start game";
-                    spriteBatch.DrawString(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - chooseLevelStr.Length * 12, 1.0f), Color.Black);
+                    drawTextBorder(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - vademecumFont24.MeasureString(chooseLevelStr).X/2, 1f), Color.Black, Color.DarkGray, 0);
                     spriteBatch.Draw(texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2), Color.White);
-                    spriteBatch.DrawString(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128), Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 128 + 32), Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, "Level length:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 200), Color.Black);
-                    spriteBatch.DrawString(vademecumFont24, mapManager.getCurrentLevel().levelLength.ToString(), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 200 + 32), Color.Black);
+                    drawTextBorder(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168), Color.Black, Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168 - 32), Color.Black, Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, "Level length:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 96), Color.Black, Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, mapManager.getCurrentLevel().levelLength.ToString(), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 96 - 32), Color.Black, Color.DarkGray, 0);
                     break;
                 #endregion
             }
@@ -721,19 +722,19 @@ namespace BountyBandits
                     spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(24 + 16 + pIndex * 288 + 32 * pIndex, 63), new Color(255, 255, 255, 192));
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Data)
                     {
-                        spriteBatch.DrawString(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, 67), Color.Black);
-                        spriteBatch.DrawString(vademecumFont18, "Current XP:    " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
-                        spriteBatch.DrawString(vademecumFont18, "XP to Level:   " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
-                        spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
-                        spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
-                        spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
-                        spriteBatch.DrawString(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, 223), currPlayer.menu.getMenuColor(3));
-                        spriteBatch.DrawString(vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, 249), currPlayer.menu.getMenuColor(4));
+                        drawTextBorder(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 67), Color.Black, Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Current XP:    " + currPlayer.xp, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 93), Color.Black, Color.White, 0);
+                        drawTextBorder(vademecumFont18, "XP to Level:   " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 119), Color.Black, Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 145), currPlayer.menu.getMenuColor(0), Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 171), currPlayer.menu.getMenuColor(1), Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 197), currPlayer.menu.getMenuColor(2), Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 223), currPlayer.menu.getMenuColor(3), Color.White, 0);
+                        drawTextBorder(vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 249), currPlayer.menu.getMenuColor(4), Color.White, 0);
                     }
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Inv)
-                        spriteBatch.DrawString(vademecumFont18, "Inventory Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
+                        drawTextBorder(vademecumFont18, "Inventory Screen", new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 67), Color.Black, Color.White, 0);
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Stats)
-                        spriteBatch.DrawString(vademecumFont18, "Data Screen", new Vector2(48 + pIndex * 320, 67), Color.Black);
+                        drawTextBorder(vademecumFont18, "Data Screen", new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 67), Color.Black, Color.White, 0);
 
 
                 }
@@ -748,11 +749,11 @@ namespace BountyBandits
                 for (int healthIndex = 0; healthIndex < (int)currPlayer.currenthealth; ++healthIndex)
                     spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
                 int currentHP = currPlayer.currenthealth > 0f && (int)currPlayer.currenthealth == 0 ? 1 : (int)currPlayer.currenthealth;
-                spriteBatch.DrawString(vademecumFont12, currentHP + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
+                drawTextBorder(vademecumFont12, currentHP + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 140), Color.Black, Color.DarkGray, 0);
 
                 for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
                     spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
-                spriteBatch.DrawString(vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
+                drawTextBorder(vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 164), Color.Black, Color.DarkGray, 0);
 
             }
             #endregion
@@ -765,9 +766,17 @@ namespace BountyBandits
         {
             spriteBatch.Draw(tex, new Vector2(pos.X, res.ScreenHeight - pos.Y), null, Color.White, rot, origin, scale, effects, depth);
         }
-        public void drawText(String text, Vector2 pos, Color color, int depth)
+        public void drawTextBorder(SpriteFont font, String text, Vector2 pos, Color color, Color borderColor, int depth)
         {
-            spriteBatch.DrawString(vademecumFont12, text, new Vector2(pos.X - DEPTH_X_OFFSET * depth, res.ScreenHeight - (pos.Y + (DEPTH_MULTIPLE * (3 - depth)))), color);
+            drawText(font, text, pos + new Vector2(0, 1), borderColor, depth);
+            drawText(font, text, pos + new Vector2(0, -1), borderColor, depth);
+            drawText(font, text, pos + new Vector2(1, 0), borderColor, depth);
+            drawText(font, text, pos + new Vector2(-1, 0), borderColor, depth);
+            drawText(font, text, pos, color, depth);
+        }
+        public void drawText(SpriteFont font, String text, Vector2 pos, Color color, int depth)
+        {
+            spriteBatch.DrawString(font, text, new Vector2(pos.X - DEPTH_X_OFFSET * depth, res.ScreenHeight - (pos.Y + (DEPTH_MULTIPLE * (3 - depth)))), color);
         }
         public void drawItemDescription(DropItem item)
         {
@@ -833,8 +842,8 @@ namespace BountyBandits
             int backgroundDrawHeight = (20 * numNewLines < (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3) ? (texMan.getTex(item.getItem().getTextureName()).Height * 2) / 3 : 20 * numNewLines;
             spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(item.body.Position.X - 46f - avePosition.X, res.ScreenHeight + avePosition.Y - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)))), new Rectangle(0, 0, maxWidth, backgroundDrawHeight), new Color(255, 255, 255, 192));
             drawGameItem(texMan.getTexColored(item.getItem().getTextureName(), item.getItem().getPrimaryColor(), item.getItem().getSecondaryColor(), this.graphics.GraphicsDevice), new Vector2(item.body.Position.X - 25f - avePosition.X, item.body.Position.Y + 15f - avePosition.Y), 0f, (int)item.startdepth, Vector2.One, SpriteEffects.None, new Vector2(texMan.getTex(item.getItem().getTextureName()).Width / 2, texMan.getTex(item.getItem().getTextureName()).Height / 2));
-            spriteBatch.DrawString(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 60f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), nameColor);
-            spriteBatch.DrawString(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, res.ScreenHeight - (item.body.Position.Y + 45f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White);
+            drawTextBorder(vademecumFont12, name, new Vector2(item.body.Position.X - 10f - avePosition.X, (item.body.Position.Y + -64f + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), nameColor, Color.Black, 0);
+            drawTextBorder(vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, (item.body.Position.Y + -79f - (20f * (name.Length / 20)) + (DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White, Color.Black, 0);
             #endregion
         }
         public void endLevel(bool increment)
