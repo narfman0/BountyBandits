@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using FarseerGames.FarseerPhysics;
 using BountyBandits.Stats;
 using BountyBandits.Map;
+using BountyBandits.Character;
 
 namespace BountyBandits
 {
@@ -30,8 +31,8 @@ namespace BountyBandits
             {
                 Enemy enemy = new Enemy(type, (int)level, gameref, 
                     gameref.animationManager.getController(type));
-                enemy.currenthealth = enemy.getStat(StatType.Life);
-                enemy.currentspecial = enemy.getStat(StatType.Special);
+                enemy.currenthealth = (float)enemy.getStat(StatType.Life);
+                enemy.currentspecial = (float)enemy.getStat(StatType.Special);
 
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
                 if (gameref.getAvePosition().X - gameref.res.ScreenWidth / 2 < 16) 

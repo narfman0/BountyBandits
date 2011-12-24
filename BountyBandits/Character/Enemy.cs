@@ -5,10 +5,12 @@ using System.Text;
 using BountyBandits.Animation;
 using Microsoft.Xna.Framework;
 
-namespace BountyBandits
+namespace BountyBandits.Character
 {
     public class Enemy : Being
     {
+        public int targetPlayer = -1;
+
         public Enemy(string name, int level, Game gameref, AnimationController controller)
             :base(name, level, gameref, controller, null, false, false) { }
 
@@ -18,10 +20,10 @@ namespace BountyBandits
             //figure out if anyone is alive
             bool someoneAlive = false;
             foreach (Being player in gameref.players)
-                if (player.currenthealth > 0)
+                if (player.currenthealth > 0f)
                     someoneAlive = true;
             //and target that random alive person
-            while (someoneAlive && (targetPlayer == -1 || gameref.players[targetPlayer].currenthealth < 1))
+            while (someoneAlive && (targetPlayer == -1 || gameref.players[targetPlayer].currenthealth <= 0f))
                 targetPlayer = gameref.rand.Next(gameref.players.Count);
             if (targetPlayer < 0)
                 return;

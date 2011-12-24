@@ -11,8 +11,8 @@ namespace BountyBandits
     {
         public static void write(LogType type, String log)
         {
-            Directory.CreateDirectory(SaveManager.SAVE_PATH);
-            File.AppendAllLines(SaveManager.SAVE_PATH + "/" + type + ".txt", new String[] {DateTime.Now.ToString("HH:mm:ss tt") + "   " + log });
+            Directory.CreateDirectory(SaveManager.BB_USER_PATH);
+            File.AppendAllLines(SaveManager.BB_USER_PATH + "/" + type + ".txt", new String[] {DateTime.Now.ToString("HH:mm:ss tt") + "   " + log });
         }
     }
 }

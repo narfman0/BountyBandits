@@ -33,7 +33,7 @@ namespace BountyBandits.Inventory
                 stats.getStatValue(StatType.LifeSteal) > 0)
                 return new Color(color, antiColor, antiColor);
             if (stats.getStatValue(StatType.Defense) > 0 ||
-                stats.getStatValue(StatType.EnhanecdDefense) > 0 ||
+                stats.getStatValue(StatType.EnhancedDefense) > 0 ||
                 stats.getStatValue(StatType.DamageReduction) > 0)
                 return new Color(antiColor, color, antiColor);
             if (stats.getStatValue(StatType.Magic) > 0 ||

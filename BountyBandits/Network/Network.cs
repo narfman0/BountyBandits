@@ -7,6 +7,7 @@ using System.Net;
 using System.Xml;
 using Microsoft.Xna.Framework;
 using System.Threading;
+using BountyBandits.Character;
 
 namespace BountyBandits.Network
 {

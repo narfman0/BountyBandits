@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Lidgren.Network;
 using Microsoft.Xna.Framework;
+using BountyBandits.Character;
 
 namespace BountyBandits.Network
 {

@@ -22,13 +22,15 @@ using System.IO;
 using BountyBandits.Network;
 using System.Net;
 using Lidgren.Network;
+using BountyBandits.Inventory;
+using BountyBandits.Character;
 
 namespace BountyBandits
 {
     public class Game : Microsoft.Xna.Framework.Game
     {
         #region Fields
-        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 4000f;
+        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 10000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
         GameTime previousGameTime = new GameTime();
@@ -63,20 +65,18 @@ namespace BountyBandits
         protected override void Initialize()
         {
             activeItems = new List<GameItem>();
-            //set up resolution
+			//set up resolution
             DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
             if (displayMode.Width == 1920 && displayMode.Height == 1080)
-            {
                 res = new Resolution(graphics, ScreenMode.tv1080p);
-                graphics.IsFullScreen = true;
-            }
             else if (displayMode.Width == 1280 && displayMode.Height == 720)
-            {
                 res = new Resolution(graphics, ScreenMode.tv720p);
-                graphics.IsFullScreen = true;
-            }
             else
                 res = new Resolution(graphics, ScreenMode.tv480i);
+            //res.Initialize(graphics);
+            #if XBOX
+                graphics.IsFullScreen = true;
+            #endif
 
             spawnManager = new SpawnManager(this);
             rand = new Random();
@@ -115,6 +115,15 @@ namespace BountyBandits
         {
             float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
             network.update(gameTime);
+            #region fullscreen
+#if WINDOWS
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                graphics.IsFullScreen = !graphics.IsFullScreen;
+                graphics.ApplyChanges();
+            }
+#endif
+            #endregion
             switch (currentState.getState())
             {
                 #region RootMenu
@@ -315,24 +324,29 @@ namespace BountyBandits
                                     currentplayer.menu.changeMenuItem(true);
                                 else
                                     currentplayer.lane(true);
-
                             if (currentplayer.input.getButtonHit(Buttons.DPadRight))
                                 currentplayer.menu.changeMenuScreen(true);
                             if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
                                 currentplayer.menu.changeMenuScreen(false);
+                            if (currentplayer.input.getButtonHit(Buttons.Start))
+                                endLevel(false);
+#if WINDOWS
+                            if (Keyboard.GetState().IsKeyDown(Keys.F2))
+                                endLevel(false);
+#endif
                             if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
                             {
                                 //pick up closest item and throw the equipped one on the ground
                                 DropItem dropItem = getClosestDropItem(currentplayer);
                                 if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
                                 {
-                                    BountyBandits.Inventory.Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
+                                    Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
                                     currentplayer.getItemManager().putItem(dropItem.getItem());
                                     if (playerItem != null)
                                     {
                                         dropItem.setItem(playerItem);
-                                        dropItem.body.LinearVelocity.Y += 100f;
-                                        dropItem.body.ApplyTorque((float)rand.NextDouble() - .5f);
+                                        dropItem.body.LinearVelocity.Y += 25f;
+                                        dropItem.body.ApplyTorque((float)rand.NextDouble()*.25f - .125f);
                                     }
                                     else
                                         activeItems.Remove(dropItem);
@@ -545,12 +559,11 @@ namespace BountyBandits
             Geom geom = new Geom();
             geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
             geom.FrictionCoefficient = .6f;
-            geom.CollisionCategories = CollisionCategory.None;
-            for (uint depth = item.startdepth; depth < item.width; depth++)
-                geom.CollisionCategories = (CollisionCategory)(int)geom.CollisionCategories + ((int)Math.Pow(2, depth));
+            geom.CollisionCategories = killedBeing.geom.CollisionCategories;
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.setItem(DropManager.generateItem(killedBeing));
+            item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(geom.CollisionCategories);
             activeItems.Add(item);
             if(network.isServer())
                 network.sendFullObjectsUpdate();
@@ -709,8 +722,8 @@ namespace BountyBandits
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Data)
                     {
                         spriteBatch.DrawString(vademecumFont18, "Level:   " + currPlayer.level, new Vector2(48 + pIndex * 320, 67), Color.Black);
-                        spriteBatch.DrawString(vademecumFont18, "Current XP:     " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
-                        spriteBatch.DrawString(vademecumFont18, "XP to Level:     " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
+                        spriteBatch.DrawString(vademecumFont18, "Current XP:    " + currPlayer.xp, new Vector2(48 + pIndex * 320, 93), Color.Black);
+                        spriteBatch.DrawString(vademecumFont18, "XP to Level:   " + currPlayer.xpOfNextLevel, new Vector2(48 + pIndex * 320, 119), Color.Black);
                         spriteBatch.DrawString(vademecumFont18, "Agility:   " + currPlayer.getStat(BountyBandits.Stats.StatType.Agility), new Vector2(48 + pIndex * 320, 145), currPlayer.menu.getMenuColor(0));
                         spriteBatch.DrawString(vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, 171), currPlayer.menu.getMenuColor(1));
                         spriteBatch.DrawString(vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, 197), currPlayer.menu.getMenuColor(2));
@@ -732,13 +745,14 @@ namespace BountyBandits
                 }
                 spriteBatch.Draw(texMan.getTex("portrait"), new Vector2(16 + pIndex * 288 + 32 * pIndex, 16), Color.White);
 
-                for (int healthIndex = 0; healthIndex < currPlayer.currenthealth; ++healthIndex)
+                for (int healthIndex = 0; healthIndex < (int)currPlayer.currenthealth; ++healthIndex)
                     spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
-                spriteBatch.DrawString(vademecumFont12, currPlayer.currenthealth + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
+                int currentHP = currPlayer.currenthealth > 0f && (int)currPlayer.currenthealth == 0 ? 1 : (int)currPlayer.currenthealth;
+                spriteBatch.DrawString(vademecumFont12, currentHP + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, 14), Color.Black);
 
-                for (int specialIndex = 0; specialIndex < currPlayer.currentspecial; ++specialIndex)
+                for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
                     spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
-                spriteBatch.DrawString(vademecumFont12, currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
+                spriteBatch.DrawString(vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, 40), Color.Black);
 
             }
             #endregion
@@ -750,6 +764,10 @@ namespace BountyBandits
         public void drawItem(Texture2D tex, Vector2 pos, float rot, float depth, Vector2 scale, SpriteEffects effects, Vector2 origin)
         {
             spriteBatch.Draw(tex, new Vector2(pos.X, res.ScreenHeight - pos.Y), null, Color.White, rot, origin, scale, effects, depth);
+        }
+        public void drawText(String text, Vector2 pos, Color color, int depth)
+        {
+            spriteBatch.DrawString(vademecumFont12, text, new Vector2(pos.X - DEPTH_X_OFFSET * depth, res.ScreenHeight - (pos.Y + (DEPTH_MULTIPLE * (3 - depth)))), color);
         }
         public void drawItemDescription(DropItem item)
         {
@@ -836,7 +854,7 @@ namespace BountyBandits
             Vector2 ave = Vector2.Zero;
             foreach (Being player in players)
             {
-                if (player.currenthealth > 0)
+                //if (player.currenthealth > 0f)
                 {
                     ave += player.getPos();
                     aliveCount++;
@@ -860,19 +878,16 @@ namespace BountyBandits
             float closestDist = float.MaxValue;
             foreach (GameItem item in activeItems)
             {
-                if (item is DropItem)
+                if (item is DropItem && player.getDepth() == item.startdepth)
                 {
-                    if (closest != null)
-                    {
-                        float distanceToPlayer = Vector2.DistanceSquared(item.body.Position, player.body.Position);
-                        if (distanceToPlayer < closestDist)
-                        {
-                            closestDist = distanceToPlayer;
-                            closest = (DropItem)item;
-                        }
-                    }
-                    else
+                    if(closest == null)
                         closest = (DropItem)item;
+                    float distanceToPlayer = Vector2.DistanceSquared(item.body.Position, player.body.Position);
+                    if (distanceToPlayer < closestDist)
+                    {
+                        closestDist = distanceToPlayer;
+                        closest = (DropItem)item;
+                    }
                 }
             }
             return closest;

@@ -207,6 +207,21 @@ namespace BountyBandits
             SetResolution(graphics);
         }
 
+        public void Initialize(GraphicsDeviceManager graphics)
+        {
+            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            if (displayMode.Width == 1920 && displayMode.Height == 1080)
+                this.Mode = ScreenMode.tv1080p;
+            else if (displayMode.Width == 1280 && displayMode.Height == 720)
+                this.Mode = ScreenMode.tv720p;
+            else if (displayMode.Width == 1024 && displayMode.Height == 768)
+                this.Mode = ScreenMode.XGA;
+            else
+                this.Mode = ScreenMode.tv480i;
+            this.baseMode = this.currentMode;
+            SetResolution(graphics);
+        }
+
         public void SetResolution(GraphicsDeviceManager graphics)
         {
             graphics.PreferredBackBufferWidth = this.screenWidth;

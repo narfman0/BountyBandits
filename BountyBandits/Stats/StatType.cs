@@ -9,6 +9,6 @@ namespace BountyBandits.Stats
     {
         Agility, Magic, Speed, Strength,
         DamageReduction, Knockback, MaxDamage, MinDamage, EnhancedDamage, 
-        LifeSteal, Life, AbilityLevel, EnhanecdDefense, Defense, Range, Special
+        LifeSteal, Life, AbilityLevel, EnhancedDefense, Defense, Range, Special
     }
 }

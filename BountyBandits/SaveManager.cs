@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using BountyBandits.Character;
 
 namespace BountyBandits
 {
     public class SaveManager
     {
-        public static String SAVE_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\Bounty Bandits\";
+        public static String BB_USER_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\Bounty Bandits\";
+        private static String SAVE_PATH = BB_USER_PATH + @"Saves\";
         private static int NUM_BACKUPS = 10;
 
         public static string[] getAvailableCharacterNames()

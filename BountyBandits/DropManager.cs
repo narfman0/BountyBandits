@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BountyBandits.Inventory;
 using BountyBandits.Stats;
+using BountyBandits.Character;
 
 namespace BountyBandits
 {
