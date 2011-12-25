@@ -167,6 +167,8 @@ namespace BountyBandits.Network
             NetOutgoingMessage stateUpdate = server.CreateMessage();
             stateUpdate.Write((int)MessageType.GameState);
             stateUpdate.Write((int)gameref.currentState.getState());
+            if(gameref.currentState.getState() == GameState.Gameplay)
+                ;// stateUpdate.Write(gameref.mapManager.getCurrentLevelIndex());
             server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
 
             if (gameref.currentState.getState() == GameState.Gameplay)
@@ -180,6 +182,12 @@ namespace BountyBandits.Network
                 gameref.currentState.setState((GameState)newState);
                 if (gameref.currentState.getState() != GameState.Gameplay)
                     gameref.newLevel();
+                if (gameref.currentState.getState() == GameState.Gameplay)
+                {
+                    //int currentLevelIndex = im.ReadInt32();
+                    //gameref.mapManager.currentLevelIndex = currentLevelIndex;
+                    //gameref.newLevel();
+                }
             }
         }
         public void sendIncrementLevelRequest(bool up)
@@ -316,11 +324,6 @@ namespace BountyBandits.Network
             foreach (GameItem item in gameref.activeItems)
                 if (item is DropItem)
                     dropItems.Add((DropItem)item);
-            //Log.write(LogType.NetworkServer, "Sending full object update with " +
-            //    gameItems.Count + " gameItems and " + dropItems.Count + " drop items.");
-            //msg.Write(dropItems.Count);
-            //foreach (DropItem item in dropItems)
-            //    msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
@@ -378,10 +381,9 @@ namespace BountyBandits.Network
                     if (item.guid == state.guid)
                     {
                         Vector2 positiondifference = state.position - item.body.Position;
-                        float rotationDifference = state.rotation - item.body.Rotation;
                         item.body.LinearVelocity = state.velocity;
                         item.body.Position = item.body.Position + (positiondifference * .1f);
-                        item.body.Rotation = state.rotation + (rotationDifference * .1f);//this might not be right
+                        item.body.Rotation = state.rotation;
                         item.body.AngularVelocity = state.angularVelocity;
                     }
             }

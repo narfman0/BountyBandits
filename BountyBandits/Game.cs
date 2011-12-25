@@ -67,11 +67,11 @@ namespace BountyBandits
             activeItems = new List<GameItem>();
 			//set up resolution
             DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-            if (displayMode.Width == 1920 && displayMode.Height == 1080)
+            /*if (displayMode.Width == 1920 && displayMode.Height == 1080)
                 res = new Resolution(graphics, ScreenMode.tv1080p);
             else if (displayMode.Width == 1280 && displayMode.Height == 720)
                 res = new Resolution(graphics, ScreenMode.tv720p);
-            else
+            else*/
                 res = new Resolution(graphics, ScreenMode.tv480i);
             //res.Initialize(graphics);
             #if XBOX
@@ -596,8 +596,8 @@ namespace BountyBandits
                     break;
                 case GameState.JoinScreen:
                     spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
                     break;
                 #region Cutscene
                 case GameState.Cutscene:

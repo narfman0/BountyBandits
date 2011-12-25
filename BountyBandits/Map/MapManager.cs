@@ -17,7 +17,7 @@ namespace BountyBandits.Map
             DEFAULT_CAMPAIGN_PATH = CAMPAIGNS_PATH + @"default\",
             MAP_FILENAME = "map.xml";
         List<Level> levels;
-        private int currentLevelIndex;
+        public int currentLevelIndex;
         public Guid guid;
         public Texture2D worldBackground;
         public String currentCampaignPath;

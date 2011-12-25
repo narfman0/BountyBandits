@@ -73,16 +73,15 @@ namespace BountyBandits
         public virtual XmlElement asXML(XmlNode parentNode)
         {
             XmlElement element = parentNode.OwnerDocument.CreateElement("gameItem"),
+                locationNode = parentNode.OwnerDocument.CreateElement("loc"),
                 nameNode = parentNode.OwnerDocument.CreateElement("name"),
                 radiusNode = parentNode.OwnerDocument.CreateElement("radius"),
-                startDepthNode = parentNode.OwnerDocument.CreateElement("startDepth"),
+                startDepthNode = parentNode.OwnerDocument.CreateElement("startdepth"),
                 weightNode = parentNode.OwnerDocument.CreateElement("weight"),
                 widthNode = parentNode.OwnerDocument.CreateElement("width"),
                 immovableNode = parentNode.OwnerDocument.CreateElement("immovable"),
                 polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType"),
                 verticesNode = parentNode.OwnerDocument.CreateElement("vertices");
-            XMLUtil.asXMLVector2(element, loc, "loc");
-            XMLUtil.asXMLVector2(element, sideLengths, "sideLengths");
             element.SetAttribute("guid", guid.ToString());
             nameNode.InnerText = name;
             radiusNode.InnerText = radius.ToString();
@@ -90,16 +89,29 @@ namespace BountyBandits
             weightNode.InnerText = weight.ToString();
             widthNode.InnerText = width.ToString();
             immovableNode.InnerText = immovable.ToString();
+            polygonTypeNode.InnerText = polygonType.ToString();
+            locationNode.InnerText = loc.X + "," + loc.Y;
             if(vertices != null)
                 foreach(Vector2 vertex in vertices)
-                    XMLUtil.asXMLVector2(verticesNode, vertex, "vertex");
+                    verticesNode.AppendChild(XMLUtil.asXMLVector2(verticesNode, vertex, "vertex"));
+            switch(polygonType)
+            {
+                case PhysicsPolygonType.Rectangle:
+                    element.AppendChild(XMLUtil.asXMLVector2(element, sideLengths, "sideLengths"));
+                break;
+                case PhysicsPolygonType.Circle:
+                    element.AppendChild(radiusNode);
+                break;
+                case PhysicsPolygonType.Polygon:
+                    element.AppendChild(verticesNode);
+                break;
+            }
+            element.AppendChild(locationNode);
             element.AppendChild(nameNode);
-            element.AppendChild(radiusNode);
             element.AppendChild(startDepthNode);
             element.AppendChild(weightNode);
             element.AppendChild(widthNode);
             element.AppendChild(immovableNode);
-            element.AppendChild(verticesNode);
             return element;
         }
     }

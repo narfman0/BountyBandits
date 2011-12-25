@@ -49,7 +49,7 @@ namespace BountyBandits.Network
             msg.Write(gameItem.body.Position.Y);
             msg.Write(gameItem.body.LinearVelocity.X);
             msg.Write(gameItem.body.LinearVelocity.Y);
-            msg.Write(gameItem.body.TotalRotation);
+            msg.Write(gameItem.body.Rotation);
             msg.Write(gameItem.body.AngularVelocity);
             msg.Write(gameItem.guid.ToString());
         }
