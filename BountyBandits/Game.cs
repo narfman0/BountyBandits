@@ -583,18 +583,21 @@ namespace BountyBandits
             switch (currentState.getState())
             {
                 case GameState.RootMenu:
-                    drawTextBorder(vademecumFont24, "Single Player", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.DarkGray : Color.Black, selectedMenuItem == 2 ? Color.Black : Color.DarkGray, 0);
+                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
+                    drawTextBorder(vademecumFont24, "Single Player", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.Yellow : Color.White, Color.Black, 0);
                     break;
                 case GameState.Multiplayer:
-                    drawTextBorder(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.DarkGray : Color.Black, selectedMenuItem == 2 ? Color.Black : Color.DarkGray, 0);
+                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
+                    drawTextBorder(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.Yellow : Color.White, Color.Black, 0);
                     break;
                 case GameState.JoinScreen:
-                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.DarkGray : Color.Black, selectedMenuItem == 0 ? Color.Black : Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.DarkGray : Color.Black, selectedMenuItem == 1 ? Color.Black : Color.DarkGray, 0);
+                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
+                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
+                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
                     break;
                 #region Cutscene
                 case GameState.Cutscene:
@@ -615,13 +618,15 @@ namespace BountyBandits
                 #endregion
                 #region CharacterSelection
                 case GameState.CharacterSelection:
+                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
                     fontPos = new Vector2(1.0f, 1.0f);
-                    drawTextBorder(vademecumFont24, "Choose character, A to start game", fontPos, Color.Black, Color.DarkGray, 0);
+                    if(players.Count > 0)
+                        drawTextBorder(vademecumFont24, "Press " + Input.AFFIRM_KEY + " to start game", fontPos, Color.White, Color.Black, 0);
                     fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
                     foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                     {
                         if (selectedMenuIndex[playerIndex] == -1)
-                            drawTextBorder(vademecumFont24, "Press A/Enter\n to join", fontPos, Color.Black, Color.DarkGray, 0);
+                            drawTextBorder(vademecumFont24, "Press " + Input.AFFIRM_KEY + "\nto join", fontPos, Color.White, Color.Black, 0);
                         else
                         {
                             List<String> saves = new List<string>();
@@ -629,9 +634,8 @@ namespace BountyBandits
                             saves.AddRange(SaveManager.getAvailableCharacterNames());
                             for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
                             {
-                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.DarkGray : Color.Black,
-                                    outline = color == Color.Black ? Color.DarkGray : Color.Black;
-                                drawTextBorder(vademecumFont24, saves[saveIndex], fontPos, color, outline, 0);
+                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.Yellow : Color.White;
+                                drawTextBorder(vademecumFont24, saves[saveIndex], fontPos, color, Color.Black, 0);
                                 fontPos.Y -= 28f;
                             }
                             fontPos.Y = res.ScreenHeight / 2;

@@ -8,6 +8,11 @@ namespace BountyBandits
 {
     public class Input
     {
+#if WINDOWS 
+            public static string AFFIRM_KEY = "Enter";
+#else
+            public static string AFFIRM_KEY = "A";
+#endif
         private Dictionary<Buttons, Keys> xboxButtonToKeyboardKey = new Dictionary<Buttons, Keys>(), 
             xboxButtonToKeyboardKeySecondary = new Dictionary<Buttons, Keys>();
         public KeyboardState keyState, keyPreviousState;

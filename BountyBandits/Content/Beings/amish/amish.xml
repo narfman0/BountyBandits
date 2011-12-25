@@ -31,7 +31,7 @@
       <stat type='Magic' value='2' />
       <stat type='Agility' value='3' />
       <stat type='Speed' value='3' />
-      <stat type='Range' value='125' />
+      <stat type='Range' value='75' />
       <stat type='Life' value='5' />
       <stat type='Special' value='5' />
     </stats>
