@@ -77,8 +77,6 @@ namespace BountyBandits.Network
                 updateServer();
                 if (gameref.network.isServer() && server.ConnectionsCount > 0)
                 {
-                    if (timedActions.isActionReady(gameTime, 1500, TimedUpdate.State))
-                        sendGameStateUpdate();
                     if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
                         sendPlayersUpdateServer();
                     if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
@@ -134,7 +132,6 @@ namespace BountyBandits.Network
                 {
                     case NetIncomingMessageType.ConnectionApproval:
                         Log.write(LogType.NetworkServer, "Connection approved from " + im.SenderEndpoint.ToString());
-                        sendGameStateUpdate();
                         break;
                     case NetIncomingMessageType.Data:
                         switch (im.ReadInt32())
@@ -160,16 +157,28 @@ namespace BountyBandits.Network
                 }
             }
         }
+        private void serverSendToAllUnordered(NetOutgoingMessage msg)
+        {
+            if (gameref.network.isServer() && server.ConnectionsCount > 0)
+                try
+                {
+                    server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+                }
+                catch (Exception e)
+                {
+                    Log.write(LogType.NetworkServer, e.Message);
+                }
+        }
         public void sendGameStateUpdate()
         {
-            if (!gameref.network.isServer() || server.ConnectionsCount < 1 || gameref.currentState.getState() == GameState.Cutscene)
+            if (!gameref.network.isServer() || server.ConnectionsCount < 1)
                 return;
             NetOutgoingMessage stateUpdate = server.CreateMessage();
             stateUpdate.Write((int)MessageType.GameState);
             stateUpdate.Write((int)gameref.currentState.getState());
-            if(gameref.currentState.getState() == GameState.Gameplay)
-                ;// stateUpdate.Write(gameref.mapManager.getCurrentLevelIndex());
-            server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+            if (gameref.currentState.getState() == GameState.Gameplay)
+                stateUpdate.Write(gameref.mapManager.getCurrentLevelIndex());
+            serverSendToAllUnordered(stateUpdate);
 
             if (gameref.currentState.getState() == GameState.Gameplay)
                 sendFullObjectsUpdate();
@@ -179,15 +188,13 @@ namespace BountyBandits.Network
             int newState = im.ReadInt32();
             if (gameref.currentState.getState() != GameState.CharacterSelection)
             {
-                gameref.currentState.setState((GameState)newState);
-                if (gameref.currentState.getState() != GameState.Gameplay)
+                if ((GameState)newState == GameState.Gameplay)
+                    gameref.mapManager.currentLevelIndex = im.ReadInt32();
+                if (gameref.currentState.getState() != GameState.Gameplay && (GameState)newState == GameState.Gameplay)
                     gameref.newLevel();
-                if (gameref.currentState.getState() == GameState.Gameplay)
-                {
-                    //int currentLevelIndex = im.ReadInt32();
-                    //gameref.mapManager.currentLevelIndex = currentLevelIndex;
-                    //gameref.newLevel();
-                }
+                else if (gameref.currentState.getState() != GameState.WorldMap && (GameState)newState == GameState.WorldMap)
+                    gameref.endLevel(false);
+                gameref.currentState.setState((GameState)newState);
             }
         }
         public void sendIncrementLevelRequest(bool up)
@@ -213,7 +220,7 @@ namespace BountyBandits.Network
             NetOutgoingMessage msg = server.CreateMessage();
             msg.Write((int)MessageType.LevelIndexChange);
             msg.Write(newLevelIndex);
-            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+            serverSendToAllUnordered(msg);
         }
         private void receiveLevelIndexChange(NetIncomingMessage im)
         {
@@ -246,7 +253,7 @@ namespace BountyBandits.Network
             stateUpdate.Write((int)gameref.players.Count);
             foreach (Being player in gameref.players)
                 BeingNetworkState.writeState(stateUpdate, player);
-            server.SendToAll(stateUpdate, NetDeliveryMethod.ReliableUnordered);
+            serverSendToAllUnordered(stateUpdate);
         }
         private void receivePlayersUpdate(NetIncomingMessage im)
         {
@@ -294,7 +301,7 @@ namespace BountyBandits.Network
                 foreach (Being player in gameref.players)
                     if (player.guid == being.guid)
                         found = true;
-                if(!found)
+                if (!found)
                     gameref.players.Add(being);
             }
         }
@@ -305,10 +312,12 @@ namespace BountyBandits.Network
             msg.Write(gameref.players.Count);
             foreach (Being player in gameref.players)
                 msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
-            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+            serverSendToAllUnordered(msg);
         }
         public void sendFullObjectsUpdate()
         {
+            if (!isServer())
+                return;
             List<GameItem> gameItems = new List<GameItem>();
             foreach (GameItem item in gameref.activeItems)
                 if (!(item is DropItem))
@@ -324,7 +333,7 @@ namespace BountyBandits.Network
             foreach (GameItem item in gameref.activeItems)
                 if (item is DropItem)
                     dropItems.Add((DropItem)item);
-            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+            serverSendToAllUnordered(msg);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
         {
@@ -369,7 +378,7 @@ namespace BountyBandits.Network
             msg.Write(gameItems.Count);
             foreach (GameItem item in gameItems)
                 GameItemNetworkState.writeState(msg, item);
-            server.SendToAll(msg, NetDeliveryMethod.ReliableUnordered);
+            serverSendToAllUnordered(msg);
         }
         private void receiveObjectsUpdate(NetIncomingMessage im)
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BountyBandits.Network
 {
-    enum TimedUpdate { State, PlayersUpdate, ObjectsUpdate }
+    enum TimedUpdate { PlayersUpdate, ObjectsUpdate }
     public enum MessageType
     {
         PlayerFullUpdateClient, PlayerFullUpdateServer, GameState, ObjectsFullUpdate, ObjectsUpdate,

@@ -14,8 +14,11 @@ namespace BountyBandits
             this.gameref = gameref;
         }
         public void setState(GameState newState){
+            bool skip = (current == GameState.Gameplay && newState == GameState.Cutscene) ||
+                        (current == GameState.Cutscene && newState == GameState.Gameplay);
             current = newState;
-            gameref.network.sendGameStateUpdate();
+            if(!skip)
+                gameref.network.sendGameStateUpdate();
         }
         public GameState getState() { return current; }
     }

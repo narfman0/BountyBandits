@@ -565,8 +565,7 @@ namespace BountyBandits
             item.setItem(DropManager.generateItem(killedBeing));
             item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(geom.CollisionCategories);
             activeItems.Add(item);
-            if(network.isServer())
-                network.sendFullObjectsUpdate();
+            network.sendFullObjectsUpdate();
         }
         private bool isUnlocked(int level)
         {
@@ -972,6 +971,7 @@ namespace BountyBandits
             #endregion
             item.body.Position = item.loc;
             activeItems.Add(item);
+            network.sendFullObjectsUpdate();
         }
     }
     static class Program
