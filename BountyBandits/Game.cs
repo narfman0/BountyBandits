@@ -65,15 +65,7 @@ namespace BountyBandits
         protected override void Initialize()
         {
             activeItems = new List<GameItem>();
-			//set up resolution
-            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-            /*if (displayMode.Width == 1920 && displayMode.Height == 1080)
-                res = new Resolution(graphics, ScreenMode.tv1080p);
-            else if (displayMode.Width == 1280 && displayMode.Height == 720)
-                res = new Resolution(graphics, ScreenMode.tv720p);
-            else*/
-                res = new Resolution(graphics, ScreenMode.tv480i);
-            //res.Initialize(graphics);
+            res = Resolution.Initialize(graphics);
             #if XBOX
                 graphics.IsFullScreen = true;
             #endif
@@ -645,7 +637,7 @@ namespace BountyBandits
                 #endregion
                 #region worldmap
                 case GameState.WorldMap:
-                    spriteBatch.Draw(mapManager.worldBackground, Vector2.Zero, Color.White);
+                    spriteBatch.Draw(mapManager.worldBackground, new Rectangle(0,0,res.ScreenWidth,res.ScreenHeight), Color.White);
                     foreach (Level level in mapManager.getLevels())
                         spriteBatch.Draw(easyLevel, level.loc, Color.White);
                     const string chooseLevelStr = "Choose level, A to start game";
@@ -670,7 +662,7 @@ namespace BountyBandits
                 Vector2 currentResolution = new Vector2(res.ScreenWidth, res.ScreenHeight),
                     origin = new Vector2(mapManager.getCurrentLevel().horizon.Width / 2f, mapManager.getCurrentLevel().horizon.Height / 2f),
                     position = currentResolution / 2f - new Vector2(0, avePosition.Y - res.ScreenHeight / 2);
-                drawItem(mapManager.getCurrentLevel().horizon, position, 0f, 0f, Vector2.One, SpriteEffects.None, origin);
+                spriteBatch.Draw(mapManager.getCurrentLevel().horizon, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
             }
             foreach (BackgroundItemStruct item in mapManager.getCurrentLevel().backgroundItems)
             {
