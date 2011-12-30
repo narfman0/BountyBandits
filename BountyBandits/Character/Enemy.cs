@@ -10,7 +10,7 @@ namespace BountyBandits.Character
 {
     public class Enemy : Being
     {
-        public int targetPlayer = -1;
+        public Guid targetPlayer = Guid.Empty;
         private long timeOfLastAttack = 0;
 
         public Enemy(string name, int level, Game gameref, AnimationController controller)
@@ -21,13 +21,13 @@ namespace BountyBandits.Character
             base.update(gameTime);
             //figure out if anyone is alive
             bool someoneAlive = false;
-            foreach (Being player in gameref.players)
+            foreach (Being player in gameref.players.Values)
                 if (player.currenthealth > 0f)
                     someoneAlive = true;
             //and target that random alive person
-            while (someoneAlive && (targetPlayer == -1 || gameref.players[targetPlayer].currenthealth <= 0f))
-                targetPlayer = gameref.rand.Next(gameref.players.Count);
-            if (targetPlayer < 0)
+            while (someoneAlive && (targetPlayer == Guid.Empty || gameref.players[targetPlayer].currenthealth <= 0f))
+                targetPlayer = gameref.players.Values.ElementAt(gameref.rand.Next(gameref.players.Count)).guid;
+            if (targetPlayer == Guid.Empty)
                 return;
             Being targetBeing = gameref.players[targetPlayer];
             if (targetBeing.getDepth() < getDepth()) lane(true);

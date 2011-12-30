@@ -35,7 +35,7 @@ namespace BountyBandits
         GraphicsDeviceManager graphics;
         GameTime previousGameTime = new GameTime();
         SpriteBatch spriteBatch;
-        public List<Being> players = new List<Being>();
+        public Dictionary<Guid, Being> players = new Dictionary<Guid, Being>();
         public Dictionary<Guid,GameItem> activeItems;
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
@@ -259,7 +259,7 @@ namespace BountyBandits
                     #endregion
                     #region quit cutscene
                     bool startPressed = false;
-                    foreach (Being player in players)
+                    foreach (Being player in players.Values)
                         if (player.isLocal && player.input.getButtonHit(Buttons.Start))
                             startPressed = true;
                     double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
@@ -277,7 +277,7 @@ namespace BountyBandits
                 case GameState.Gameplay:
                     if (isEndLevel())
                         endLevel(true);
-                    foreach (Being currentplayer in players)
+                    foreach (Being currentplayer in players.Values)
                     {
                         if (currentplayer.getPos().X < 0)
                             endLevel(false);
@@ -348,7 +348,7 @@ namespace BountyBandits
                             if (inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
                                 spawnManager.spawnGroup("sumo", 1, 1);
                             if (Keyboard.GetState().IsKeyDown(Keys.F4))
-                                foreach (Being player in players)
+                                foreach (Being player in players.Values)
                                     player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
                             if (inputs[0].keyPreviousState.IsKeyUp(Keys.F5) && Keyboard.GetState().IsKeyDown(Keys.F5))
                             {
@@ -365,12 +365,12 @@ namespace BountyBandits
                             if (inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
                             {
                                 GameItem gameItem = new GameItem();
-                                gameItem.loc = players[0].body.Position + new Vector2(32, res.ScreenHeight);
+                                gameItem.loc = getAvePosition() + new Vector2(32, res.ScreenHeight);
                                 gameItem.polygonType = PhysicsPolygonType.Rectangle;
                                 gameItem.sideLengths = new Vector2((float)rand.NextDouble() * 32f + 32f, (float)rand.NextDouble() * 32f + 32f);
                                 gameItem.weight = 1;
                                 gameItem.name = "box";
-                                gameItem.startdepth = (uint)players[0].getDepth() ;
+                                gameItem.startdepth = (uint)rand.Next(4);
                                 addGameItem(gameItem);
                             }
 #endif
@@ -400,7 +400,7 @@ namespace BountyBandits
                         if (input.getButtonHit(Buttons.A))
                         {
                             bool isPlayerOneAdded = false;
-                            foreach (Being player in players)
+                            foreach (Being player in players.Values)
                                 if (player.input.useKeyboard)
                                     isPlayerOneAdded = true;
 
@@ -418,10 +418,13 @@ namespace BountyBandits
                                     player.isPlayer = true;
                                     player.input = input;
                                 }
-                                for (int extraPlayerIndex = 0; extraPlayerIndex < players.Count; extraPlayerIndex++)
-                                    if (players[extraPlayerIndex].input.getPlayerIndex() == input.getPlayerIndex())
-                                        players.RemoveAt(extraPlayerIndex--);
-                                players.Add(player);
+                                List<Guid> killGuids = new List<Guid>();
+                                foreach (Being extraPlayer in players.Values)
+                                    if (extraPlayer.input.getPlayerIndex() == input.getPlayerIndex())
+                                        killGuids.Add(extraPlayer.guid);
+                                foreach (Guid kill in killGuids)
+                                    players.Remove(kill);
+                                players.Add(player.guid,player);
                             }
                             //go to worldmap if player one hits a
                             if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
@@ -432,7 +435,7 @@ namespace BountyBandits
                                     currentState.setState(GameState.WorldMap);
                                 }
                                 else
-                                    foreach (Being player in players)
+                                    foreach (Being player in players.Values)
                                         if (player.input.getButtonHit(Buttons.A))
                                             currentState.setState(GameState.WorldMap);
                             }
@@ -476,7 +479,7 @@ namespace BountyBandits
                 #endregion
                 #region world map
                 case GameState.WorldMap:
-                    foreach (Being player in players)
+                    foreach (Being player in players.Values)
                     {
                         if (player.isLocal)
                         {
@@ -561,7 +564,7 @@ namespace BountyBandits
         }
         private bool isUnlocked(int level)
         {
-            foreach (Being player in players)
+            foreach (Being player in players.Values)
                 if (!player.unlocked.isUnlocked(mapManager.guid, difficulty, level))
                     return false;
             return true;
@@ -698,7 +701,7 @@ namespace BountyBandits
                 foreach (Being enemy in spawnManager.enemies.Values)
                     if (currentDepth == enemy.getDepth())
                         enemy.draw();
-                foreach (Being player in players)
+                foreach (Being player in players.Values)
                     if (currentDepth == player.getDepth())
                     {
                         player.draw();
@@ -709,9 +712,9 @@ namespace BountyBandits
             }
             #endregion
             #region HUD
-            for (int pIndex = 0; pIndex < players.Count; ++pIndex)
+            int pIndex = 0;
+            foreach (Being currPlayer in players.Values)
             {
-                Being currPlayer = players[pIndex];
                 if (currPlayer.menu.getMenuActive())
                 {
                     spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(24 + 16 + pIndex * 288 + 32 * pIndex, 63), new Color(255, 255, 255, 192));
@@ -749,7 +752,8 @@ namespace BountyBandits
                 for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
                     spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
                 drawTextBorder(vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 164), Color.Black, Color.DarkGray, 0);
-
+                
+                pIndex++;
             }
             #endregion
         }
@@ -843,7 +847,7 @@ namespace BountyBandits
         }
         public void endLevel(bool increment)
         {
-            foreach (Being player in players)
+            foreach (Being player in players.Values)
             {
                 if (increment)
                     player.unlocked.add(mapManager, difficulty);
@@ -854,20 +858,10 @@ namespace BountyBandits
         }
         public Vector2 getAvePosition()
         {
-            int aliveCount = 0;
             Vector2 ave = Vector2.Zero;
-            foreach (Being player in players)
-            {
-                //if (player.currenthealth > 0f)
-                {
-                    ave += player.getPos();
-                    aliveCount++;
-                }
-            }
-            if (aliveCount == 0)
-                players[0].getPos();
-            else
-                ave /= aliveCount;
+            foreach (Being player in players.Values)
+                ave += player.getPos();
+            ave /= players.Count;
             if (ave.Y < res.ScreenHeight / 2)
                 ave.Y = res.ScreenHeight / 2;
             if (ave.X < res.ScreenWidth / 2)
@@ -898,7 +892,7 @@ namespace BountyBandits
         }
         public bool isEndLevel()
         {
-            foreach (Being player in players)
+            foreach (Being player in players.Values)
                 if (player.getPos().X >= mapManager.getCurrentLevel().levelLength - res.ScreenWidth / 2)
                     return true;
             return false;
@@ -906,7 +900,7 @@ namespace BountyBandits
         public void newLevel()
         {
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
-            foreach (Being player in players)
+            foreach (Being player in players.Values)
                 if (player.isLocal)
                     player.newLevel();
             #region add gameitems

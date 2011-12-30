@@ -102,6 +102,9 @@ namespace BountyBandits.Network
                             case (int)MessageType.PlayersUpdate:
                                 receivePlayersUpdate(im);
                                 break;
+                            case (int)MessageType.BeingAnimationChange:
+                                receiveBeingAnimationChange(im);
+                                break;
                             case (int)MessageType.LevelIndexChange:
                                 receiveLevelIndexChange(im);
                                 break;
@@ -131,6 +134,7 @@ namespace BountyBandits.Network
                 }
             }
         }
+
         public void updateServer()
         {
             NetIncomingMessage im;
@@ -153,6 +157,9 @@ namespace BountyBandits.Network
                                 break;
                             case (int)MessageType.PlayersUpdateClient:
                                 receivePlayersUpdate(im);
+                                break;
+                            case (int)MessageType.BeingAnimationChange:
+                                receiveBeingAnimationChange(im);
                                 break;
                             default:
                                 Log.write(LogType.NetworkServer, "Unknown data message received");
@@ -243,7 +250,7 @@ namespace BountyBandits.Network
             if (!gameref.network.isClient())
                 return;
             List<Being> localList = new List<Being>();
-            foreach (Being player in gameref.players)
+            foreach (Being player in gameref.players.Values)
                 if (player.isLocal)
                     localList.Add(player);
 
@@ -259,7 +266,7 @@ namespace BountyBandits.Network
             NetOutgoingMessage stateUpdate = server.CreateMessage();
             stateUpdate.Write((int)MessageType.PlayersUpdate);
             stateUpdate.Write((int)gameref.players.Count);
-            foreach (Being player in gameref.players)
+            foreach (Being player in gameref.players.Values)
                 BeingNetworkState.writeState(stateUpdate, player);
             serverSendToAllUnordered(stateUpdate);
         }
@@ -269,8 +276,10 @@ namespace BountyBandits.Network
             for (int i = 0; i < count; i++)
             {
                 BeingNetworkState state = BeingNetworkState.readState(im);
-                foreach (Being player in gameref.players)
-                    if (!player.isLocal && player.guid == state.guid)
+                if (gameref.players.ContainsKey(state.guid))
+                {
+                    Being player = gameref.players[state.guid];
+                    if (!player.isLocal)
                     {
                         player.body.LinearVelocity = state.velocity;
                         Vector2 difference = state.position - player.body.Position;
@@ -282,12 +291,13 @@ namespace BountyBandits.Network
                             player.setDepth(state.depth);
                         }
                     }
+                }
             }
         }
         public void sendFullPlayersUpdateClient()
         {
             List<Being> localList = new List<Being>();
-            foreach (Being player in gameref.players)
+            foreach (Being player in gameref.players.Values)
                 if (player.isLocal)
                     localList.Add(player);
 
@@ -303,14 +313,9 @@ namespace BountyBandits.Network
             int count = im.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                String beingXML = im.ReadString();
-                Being being = Being.fromXML(XMLUtil.asXML(beingXML), gameref);
-                bool found = false;
-                foreach (Being player in gameref.players)
-                    if (player.guid == being.guid)
-                        found = true;
-                if (!found)
-                    gameref.players.Add(being);
+                Being being = Being.fromXML(XMLUtil.asXML(im.ReadString()), gameref);
+                if(!gameref.players.ContainsKey(being.guid))
+                    gameref.players.Add(being.guid,being);
             }
         }
         public void sendFullPlayersUpdateServer()
@@ -318,7 +323,7 @@ namespace BountyBandits.Network
             NetOutgoingMessage msg = server.CreateMessage();
             msg.Write((int)MessageType.PlayerFullUpdateServer);
             msg.Write(gameref.players.Count);
-            foreach (Being player in gameref.players)
+            foreach (Being player in gameref.players.Values)
                 msg.Write(player.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             serverSendToAllUnordered(msg);
         }
@@ -402,6 +407,8 @@ namespace BountyBandits.Network
         }
         public void sendNewEnemy(Being enemy)
         {
+            if (!isServer())
+                return;
             NetOutgoingMessage msg = server.CreateMessage();
             msg.Write((int)MessageType.NewEnemy);
             msg.Write(enemy.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
@@ -442,6 +449,28 @@ namespace BountyBandits.Network
                     }
                 }
             }
+        }
+        public void sendBeingAnimationChange(Guid beingGuid, String animationName)
+        {
+            if (!isServer() && !isClient())
+                return;
+            NetOutgoingMessage msg = isServer() ? server.CreateMessage() : client.CreateMessage();
+            msg.Write((int)MessageType.BeingAnimationChange);
+            msg.Write(beingGuid.ToString());
+            msg.Write(animationName);
+            if (isClient())
+                client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
+            else
+                serverSendToAllUnordered(msg);
+        }
+        private void receiveBeingAnimationChange(NetIncomingMessage im)
+        {
+            Guid guid = Guid.Parse(im.ReadString());
+            String animationName = im.ReadString();
+            if (gameref.spawnManager.enemies.ContainsKey(guid))
+                gameref.spawnManager.enemies[guid].changeAnimation(animationName);
+            else if (gameref.players.ContainsKey(guid))
+                gameref.players[guid].changeAnimation(animationName);
         }
     }
 }

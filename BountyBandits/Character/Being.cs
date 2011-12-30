@@ -111,7 +111,7 @@ namespace BountyBandits.Character
                             enemy.combatText.add("-" + (int)damage, CombatTextType.HealthTaken);
                         }
                         if (enemy.currenthealth <= 0f && isPlayer)
-                            foreach (Being being in gameref.players)
+                            foreach (Being being in gameref.players.Values)
                                 being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
                         if (getStat(StatType.Knockback) > 0)
                             enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
@@ -124,6 +124,8 @@ namespace BountyBandits.Character
         {
             if (currAnimation.name != name)
             {
+                if(isLocal || (this is Enemy && gameref.network.isServer()))
+                    gameref.network.sendBeingAnimationChange(guid, name);
                 currAnimation = controller.getAnimationInfo(name);
                 currFrame = currAnimation.start;
             }
@@ -304,7 +306,7 @@ namespace BountyBandits.Character
                     attackComputed = true;
                     List<Being> enemies = new List<Being>();
                     if (!isPlayer)
-                        enemies.AddRange(gameref.players);
+                        enemies.AddRange(gameref.players.Values);
                     else
                         enemies.AddRange(gameref.spawnManager.enemies.Values);
                     foreach (Being enemy in enemies)
