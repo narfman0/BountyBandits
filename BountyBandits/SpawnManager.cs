@@ -13,7 +13,7 @@ namespace BountyBandits
     {
         List<SpawnPoint> spawnPoints;
         Game gameref;
-        public List<Enemy> enemies = new List<Enemy>();
+        public Dictionary<Guid, Enemy> enemies = new Dictionary<Guid, Enemy>();
         public SpawnManager(Game gameref)
         {
             this.gameref = gameref;
@@ -46,7 +46,8 @@ namespace BountyBandits
                 enemy.body.Position = new Vector2(avePosition.X + posOffset.X, avePosition.Y - gameref.res.ScreenHeight / 2 + posOffset.Y);
                 while (enemy.isTouchingGeom(false))
                     enemy.body.Position = new Vector2(enemy.body.Position.X + side * enemy.controller.frames[0].Width, enemy.body.Position.Y);
-                enemies.Add(enemy);
+                enemies.Add(enemy.guid, enemy);
+                gameref.network.sendNewEnemy(enemy);
             }
         }
         public void update(GameTime gameTime)
@@ -61,17 +62,17 @@ namespace BountyBandits
                     spawnp.isSpawned = true;
                 }
             #endregion
-            foreach (Being enemy in enemies)
+            foreach (Being enemy in enemies.Values)
                 enemy.update(gameTime);
             #region Kill current remnants (only first 10, so hopefully they are off the map already)
             if (enemies.Count > 25)
             {
                 List<Enemy> toKill = new List<Enemy>();
-                foreach (Enemy enemy in enemies)
+                foreach (Enemy enemy in enemies.Values)
                     if (enemy.isDead && toKill.Count < 10)
                         toKill.Add(enemy);
                 foreach (Enemy deadenemy in toKill)
-                    enemies.Remove(deadenemy);
+                    enemies.Remove(deadenemy.guid);
             }
             #endregion
         }

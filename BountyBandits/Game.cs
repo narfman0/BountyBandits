@@ -36,7 +36,7 @@ namespace BountyBandits
         GameTime previousGameTime = new GameTime();
         SpriteBatch spriteBatch;
         public List<Being> players = new List<Being>();
-        public List<GameItem> activeItems;
+        public Dictionary<Guid,GameItem> activeItems;
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
@@ -64,7 +64,7 @@ namespace BountyBandits
         }
         protected override void Initialize()
         {
-            activeItems = new List<GameItem>();
+            activeItems = new Dictionary<Guid,GameItem>();
             res = Resolution.Initialize(graphics);
             #if XBOX
                 graphics.IsFullScreen = true;
@@ -341,7 +341,7 @@ namespace BountyBandits
                                         dropItem.body.ApplyTorque((float)rand.NextDouble()*.25f - .125f);
                                     }
                                     else
-                                        activeItems.Remove(dropItem);
+                                        activeItems.Remove(dropItem.guid);
                                 }
                             }
 #if DEBUG
@@ -556,7 +556,7 @@ namespace BountyBandits
             #endregion
             item.setItem(DropManager.generateItem(killedBeing));
             item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(geom.CollisionCategories);
-            activeItems.Add(item);
+            activeItems.Add(item.guid,item);
             network.sendFullObjectsUpdate();
         }
         private bool isUnlocked(int level)
@@ -672,7 +672,7 @@ namespace BountyBandits
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
-                foreach (GameItem gameItem in activeItems)
+                foreach (GameItem gameItem in activeItems.Values)
                     if (currentDepth >= gameItem.startdepth &&
                         currentDepth < gameItem.startdepth + gameItem.width)
                     {
@@ -695,7 +695,7 @@ namespace BountyBandits
                             }
                         drawGameItem(tex, pos, rotation, currentDepth, scale, SpriteEffects.None, origin);
                     }
-                foreach (Being enemy in spawnManager.enemies)
+                foreach (Being enemy in spawnManager.enemies.Values)
                     if (currentDepth == enemy.getDepth())
                         enemy.draw();
                 foreach (Being player in players)
@@ -880,7 +880,7 @@ namespace BountyBandits
         {
             DropItem closest = null;
             float closestDist = float.MaxValue;
-            foreach (GameItem item in activeItems)
+            foreach (GameItem item in activeItems.Values)
             {
                 if (item is DropItem && player.getDepth() == item.startdepth)
                 {
@@ -962,7 +962,7 @@ namespace BountyBandits
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;
-            activeItems.Add(item);
+            activeItems.Add(item.guid,item);
             network.sendFullObjectsUpdate();
         }
     }

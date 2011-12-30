@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BountyBandits.Animation;
 using Microsoft.Xna.Framework;
+using System.Xml;
 
 namespace BountyBandits.Character
 {
@@ -53,6 +54,14 @@ namespace BountyBandits.Character
         private long getAttackWaitTime()
         {
             return (long)(4073.95 * Math.Pow(Math.E, -.0184674 * level));
+        }
+
+        public static new Enemy fromXML(XmlElement element, Game gameref)
+        {
+            AnimationController controller = gameref.animationManager.getController(element.GetAttribute("animationControllerName"));
+            Enemy being = new Enemy(element.GetAttribute("name"), 1, gameref, controller);
+            being.copyValues(element);
+            return being;
         }
     }
 }

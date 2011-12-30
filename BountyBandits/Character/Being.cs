@@ -306,7 +306,7 @@ namespace BountyBandits.Character
                     if (!isPlayer)
                         enemies.AddRange(gameref.players);
                     else
-                        enemies.AddRange(gameref.spawnManager.enemies);
+                        enemies.AddRange(gameref.spawnManager.enemies.Values);
                     foreach (Being enemy in enemies)
                         attackCompute(enemy);
                 }
@@ -316,7 +316,7 @@ namespace BountyBandits.Character
                 {
                     timeToNextHeal = Environment.TickCount;
                     bool isEnemyAlive = false;
-                    foreach (Being enemy in gameref.spawnManager.enemies)
+                    foreach (Being enemy in gameref.spawnManager.enemies.Values)
                         if (enemy.currenthealth > 0f)
                             isEnemyAlive = true;
                     if (gameref.spawnManager.enemies.Count < 1 && isPlayer && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
@@ -332,7 +332,7 @@ namespace BountyBandits.Character
             else
             {
 				bool enemiesAlive = false;
-				foreach(Being enemy in gameref.spawnManager.enemies)
+				foreach(Being enemy in gameref.spawnManager.enemies.Values)
 					if(enemy == this || enemy.currenthealth > 0f)
 						enemiesAlive=true;
 				if(!enemiesAlive)
@@ -367,19 +367,22 @@ namespace BountyBandits.Character
         }
         public static Being fromXML(XmlElement element, Game gameref)
         {
-            String name = element.GetAttribute("name"),
-                controllerName = element.GetAttribute("animationControllerName");
-            StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
-            Being being = new Being(name, 1, gameref, gameref.animationManager.getController(controllerName), null, false, false);
-            being.xp = int.Parse(element.GetAttribute("xp"));
-            being.level = int.Parse(element.GetAttribute("level"));
-            being.unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
-            being.xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
-            being.guid = new Guid(element.GetAttribute("guid"));
-            being.unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
-            foreach (Stat stat in stats.statsTable.Values)
-                being.myStats.setStatValue(stat.getType(), stat.getValue());
+            AnimationController controller = gameref.animationManager.getController(element.GetAttribute("animationControllerName"));
+            Being being = new Being(element.GetAttribute("name"), 1, gameref, controller, null, false, false);
+            being.copyValues(element);
             return being;
+        }
+        protected void copyValues(XmlElement element)
+        {
+            StatSet stats = StatSet.fromXML((XmlElement)element.GetElementsByTagName("stats").Item(0));
+            xp = int.Parse(element.GetAttribute("xp"));
+            level = int.Parse(element.GetAttribute("level"));
+            unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
+            xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
+            guid = new Guid(element.GetAttribute("guid"));
+            unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
+            foreach (Stat stat in stats.statsTable.Values)
+                myStats.setStatValue(stat.getType(), stat.getValue());
         }
         public void setDepth(int depth)
         {

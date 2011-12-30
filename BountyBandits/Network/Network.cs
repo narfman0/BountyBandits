@@ -69,7 +69,7 @@ namespace BountyBandits.Network
             if (isClient())
             {
                 updateClient();
-                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
+                if (timedActions.isActionReady(gameTime, 100, TimedUpdate.BeingsUpdate))
                     sendPlayersUpdateClient();
             }
             if (isServer())
@@ -77,9 +77,11 @@ namespace BountyBandits.Network
                 updateServer();
                 if (gameref.network.isServer() && server.ConnectionsCount > 0)
                 {
-                    if (timedActions.isActionReady(gameTime, 100, TimedUpdate.PlayersUpdate))
+                    if (timedActions.isActionReady(gameTime, 100, TimedUpdate.BeingsUpdate))
+                    {
                         sendPlayersUpdateServer();
-                    if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
+                        sendEnemiesUpdate();
+                    } if (timedActions.isActionReady(gameTime, 100, TimedUpdate.ObjectsUpdate))
                         sendObjectsUpdate();
                 }
             }
@@ -111,6 +113,12 @@ namespace BountyBandits.Network
                                 break;
                             case (int)MessageType.ObjectsUpdate:
                                 receiveObjectsUpdate(im);
+                                break;
+                            case (int)MessageType.NewEnemy:
+                                receiveNewEnemy(im);
+                                break;
+                            case (int)MessageType.EnemiesUpdate:
+                                receiveEnemiesUpdate(im);
                                 break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
@@ -319,7 +327,7 @@ namespace BountyBandits.Network
             if (!isServer())
                 return;
             List<GameItem> gameItems = new List<GameItem>();
-            foreach (GameItem item in gameref.activeItems)
+            foreach (GameItem item in gameref.activeItems.Values)
                 if (!(item is DropItem))
                     gameItems.Add(item);
 
@@ -330,9 +338,12 @@ namespace BountyBandits.Network
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
 
             List<DropItem> dropItems = new List<DropItem>();
-            foreach (GameItem item in gameref.activeItems)
+            foreach (GameItem item in gameref.activeItems.Values)
                 if (item is DropItem)
                     dropItems.Add((DropItem)item);
+            msg.Write(dropItems.Count);
+            foreach (DropItem item in dropItems)
+                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
             serverSendToAllUnordered(msg);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
@@ -343,33 +354,25 @@ namespace BountyBandits.Network
             {
                 String gameItemXML = im.ReadString();
                 GameItem item = GameItem.fromXML(XMLUtil.asXML(gameItemXML));
-                bool found = false;
-                foreach (GameItem activeitem in gameref.activeItems)
-                    if (activeitem.guid == item.guid)
-                        found = true;
-                if (!found)
+                if (!gameref.activeItems.ContainsKey(item.guid))
                     gameref.addGameItem(item);
             }
             #endregion
+            // TODO must remove picked up objects and implement updates for dropped items
             #region DropItems
-            /*count = im.ReadInt32();
-            for (int j = 0; j < gameref.activeItems.Count; j++)
-            {
-                gameref.physicsSimulator.Remove(gameref.activeItems[j].body);
-                gameref.activeItems.RemoveAt(j--);
-            }
+            count = im.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                String gameItemXML = im.ReadString();
-                DropItem item = DropItem.fromXML(XMLUtil.asXML(gameItemXML));
-                gameref.addGameItem(item);
-            }*/
+                DropItem item = DropItem.fromXML(XMLUtil.asXML(im.ReadString()));
+                if (!gameref.activeItems.ContainsKey(item.guid))
+                    gameref.addGameItem(item);
+            }
             #endregion
         }
         private void sendObjectsUpdate()
         {
             List<GameItem> gameItems = new List<GameItem>();
-            foreach (GameItem item in gameref.activeItems)
+            foreach (GameItem item in gameref.activeItems.Values)
                 if (!item.immovable && !item.body.IsStatic)
                     gameItems.Add(item);
 
@@ -386,15 +389,58 @@ namespace BountyBandits.Network
             for (int i = 0; i < count; i++)
             {
                 GameItemNetworkState state = GameItemNetworkState.readState(im);
-                foreach (GameItem item in gameref.activeItems)
-                    if (item.guid == state.guid)
+                if (gameref.activeItems.ContainsKey(state.guid))
+                {
+                    GameItem item = gameref.activeItems[state.guid];
+                    Vector2 positiondifference = state.position - item.body.Position;
+                    item.body.LinearVelocity = state.velocity;
+                    item.body.Position = item.body.Position + (positiondifference * .1f);
+                    item.body.Rotation = state.rotation;
+                    item.body.AngularVelocity = state.angularVelocity;
+                }
+            }
+        }
+        public void sendNewEnemy(Being enemy)
+        {
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.NewEnemy);
+            msg.Write(enemy.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+            serverSendToAllUnordered(msg);
+        }
+        public void receiveNewEnemy(NetIncomingMessage im)
+        {
+            Enemy being = Enemy.fromXML(XMLUtil.asXML(im.ReadString()), gameref);
+            if (!gameref.spawnManager.enemies.ContainsKey(being.guid))
+                gameref.spawnManager.enemies.Add(being.guid, being);
+        }
+        private void sendEnemiesUpdate()
+        {
+            NetOutgoingMessage stateUpdate = server.CreateMessage();
+            stateUpdate.Write((int)MessageType.EnemiesUpdate);
+            stateUpdate.Write((int)gameref.spawnManager.enemies.Count);
+            foreach (Enemy enemy in gameref.spawnManager.enemies.Values)
+                BeingNetworkState.writeState(stateUpdate, enemy);
+            serverSendToAllUnordered(stateUpdate);
+        }
+        private void receiveEnemiesUpdate(NetIncomingMessage im)
+        {
+            int count = im.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                BeingNetworkState state = BeingNetworkState.readState(im);
+                if (gameref.spawnManager.enemies.ContainsKey(state.guid))
+                {
+                    Enemy enemy = gameref.spawnManager.enemies[state.guid];
+                    enemy.body.LinearVelocity = state.velocity;
+                    Vector2 difference = state.position - enemy.body.Position;
+                    enemy.body.Position = enemy.body.Position + (difference * .1f);
+                    enemy.isFacingLeft = state.isFacingLeft;
+                    if (state.depth != enemy.getDepth())
                     {
-                        Vector2 positiondifference = state.position - item.body.Position;
-                        item.body.LinearVelocity = state.velocity;
-                        item.body.Position = item.body.Position + (positiondifference * .1f);
-                        item.body.Rotation = state.rotation;
-                        item.body.AngularVelocity = state.angularVelocity;
+                        enemy.timeOfLastDepthChange = Environment.TickCount;
+                        enemy.setDepth(state.depth);
                     }
+                }
             }
         }
     }
