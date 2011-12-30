@@ -11,8 +11,8 @@ namespace BountyBandits
 {
     public class SpawnManager
     {
-        List<SpawnPoint> spawnPoints;
-        Game gameref;
+        private List<SpawnPoint> spawnPoints;
+        private Game gameref;
         public Dictionary<Guid, Enemy> enemies = new Dictionary<Guid, Enemy>();
         public SpawnManager(Game gameref)
         {
@@ -22,8 +22,9 @@ namespace BountyBandits
         {
             enemies.Clear();
             spawnPoints = new List<SpawnPoint>();
-            foreach (SpawnPoint point in newLvl.spawns)
-                spawnPoints.Add(point.Clone());
+            if(!gameref.network.isClient())
+                foreach (SpawnPoint point in newLvl.spawns)
+                    spawnPoints.Add(point.Clone());
         }
         public void spawnGroup(string type, uint level, uint amount)
         {

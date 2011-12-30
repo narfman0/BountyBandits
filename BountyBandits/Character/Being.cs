@@ -69,7 +69,6 @@ namespace BountyBandits.Character
             if (!isDead && !currAnimation.name.Contains("attack"))
             {
                 changeAnimation(attackName);
-                attackComputed = false;
                 if(isTouchingGeom(true))
                     body.LinearVelocity /= 2f;
             }
@@ -105,10 +104,10 @@ namespace BountyBandits.Character
                             float lifeSteal = getLifeSteal();
                             if(lifeSteal > 0f){
                                 currenthealth += damage * lifeSteal;
-                                combatText.add("+" + (int)damage, CombatTextType.HealthAdded);
+                                combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
                             }
                             enemy.currenthealth -= damage;
-                            enemy.combatText.add("-" + (int)damage, CombatTextType.HealthTaken);
+                            enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                         }
                         if (enemy.currenthealth <= 0f && isPlayer)
                             foreach (Being being in gameref.players.Values)
@@ -128,6 +127,8 @@ namespace BountyBandits.Character
                     gameref.network.sendBeingAnimationChange(guid, name);
                 currAnimation = controller.getAnimationInfo(name);
                 currFrame = currAnimation.start;
+                if (currAnimation.name.Contains("attack") && !gameref.network.isClient())
+                    attackComputed = false;
             }
         }
         public void draw()

@@ -56,9 +56,11 @@ namespace BountyBandits
         List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
         Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem = 0;
         List<Input> inputs = new List<Input>();
+        public static Game instance;
         #endregion
         public Game()
         {
+            instance = this;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -914,9 +916,9 @@ namespace BountyBandits
                         animationManager.getController(spawn.type);
                 foreach (GameItem item in mapManager.getCurrentLevel().items)
                     addGameItem(item);
-                spawnManager.newLevel(mapManager.getCurrentLevel());
             }
             #endregion
+            spawnManager.newLevel(mapManager.getCurrentLevel());
             mapManager.getCurrentLevel().resetStoryElements();
             #region physics - add ground and side wall
             const int GROUND_WIDTH = 10000;

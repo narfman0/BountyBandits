@@ -12,7 +12,8 @@ namespace BountyBandits.Network
 
     enum MessageType
     {
-        PlayerFullUpdateClient, PlayerFullUpdateServer, BeingAnimationChange, BeingDepthChange,
+        PlayerFullUpdateClient, PlayerFullUpdateServer, BeingAnimationChange, 
+        BeingDepthChange, BeingNewCombatText,
         GameState, ObjectsFullUpdate, ObjectsUpdate,
         PlayersUpdate, PlayersUpdateClient, 
         IncrementLevelRequest, LevelIndexChange, 

@@ -123,6 +123,9 @@ namespace BountyBandits.Network
                             case (int)MessageType.EnemiesUpdate:
                                 receiveEnemiesUpdate(im);
                                 break;
+                            case (int)MessageType.BeingNewCombatText:
+                                receiveNewCombatText(im);
+                                break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
                                 break;
@@ -285,6 +288,7 @@ namespace BountyBandits.Network
                         Vector2 difference = state.position - player.body.Position;
                         player.body.Position = player.body.Position + (difference * .1f);
                         player.isFacingLeft = state.isFacingLeft;
+                        player.currenthealth = state.currentHP;
                         if (state.depth != player.getDepth())
                         {
                             player.timeOfLastDepthChange = Environment.TickCount;
@@ -443,6 +447,7 @@ namespace BountyBandits.Network
                     Vector2 difference = state.position - enemy.body.Position;
                     enemy.body.Position = enemy.body.Position + (difference * .1f);
                     enemy.isFacingLeft = state.isFacingLeft;
+                    enemy.currenthealth = state.currentHP;
                     if (state.depth != enemy.getDepth())
                     {
                         enemy.timeOfLastDepthChange = Environment.TickCount;
@@ -472,6 +477,30 @@ namespace BountyBandits.Network
                 gameref.spawnManager.enemies[guid].changeAnimation(animationName);
             else if (gameref.players.ContainsKey(guid))
                 gameref.players[guid].changeAnimation(animationName);
+        }
+        public void sendNewCombatText(Guid guid, string text, CombatTextType type)
+        {
+            if(!isServer())
+                return;
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.BeingNewCombatText);
+            msg.Write(guid.ToString());
+            msg.Write(text);
+            msg.Write((byte)type);
+            serverSendToAllUnordered(msg);
+        }
+        public void receiveNewCombatText(NetIncomingMessage im)
+        {
+            Guid guid = Guid.Parse(im.ReadString());
+            String text = im.ReadString();
+            CombatTextType type = (CombatTextType)im.ReadByte();
+            Being toUpdate = null;
+            if (gameref.spawnManager.enemies.ContainsKey(guid))
+                toUpdate = gameref.spawnManager.enemies[guid];
+            else if (gameref.players.ContainsKey(guid))
+                toUpdate = gameref.players[guid];
+            if(toUpdate != null)
+                toUpdate.combatText.add(guid, text, type);
         }
     }
 }
