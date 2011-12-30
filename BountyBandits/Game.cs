@@ -98,7 +98,8 @@ namespace BountyBandits
 
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
-                selectedMenuIndex.Add(playerIndex, -1);
+                if (!selectedMenuIndex.ContainsKey(playerIndex))
+                    selectedMenuIndex.Add(playerIndex, -1);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -644,11 +645,11 @@ namespace BountyBandits
                 #endregion
                 #region worldmap
                 case GameState.WorldMap:
-                    spriteBatch.Draw(mapManager.worldBackground, new Rectangle(0,0,res.ScreenWidth,res.ScreenHeight), Color.White);
+                    spriteBatch.Draw(mapManager.worldBackground, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
                     foreach (Level level in mapManager.getLevels())
                         spriteBatch.Draw(easyLevel, level.loc, Color.White);
                     const string chooseLevelStr = "Choose level, A to start game";
-                    drawTextBorder(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - vademecumFont24.MeasureString(chooseLevelStr).X/2, 1f), Color.Black, Color.DarkGray, 0);
+                    drawTextBorder(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - vademecumFont24.MeasureString(chooseLevelStr).X / 2, 1f), Color.Black, Color.DarkGray, 0);
                     spriteBatch.Draw(texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2), Color.White);
                     drawTextBorder(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168), Color.Black, Color.DarkGray, 0);
                     drawTextBorder(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168 - 32), Color.Black, Color.DarkGray, 0);
@@ -675,7 +676,7 @@ namespace BountyBandits
             {
                 Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, avePosition.Y - res.ScreenHeight / 2);
                 Texture2D tex = texMan.getTex(item.texturePath);
-                drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width/2, tex.Height/2));
+                drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width / 2, tex.Height / 2));
             }
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
@@ -756,7 +757,7 @@ namespace BountyBandits
                 for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
                     spriteBatch.Draw(texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
                 drawTextBorder(vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 164), Color.Black, Color.DarkGray, 0);
-                
+
                 pIndex++;
             }
             #endregion
@@ -882,7 +883,7 @@ namespace BountyBandits
             {
                 if (item is DropItem && player.getDepth() == item.startdepth)
                 {
-                    if(closest == null)
+                    if (closest == null)
                         closest = (DropItem)item;
                     float distanceToPlayer = Vector2.DistanceSquared(item.body.Position, player.body.Position);
                     if (distanceToPlayer < closestDist)
@@ -960,7 +961,7 @@ namespace BountyBandits
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;
-            activeItems.Add(item.guid,item);
+            activeItems.Add(item.guid, item);
             network.sendFullObjectsUpdate();
         }
     }

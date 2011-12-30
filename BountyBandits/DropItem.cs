@@ -22,7 +22,7 @@ namespace BountyBandits
         {
             XmlElement beingElement = parent.OwnerDocument.CreateElement("dropItem");
             beingElement.AppendChild(item.asXML(beingElement));
-            beingElement.AppendChild( ((GameItem)this).asXML(beingElement) );
+            beingElement.AppendChild(base.asXML(beingElement));
             return beingElement;
         }
     }
