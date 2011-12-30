@@ -210,15 +210,20 @@ namespace BountyBandits
         public static Resolution Initialize(GraphicsDeviceManager graphics)
         {
             DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+            ScreenMode mode = GetPreferredMode(graphics);
+            graphics.IsFullScreen = mode != ScreenMode.XGA;
+            return new Resolution(graphics, mode);
+        }
+
+        public static ScreenMode GetPreferredMode(GraphicsDeviceManager graphics)
+        {
+            DisplayMode displayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
             ScreenMode mode = ScreenMode.XGA;
-            graphics.IsFullScreen = true;
             if (displayMode.Width == 1920 && displayMode.Height == 1080)
                 mode = ScreenMode.tv1080p;
             else if (displayMode.Width == 1280 && displayMode.Height == 720)
                 mode = ScreenMode.tv720p;
-            else
-                graphics.IsFullScreen = false;
-            return new Resolution(graphics, mode);
+            return mode;
         }
 
         public void SetResolution(GraphicsDeviceManager graphics)

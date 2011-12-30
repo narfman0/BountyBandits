@@ -112,7 +112,9 @@ namespace BountyBandits
             if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 graphics.IsFullScreen = !graphics.IsFullScreen;
-                graphics.ApplyChanges();
+                res.Mode = res.BaseMode = !graphics.IsFullScreen ? 
+                    ScreenMode.XGA : Resolution.GetPreferredMode(graphics);
+                res.SetResolution(graphics);
             }
 #endif
             #endregion
