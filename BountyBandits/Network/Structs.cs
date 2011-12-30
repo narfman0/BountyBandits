@@ -12,7 +12,7 @@ namespace BountyBandits.Network
     {
         public Guid guid;
         public Vector2 position, velocity;
-        public bool isFacingLeft;
+        public bool isFacingLeft,isMovingUp;
         public int depth;
 
         public static void writeState(NetOutgoingMessage msg, Being being)
@@ -24,6 +24,7 @@ namespace BountyBandits.Network
             msg.Write(being.guid.ToString());
             msg.Write(being.isFacingLeft);
             msg.Write((byte)being.getDepth());
+            msg.Write(being.isMovingUp);
         }
 
         public static BeingNetworkState readState(NetIncomingMessage msg)
@@ -34,6 +35,7 @@ namespace BountyBandits.Network
             state.guid = new Guid(msg.ReadString());
             state.isFacingLeft = msg.ReadBoolean();
             state.depth = msg.ReadByte();
+            state.isMovingUp = msg.ReadBoolean();
             return state;
         }
     }

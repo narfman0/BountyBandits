@@ -24,10 +24,10 @@ namespace BountyBandits.Character
         private StatSet myStats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
         private const int TIME_TO_CHANGE_DEPTHS = 300;
-        int timeOfLastJump = 0, timeToNextHeal = 0, directionMoving = 0;
+        int timeOfLastJump = 0, timeToNextHeal = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0;
         public float currenthealth = 5, currentspecial = 5;
-        public bool isFacingLeft = false, isDead = false;
+        public bool isFacingLeft = false, isDead = false, isMovingUp;
         private bool attackComputed = true;
         public Body body; private Vector2 pos; //used to draw when dead
         public Geom geom;
@@ -149,8 +149,8 @@ namespace BountyBandits.Character
                 int difference = Environment.TickCount - timeOfLastDepthChange;
                 float slidex = Game.DEPTH_X_OFFSET / TIME_TO_CHANGE_DEPTHS * difference;   // 0 < x < DEPTH_X_OFFSET
                 float slidey = Game.DEPTH_MULTIPLE / TIME_TO_CHANGE_DEPTHS * difference;   // 0 < y < DEPTH_MULTIPLE
-                slidex *= directionMoving; slidey *= directionMoving;
-                if (directionMoving == -1)
+                slidex *= getMovingUpMultiple(); slidey *= getMovingUpMultiple();
+                if (isMovingUp)
                 {
                     slidex += Game.DEPTH_X_OFFSET;
                     slidey -= 2 * Game.DEPTH_MULTIPLE;
@@ -240,7 +240,7 @@ namespace BountyBandits.Character
                 else
                 {
                     timeOfLastDepthChange = Environment.TickCount;
-                    directionMoving = (up) ? -1 : 1;
+                    isMovingUp = up;
                     return true;
                 }
             }
@@ -423,6 +423,10 @@ namespace BountyBandits.Character
         public float getSpeedMultiplier()
         {
             return (100f + (float)getStat(StatType.Speed)) / 100f;
+        }
+        private int getMovingUpMultiple()
+        {
+            return isMovingUp ? -1 : 1;
         }
     }
 }

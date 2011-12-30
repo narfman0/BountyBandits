@@ -289,6 +289,7 @@ namespace BountyBandits.Network
                         {
                             player.timeOfLastDepthChange = Environment.TickCount;
                             player.setDepth(state.depth);
+                            player.isMovingUp = state.isMovingUp;
                         }
                     }
                 }
