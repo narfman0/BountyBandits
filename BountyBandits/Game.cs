@@ -384,6 +384,8 @@ namespace BountyBandits
                     }
                     if(!network.isClient())
                         spawnManager.update(gameTime);
+                    else
+                        spawnManager.updateEnemies(gameTime);
                     physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
                     #region initiate cutscene
                     storyElement = mapManager.getCurrentLevel().popStoryElement(getAvePosition().X);

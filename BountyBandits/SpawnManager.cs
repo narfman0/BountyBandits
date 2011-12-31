@@ -63,8 +63,7 @@ namespace BountyBandits
                     spawnp.isSpawned = true;
                 }
             #endregion
-            foreach (Being enemy in enemies.Values)
-                enemy.update(gameTime);
+            updateEnemies(gameTime);
             #region Kill current remnants (only first 10, so hopefully they are off the map already)
             if (enemies.Count > 25)
             {
@@ -76,6 +75,11 @@ namespace BountyBandits
                     enemies.Remove(deadenemy.guid);
             }
             #endregion
+        }
+        public void updateEnemies(GameTime gameTime)
+        {
+            foreach (Being enemy in enemies.Values)
+                enemy.update(gameTime);
         }
     }
 }
