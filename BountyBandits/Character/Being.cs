@@ -107,6 +107,8 @@ namespace BountyBandits.Character
                                 combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
                             }
                             enemy.currenthealth -= damage;
+                            if(Game.instance.network.isServer())
+                                gameref.network.sendBeingCurrentHP(enemy.guid, enemy.currenthealth);
                             enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                         }
                         if (enemy.currenthealth <= 0f && isPlayer)

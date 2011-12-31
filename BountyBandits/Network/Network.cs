@@ -124,7 +124,10 @@ namespace BountyBandits.Network
                                 receiveEnemiesUpdate(im);
                                 break;
                             case (int)MessageType.BeingNewCombatText:
-                                receiveNewCombatText(im);
+                                receiveBeingNewCombatText(im);
+                                break;
+                            case (int)MessageType.BeingNewCurrentHP:
+                                receiveBeingNewCurrentHP(im);
                                 break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
@@ -489,7 +492,7 @@ namespace BountyBandits.Network
             msg.Write((byte)type);
             serverSendToAllUnordered(msg);
         }
-        public void receiveNewCombatText(NetIncomingMessage im)
+        public void receiveBeingNewCombatText(NetIncomingMessage im)
         {
             Guid guid = Guid.Parse(im.ReadString());
             String text = im.ReadString();
@@ -501,6 +504,25 @@ namespace BountyBandits.Network
                 toUpdate = gameref.players[guid];
             if(toUpdate != null)
                 toUpdate.combatText.add(guid, text, type);
+        }
+        public void sendBeingCurrentHP(Guid guid, float currentHP)
+        {
+            if (!isServer())
+                return;
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.BeingNewCurrentHP);
+            msg.Write(guid.ToString());
+            msg.Write(currentHP);
+            serverSendToAllUnordered(msg);
+        }
+        private void receiveBeingNewCurrentHP(NetIncomingMessage im)
+        {
+            Guid guid = Guid.Parse(im.ReadString());
+            float currentHP = im.ReadFloat();
+            if (gameref.spawnManager.enemies.ContainsKey(guid))
+                gameref.spawnManager.enemies[guid].currenthealth = currentHP;
+            else if (gameref.players.ContainsKey(guid))
+                gameref.players[guid].currenthealth = currentHP;
         }
     }
 }
