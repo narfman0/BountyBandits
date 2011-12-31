@@ -392,7 +392,7 @@ namespace BountyBandits.Character
         public static Being fromXML(XmlElement element, Game gameref)
         {
             AnimationController controller = gameref.animationManager.getController(element.GetAttribute("animationControllerName"));
-            Being being = new Being(element.GetAttribute("name"), 1, gameref, controller, null, false, false);
+            Being being = new Being(element.GetAttribute("name"), 1, gameref, controller, null, true, false);
             being.copyValues(element);
             return being;
         }
