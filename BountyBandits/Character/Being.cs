@@ -133,6 +133,7 @@ namespace BountyBandits.Character
                         if (enemy.CurrentHealth <= 0f && isPlayer)
                             foreach (Being being in gameref.players.Values)
                                 being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                        Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
                         if (getStat(StatType.Knockback) > 0)
                             enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
                     }
@@ -417,6 +418,7 @@ namespace BountyBandits.Character
         {
             return (int)currFrame;
         }
+        #region Gameplay getter functions
         public float getAttackSpeed()
         {
             return (100f + getStat(StatType.Speed) + getStat(StatType.Agility) / 3) / 100f;
@@ -451,6 +453,6 @@ namespace BountyBandits.Character
         {
             return isMovingUp ? -1 : 1;
         }
-
+        #endregion
     }
 }

@@ -17,6 +17,6 @@ namespace BountyBandits.Network
         GameState, ObjectsFullUpdate, ObjectsUpdate,
         PlayersUpdate, PlayersUpdateClient, 
         IncrementLevelRequest, LevelIndexChange, 
-        NewEnemy, EnemiesUpdate
+        NewEnemy, EnemiesUpdate, AddXP
     }
 }

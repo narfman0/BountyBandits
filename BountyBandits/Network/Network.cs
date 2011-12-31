@@ -129,6 +129,9 @@ namespace BountyBandits.Network
                             case (int)MessageType.BeingNewCurrentHP:
                                 receiveBeingNewCurrentHP(im);
                                 break;
+                            case (int)MessageType.AddXP:
+                                receiveAddXP(im);
+                                break;
                             default:
                                 Log.write(LogType.NetworkClient, "Unknown data message received");
                                 break;
@@ -140,7 +143,6 @@ namespace BountyBandits.Network
                 }
             }
         }
-
         public void updateServer()
         {
             NetIncomingMessage im;
@@ -523,6 +525,21 @@ namespace BountyBandits.Network
                 gameref.spawnManager.enemies[guid].CurrentHealth = currentHP;
             else if (gameref.players.ContainsKey(guid))
                 gameref.players[guid].CurrentHealth = currentHP;
+        }
+        public void sendAddXP(int addXP)
+        {
+            if (!isServer())
+                return;
+            NetOutgoingMessage msg = server.CreateMessage();
+            msg.Write((int)MessageType.AddXP);
+            msg.Write(addXP);
+            serverSendToAllUnordered(msg);
+        }
+        private void receiveAddXP(NetIncomingMessage im)
+        {
+            int addXP = im.ReadInt32();
+            foreach (Being player in gameref.players.Values)
+                player.giveXP(addXP);
         }
     }
 }
