@@ -297,7 +297,9 @@ namespace BountyBandits
                                 currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
                             if (currentplayer.input.getButtonHit(Buttons.A))
                             {
-                                if (currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && currentplayer.unusedAttr > 0)
+                                if (currentplayer.menu.isMenuActive() && 
+                                    currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && 
+                                    currentplayer.unusedAttr > 0)
                                 {
                                     if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
                                     else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
@@ -312,12 +314,12 @@ namespace BountyBandits
                             if (currentplayer.input.getButtonHit(Buttons.Back))
                                 currentplayer.menu.toggleMenu();
                             if (currentplayer.input.getButtonDown(Buttons.DPadDown))
-                                if (currentplayer.menu.getMenuActive())
+                                if (currentplayer.menu.isMenuActive())
                                     currentplayer.menu.changeMenuItem(false);
                                 else
                                     currentplayer.lane(false);
                             if (currentplayer.input.getButtonDown(Buttons.DPadUp))
-                                if (currentplayer.menu.getMenuActive())
+                                if (currentplayer.menu.isMenuActive())
                                     currentplayer.menu.changeMenuItem(true);
                                 else
                                     currentplayer.lane(true);
@@ -722,7 +724,7 @@ namespace BountyBandits
             int pIndex = 0;
             foreach (Being currPlayer in players.Values)
             {
-                if (currPlayer.menu.getMenuActive())
+                if (currPlayer.menu.isMenuActive())
                 {
                     spriteBatch.Draw(texMan.getTex("portraitBackground"), new Vector2(24 + 16 + pIndex * 288 + 32 * pIndex, 63), new Color(255, 255, 255, 192));
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Data)

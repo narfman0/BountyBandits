@@ -13,9 +13,9 @@ namespace BountyBandits
             Stats, Inv, Data
         };
         #region Fields
-        bool menuActive = false;
-        int activeMenuItem = 0, timeMenuItemChanged = 0, timeMenuScreenChanged = 0;
-        Menu.MenuScreens activeMenuScreen = Menu.MenuScreens.Data;
+        private bool menuActive = false;
+        private int activeMenuItem = 0, timeMenuItemChanged = 0, timeMenuScreenChanged = 0;
+        MenuScreens activeMenuScreen = MenuScreens.Data;
         #endregion
         public void changeMenuItem(bool up)
         {
@@ -54,7 +54,7 @@ namespace BountyBandits
                 }
             }
         }
-        public bool getMenuActive() { return menuActive; }
+        public bool isMenuActive() { return menuActive; }
         public Color getMenuColor(int menuNum)
         {
             return (menuNum == getMenuItem() && (Environment.TickCount / 200) % 2 == 0) ? new Color(45, 45, 45) : Color.Black;
