@@ -26,7 +26,7 @@ namespace BountyBandits.Network
             msg.Write(being.isFacingLeft);
             msg.Write((byte)being.getDepth());
             msg.Write(being.isMovingUp);
-            msg.Write(being.currenthealth);
+            msg.Write(being.CurrentHealth);
         }
 
         public static BeingNetworkState readState(NetIncomingMessage msg)

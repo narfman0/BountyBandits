@@ -22,10 +22,10 @@ namespace BountyBandits.Character
             //figure out if anyone is alive
             bool someoneAlive = false;
             foreach (Being player in gameref.players.Values)
-                if (player.currenthealth > 0f)
+                if (player.CurrentHealth > 0f)
                     someoneAlive = true;
             //and target that random alive person
-            while (someoneAlive && (targetPlayer == Guid.Empty || gameref.players[targetPlayer].currenthealth <= 0f))
+            while (someoneAlive && (targetPlayer == Guid.Empty || gameref.players[targetPlayer].CurrentHealth <= 0f))
                 targetPlayer = gameref.players.Values.ElementAt(gameref.rand.Next(gameref.players.Count)).guid;
             if (targetPlayer == Guid.Empty)
                 return;

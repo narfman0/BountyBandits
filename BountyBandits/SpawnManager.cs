@@ -32,7 +32,7 @@ namespace BountyBandits
             {
                 Enemy enemy = new Enemy(type, (int)level, gameref, 
                     gameref.animationManager.getController(type));
-                enemy.currenthealth = (float)enemy.getStat(StatType.Life);
+                enemy.CurrentHealth = (float)enemy.getStat(StatType.Life);
                 enemy.currentspecial = (float)enemy.getStat(StatType.Special);
 
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;

@@ -291,7 +291,7 @@ namespace BountyBandits.Network
                         Vector2 difference = state.position - player.body.Position;
                         player.body.Position = player.body.Position + (difference * .1f);
                         player.isFacingLeft = state.isFacingLeft;
-                        player.currenthealth = state.currentHP;
+                        player.CurrentHealth = state.currentHP;
                         if (state.depth != player.getDepth())
                         {
                             player.timeOfLastDepthChange = Environment.TickCount;
@@ -450,7 +450,7 @@ namespace BountyBandits.Network
                     Vector2 difference = state.position - enemy.body.Position;
                     enemy.body.Position = enemy.body.Position + (difference * .1f);
                     enemy.isFacingLeft = state.isFacingLeft;
-                    enemy.currenthealth = state.currentHP;
+                    enemy.CurrentHealth = state.currentHP;
                     if (state.depth != enemy.getDepth())
                     {
                         enemy.timeOfLastDepthChange = Environment.TickCount;
@@ -520,9 +520,9 @@ namespace BountyBandits.Network
             Guid guid = Guid.Parse(im.ReadString());
             float currentHP = im.ReadFloat();
             if (gameref.spawnManager.enemies.ContainsKey(guid))
-                gameref.spawnManager.enemies[guid].currenthealth = currentHP;
+                gameref.spawnManager.enemies[guid].CurrentHealth = currentHP;
             else if (gameref.players.ContainsKey(guid))
-                gameref.players[guid].currenthealth = currentHP;
+                gameref.players[guid].CurrentHealth = currentHP;
         }
     }
 }

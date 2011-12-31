@@ -26,7 +26,7 @@ namespace BountyBandits.Character
         private const int TIME_TO_CHANGE_DEPTHS = 300;
         int timeOfLastJump = 0, timeToNextHeal = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0;
-        public float currenthealth = 5, currentspecial = 5;
+        public float currentHealth = 5, currentspecial = 5;
         public bool isFacingLeft = false, isDead = false, isMovingUp;
         private bool attackComputed = true;
         public Body body; private Vector2 pos; //used to draw when dead
@@ -42,6 +42,17 @@ namespace BountyBandits.Character
         //player specific fields
         public UnlockedManager unlocked = new UnlockedManager(); //first is difficulty, second is actual level
         public Menu menu = new Menu();
+        #endregion
+        #region Properties
+        public float CurrentHealth { 
+            get { return currentHealth; } 
+            set {
+                float difference = value - currentHealth;
+                currentHealth = value;
+                if (Game.instance.network.isServer())
+                    gameref.network.sendBeingCurrentHP(guid, CurrentHealth);
+            } 
+        }
         #endregion
         public Being(string name, int level, Game gameref, AnimationController controller, 
             Input input, bool isPlayer, bool isLocal)
@@ -103,15 +114,15 @@ namespace BountyBandits.Character
                         {
                             float lifeSteal = getLifeSteal();
                             if(lifeSteal > 0f){
-                                currenthealth += damage * lifeSteal;
+                                CurrentHealth += damage * lifeSteal;
                                 combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
                             }
-                            enemy.currenthealth -= damage;
+                            enemy.CurrentHealth -= damage;
                             if(Game.instance.network.isServer())
                                 gameref.network.sendBeingCurrentHP(enemy.guid, enemy.currenthealth);
                             enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                         }
-                        if (enemy.currenthealth <= 0f && isPlayer)
+                        if (enemy.CurrentHealth <= 0f && isPlayer)
                             foreach (Being being in gameref.players.Values)
                                 being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
                         if (getStat(StatType.Knockback) > 0)
@@ -268,7 +279,7 @@ namespace BountyBandits.Character
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
             setDepth(input==null?gameref.rand.Next(4):(int)input.getPlayerIndex());
-            currenthealth = (float)getStat(StatType.Life);
+            CurrentHealth = (float)getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
             
         }
@@ -282,9 +293,9 @@ namespace BountyBandits.Character
             if (!isDead)
             {
                 #region Dead
-                if (currenthealth <= 0f)
+                if (CurrentHealth <= 0f)
                 {
-                    currenthealth = 0f;
+                    CurrentHealth = 0f;
                     isDead = true;
                     changeAnimation("death1");
                     pos = body.Position;
@@ -322,13 +333,13 @@ namespace BountyBandits.Character
                     timeToNextHeal = Environment.TickCount;
                     bool isEnemyAlive = false;
                     foreach (Being enemy in gameref.spawnManager.enemies.Values)
-                        if (enemy.currenthealth > 0f)
+                        if (enemy.CurrentHealth > 0f)
                             isEnemyAlive = true;
                     if (gameref.spawnManager.enemies.Count < 1 && isPlayer && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
                     {
-                        currenthealth += (float)getStat(StatType.Life) / 5f + (float)getStat(StatType.Agility) / 10f;
-                        if (currenthealth > (float)getStat(StatType.Life))
-                            currenthealth = (float)getStat(StatType.Life);
+                        CurrentHealth += (float)getStat(StatType.Life) / 5f + (float)getStat(StatType.Agility) / 10f;
+                        if (CurrentHealth > (float)getStat(StatType.Life))
+                            CurrentHealth = (float)getStat(StatType.Life);
                     }
                 }
                 #endregion
@@ -338,11 +349,11 @@ namespace BountyBandits.Character
             {
 				bool enemiesAlive = false;
 				foreach(Being enemy in gameref.spawnManager.enemies.Values)
-					if(enemy == this || enemy.currenthealth > 0f)
+					if(enemy == this || enemy.CurrentHealth > 0f)
 						enemiesAlive=true;
 				if(!enemiesAlive)
 				{
-                    currenthealth = (float)getStat(StatType.Life) / 3f;
+                    CurrentHealth = (float)getStat(StatType.Life) / 3f;
 					changeAnimation("idle");
 					isDead = false;
 				}

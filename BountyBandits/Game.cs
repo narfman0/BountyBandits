@@ -751,9 +751,9 @@ namespace BountyBandits
                 }
                 spriteBatch.Draw(texMan.getTex("portrait"), new Vector2(16 + pIndex * 288 + 32 * pIndex, 16), Color.White);
 
-                for (int healthIndex = 0; healthIndex < (int)currPlayer.currenthealth; ++healthIndex)
+                for (int healthIndex = 0; healthIndex < (int)currPlayer.CurrentHealth; ++healthIndex)
                     spriteBatch.Draw(texMan.getTex("redBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * healthIndex, 16), Color.White);
-                int currentHP = currPlayer.currenthealth > 0f && (int)currPlayer.currenthealth == 0 ? 1 : (int)currPlayer.currenthealth;
+                int currentHP = currPlayer.CurrentHealth > 0f && (int)currPlayer.CurrentHealth == 0 ? 1 : (int)currPlayer.CurrentHealth;
                 drawTextBorder(vademecumFont12, currentHP + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 140), Color.Black, Color.DarkGray, 0);
 
                 for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
