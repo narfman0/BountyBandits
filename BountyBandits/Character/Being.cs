@@ -407,6 +407,7 @@ namespace BountyBandits.Character
             unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
             foreach (Stat stat in stats.statsTable.Values)
                 myStats.setStatValue(stat.getType(), stat.getValue());
+            itemManager = InventoryManager.fromXML((XmlElement)element.GetElementsByTagName("inventory").Item(0));
         }
         public void setDepth(int depth)
         {
