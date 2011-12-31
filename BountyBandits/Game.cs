@@ -36,7 +36,7 @@ namespace BountyBandits
         GameTime previousGameTime = new GameTime();
         SpriteBatch spriteBatch;
         public Dictionary<Guid, Being> players = new Dictionary<Guid, Being>();
-        public Dictionary<Guid,GameItem> activeItems;
+        public Dictionary<Guid, GameItem> activeItems;
         StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
         public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
@@ -66,11 +66,11 @@ namespace BountyBandits
         }
         protected override void Initialize()
         {
-            activeItems = new Dictionary<Guid,GameItem>();
+            activeItems = new Dictionary<Guid, GameItem>();
             res = Resolution.Initialize(graphics);
-            #if XBOX
+#if XBOX
                 graphics.IsFullScreen = true;
-            #endif
+#endif
 
             spawnManager = new SpawnManager(this);
             rand = new Random();
@@ -115,7 +115,7 @@ namespace BountyBandits
             if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt) && Keyboard.GetState().IsKeyDown(Keys.Enter))
             {
                 graphics.IsFullScreen = !graphics.IsFullScreen;
-                res.Mode = res.BaseMode = !graphics.IsFullScreen ? 
+                res.Mode = res.BaseMode = !graphics.IsFullScreen ?
                     ScreenMode.XGA : Resolution.GetPreferredMode(graphics);
                 res.SetResolution(graphics);
             }
@@ -343,7 +343,7 @@ namespace BountyBandits
                                     {
                                         dropItem.setItem(playerItem);
                                         dropItem.body.LinearVelocity.Y += 25f;
-                                        dropItem.body.ApplyTorque((float)rand.NextDouble()*.25f - .125f);
+                                        dropItem.body.ApplyTorque((float)rand.NextDouble() * .25f - .125f);
                                     }
                                     else
                                         activeItems.Remove(dropItem.guid);
@@ -382,7 +382,7 @@ namespace BountyBandits
                         }
                         #endregion
                     }
-                    if(!network.isClient())
+                    if (!network.isClient())
                         spawnManager.update(gameTime);
                     else
                         spawnManager.updateEnemies(gameTime);
@@ -431,7 +431,7 @@ namespace BountyBandits
                                         killGuids.Add(extraPlayer.guid);
                                 foreach (Guid kill in killGuids)
                                     players.Remove(kill);
-                                players.Add(player.guid,player);
+                                players.Add(player.guid, player);
                             }
                             //go to worldmap if player one hits a
                             if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
@@ -566,7 +566,7 @@ namespace BountyBandits
             #endregion
             item.setItem(DropManager.generateItem(killedBeing));
             item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(geom.CollisionCategories);
-            activeItems.Add(item.guid,item);
+            activeItems.Add(item.guid, item);
             network.sendFullObjectsUpdate();
         }
         private bool isUnlocked(int level)
@@ -621,7 +621,7 @@ namespace BountyBandits
                 case GameState.CharacterSelection:
                     spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
                     fontPos = new Vector2(1.0f, 1.0f);
-                    if(players.Count > 0)
+                    if (players.Count > 0)
                         drawTextBorder(vademecumFont24, "Press " + Input.AFFIRM_KEY + " to start game", fontPos, Color.White, Color.Black, 0);
                     fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
                     foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))

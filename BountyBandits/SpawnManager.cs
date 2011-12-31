@@ -22,7 +22,7 @@ namespace BountyBandits
         {
             enemies.Clear();
             spawnPoints = new List<SpawnPoint>();
-            if(!gameref.network.isClient())
+            if (!gameref.network.isClient())
                 foreach (SpawnPoint point in newLvl.spawns)
                     spawnPoints.Add(point.Clone());
         }
@@ -30,15 +30,15 @@ namespace BountyBandits
         {
             for (int i = 0; i < amount; ++i)
             {
-                Enemy enemy = new Enemy(type, (int)level, gameref, 
+                Enemy enemy = new Enemy(type, (int)level, gameref,
                     gameref.animationManager.getController(type));
                 enemy.CurrentHealth = (float)enemy.getStat(StatType.Life);
                 enemy.currentspecial = (float)enemy.getStat(StatType.Special);
 
                 int side = (gameref.rand.Next(2) == 0) ? -1 : 1;
-                if (gameref.getAvePosition().X - gameref.res.ScreenWidth / 2 < 16) 
+                if (gameref.getAvePosition().X - gameref.res.ScreenWidth / 2 < 16)
                     side = 1;
-                else if (gameref.mapManager.getCurrentLevel().levelLength - gameref.getAvePosition().X < enemy.controller.frames[0].Width + gameref.res.ScreenWidth) 
+                else if (gameref.mapManager.getCurrentLevel().levelLength - gameref.getAvePosition().X < enemy.controller.frames[0].Width + gameref.res.ScreenWidth)
                     side = -1;
                 enemy.setDepth(gameref.rand.Next(4));
 

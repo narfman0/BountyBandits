@@ -502,7 +502,7 @@ namespace BountyBandits.Network
                 toUpdate = gameref.spawnManager.enemies[guid];
             else if (gameref.players.ContainsKey(guid))
                 toUpdate = gameref.players[guid];
-            if(toUpdate != null)
+            if(toUpdate != null && !toUpdate.isLocal)
                 toUpdate.combatText.add(guid, text, type);
         }
         public void sendBeingCurrentHP(Guid guid, float currentHP)
