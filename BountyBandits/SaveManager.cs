@@ -49,6 +49,7 @@ namespace BountyBandits
                     xmlDoc.Load(filename);
                 }
                 XmlNode root = xmlDoc.DocumentElement;
+                root.RemoveAll();
                 root.AppendChild(being.asXML(root));
                 xmlDoc.Save(filename);
                 Log.write(LogType.Saves, "saved character: " + being.name);
