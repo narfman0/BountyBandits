@@ -26,7 +26,8 @@ namespace BountyBandits.Character
         private const int TIME_TO_CHANGE_DEPTHS = 300;
         int timeOfLastJump = 0, timeToNextHeal = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0;
-        public float currentHealth = 5, currentspecial = 5;
+        public float currentspecial = 5;
+        private float currentHealth = 5f;
         public bool isFacingLeft = false, isDead = false, isMovingUp;
         private bool attackComputed = true;
         public Body body; private Vector2 pos; //used to draw when dead
@@ -119,7 +120,7 @@ namespace BountyBandits.Character
                             }
                             enemy.CurrentHealth -= damage;
                             if(Game.instance.network.isServer())
-                                gameref.network.sendBeingCurrentHP(enemy.guid, enemy.currenthealth);
+                                gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
                             enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                         }
                         if (enemy.CurrentHealth <= 0f && isPlayer)

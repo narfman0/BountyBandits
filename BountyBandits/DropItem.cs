@@ -11,7 +11,10 @@ namespace BountyBandits
     {
         private Item item;
         public Item getItem() { return item; }
-        public void setItem(Item item) { this.item = item; }
+        public void setItem(Item item) { 
+            this.item = item;
+            this.name = item.getTextureName();
+        }
         public new static DropItem fromXML(XmlElement element)
         {
             DropItem item = (DropItem)GameItem.fromXML((XmlElement)element.GetElementsByTagName("gameItem")[0]);
