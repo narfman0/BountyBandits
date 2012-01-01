@@ -685,8 +685,10 @@ namespace BountyBandits
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
                 foreach (GameItem gameItem in activeItems.Values)
-                    if (currentDepth >= gameItem.startdepth &&
-                        currentDepth < gameItem.startdepth + gameItem.width)
+                    if (gameItem.width - 1 + gameItem.startdepth == currentDepth)
+                        
+                        //currentDepth >= gameItem.startdepth && //disabling multidepth drawing
+                        //currentDepth < gameItem.startdepth + gameItem.width)
                     {
                         Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - avePosition.X + res.ScreenWidth / 2, gameItem.body.Position.Y - avePosition.Y + res.ScreenHeight / 2);
                         Texture2D tex = !(gameItem is DropItem) ? texMan.getTex(gameItem.name) :
@@ -697,11 +699,11 @@ namespace BountyBandits
                             switch (gameItem.polygonType)
                             {
                                 case PhysicsPolygonType.Circle:
-                                    scale = new Vector2((float)gameItem.radius * 2 / (float)tex.Width, (float)gameItem.radius * 2 / (float)tex.Width);
+                                    scale = new Vector2((float)gameItem.radius * 2 / (float)tex.Width, (float)gameItem.radius * 2 / (float)tex.Height);
                                     rotation *= -1;
                                     break;
                                 case PhysicsPolygonType.Rectangle:
-                                    scale = new Vector2((float)gameItem.sideLengths.X / (float)tex.Width, (float)gameItem.sideLengths.Y / (float)tex.Width);
+                                    scale = new Vector2((float)gameItem.sideLengths.X / (float)tex.Width, (float)gameItem.sideLengths.Y / (float)tex.Height);
                                     rotation *= -1;
                                     break;
                             }
@@ -958,10 +960,9 @@ namespace BountyBandits
                 item.body.IsStatic = item.immovable;
             geom.FrictionCoefficient = .6f;
             #region Collision Categories
-            geom.CollisionCategories = (CollisionCategory)(int)Math.Pow(2, item.startdepth);
-            //not doing multidepth for now
-            //for (uint depth = item.startdepth; depth < item.width + item.startdepth; depth++)
-            //    geom.CollisionCategories = (CollisionCategory)((int)geom.CollisionCategories) | ((int)Math.Pow(2, depth));
+            geom.CollisionCategories = CollisionCategory.None;
+            for (int depth = (int)item.startdepth; depth < item.width + item.startdepth; depth++)
+                geom.CollisionCategories |= (CollisionCategory)PhysicsHelper.depthToCollisionCategory(depth);
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;

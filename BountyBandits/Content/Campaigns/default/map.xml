@@ -169,12 +169,52 @@
     <horizonPath>desertysun</horizonPath>
     <items>
       <item>
-        <name>enemies</name>
-        <loc>800,454</loc>
-        <count>1</count>
-        <bosses>0</bosses>
-        <type>cowboy</type>
+        <name>surfboard1</name>
+        <loc>1200,100</loc>
+        <sideLengths>
+          <x>50</x>
+          <y>161</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
         <weight>1</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>surfboard2</name>
+        <loc>1250,100</loc>
+        <sideLengths>
+          <x>43</x>
+          <y>198</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>1</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>surfboard3</name>
+        <loc>1000,100</loc>
+        <sideLengths>
+          <x>43</x>
+          <y>175</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <weight>1</weight>
+        <polygonType>Rectangle</polygonType>
+      </item>
+      <item>
+        <name>trailer</name>
+        <loc>1550,300</loc>
+        <sideLengths>
+          <x>362</x>
+          <y>223</y>
+        </sideLengths>
+        <startdepth>0</startdepth>
+        <width>2</width>
+        <weight>20</weight>
+        <polygonType>Rectangle</polygonType>
       </item>
       <item>
         <name>enemies</name>
@@ -182,6 +222,14 @@
         <count>2</count>
         <bosses>0</bosses>
         <type>hippie</type>
+        <weight>1</weight>
+      </item>
+      <item>
+        <name>enemies</name>
+        <loc>1400,454</loc>
+        <count>1</count>
+        <bosses>0</bosses>
+        <type>cowboy</type>
         <weight>1</weight>
       </item>
       <item>
