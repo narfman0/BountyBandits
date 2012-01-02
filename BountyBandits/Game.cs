@@ -966,6 +966,7 @@ namespace BountyBandits
             geom.CollidesWith = geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;
+            item.body.Rotation = item.rotation;
             activeItems.Add(item.guid, item);
             network.sendFullObjectsUpdate();
         }

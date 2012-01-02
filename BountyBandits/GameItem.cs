@@ -23,6 +23,7 @@ namespace BountyBandits
         public Vector2 loc, sideLengths = Vector2.One;
         public Body body;
         public Vertices vertices;
+        public float rotation = 0f;
         public bool immovable = false;
         public PhysicsPolygonType polygonType;
         public GameItem() 
@@ -31,6 +32,8 @@ namespace BountyBandits
         }
         public void copyValues(XmlElement element)
         {
+            if (element.HasAttributes && element.Attributes.GetNamedItem("rotation").Value != null)
+                rotation = float.Parse(element.Attributes.GetNamedItem("rotation").Value);
             foreach (XmlElement itemChild in element)
                 if (itemChild.Name.Equals("name"))
                     name = itemChild.FirstChild.Value;
@@ -117,6 +120,7 @@ namespace BountyBandits
             element.AppendChild(weightNode);
             element.AppendChild(widthNode);
             element.AppendChild(immovableNode);
+            element.Attributes.GetNamedItem("rotation").Value = rotation.ToString();
             return element;
         }
     }
