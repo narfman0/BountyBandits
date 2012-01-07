@@ -209,7 +209,7 @@
         <loc>1550,300</loc>
         <sideLengths>
           <x>362</x>
-          <y>223</y>
+          <y>269</y>
         </sideLengths>
         <startdepth>0</startdepth>
         <width>2</width>
@@ -232,8 +232,8 @@
         <name>rv</name>
         <loc>2550,357</loc>
         <sideLengths>
-          <x>600</x>
-          <y>267</y>
+          <x>711</x>
+          <y>379</y>
         </sideLengths>
         <startdepth>1</startdepth>
         <width>3</width>
@@ -292,8 +292,8 @@
         <name>rv</name>
         <loc>3550,357</loc>
         <sideLengths>
-          <x>600</x>
-          <y>267</y>
+          <x>711</x>
+          <y>379</y>
         </sideLengths>
         <startdepth>0</startdepth>
         <width>2</width>
@@ -305,7 +305,7 @@
         <loc>3600,300</loc>
         <sideLengths>
           <x>362</x>
-          <y>223</y>
+          <y>269</y>
         </sideLengths>
         <startdepth>2</startdepth>
         <width>2</width>

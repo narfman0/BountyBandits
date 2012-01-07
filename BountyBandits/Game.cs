@@ -685,10 +685,10 @@ namespace BountyBandits
             for (int currentDepth = 0; currentDepth < 4; currentDepth++)
             {
                 foreach (GameItem gameItem in activeItems.Values)
-                    if (gameItem.width - 1 + gameItem.startdepth == currentDepth)
+                    if (//gameItem.width - 1 + gameItem.startdepth == currentDepth) //single lowest depth drawing
                         
-                        //currentDepth >= gameItem.startdepth && //disabling multidepth drawing
-                        //currentDepth < gameItem.startdepth + gameItem.width)
+                        currentDepth >= gameItem.startdepth && //multidepth drawing
+                        currentDepth < gameItem.startdepth + gameItem.width)
                     {
                         Vector2 scale = Vector2.One, pos = new Vector2(gameItem.body.Position.X - avePosition.X + res.ScreenWidth / 2, gameItem.body.Position.Y - avePosition.Y + res.ScreenHeight / 2);
                         Texture2D tex = !(gameItem is DropItem) ? texMan.getTex(gameItem.name) :
