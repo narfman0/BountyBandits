@@ -1,164 +1,165 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<root>
+<Root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length='10000' name='Wine Country'>
+  <level length="10000" name="Wine Country">
     <adj>1</adj>
+    <horizonPath>desertysun</horizonPath>
     <background>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>goldhorizon</path>
         <location>
           <x>1024</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>goldhorizon</path>
         <location>
           <x>3072</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>goldgrasshorizon</path>
         <location>
           <x>5120</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>greenhorizon</path>
         <location>
           <x>7168</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>greenhorizon</path>
         <location>
           <x>9216</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>goldenhill</path>
         <location>
           <x>150</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>grassflecks</path>
         <location>
           <x>300</x>
           <y>100</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>piratehouse</path>
         <location>
           <x>500</x>
-          <y>370</y>
+          <y>385</y>
         </location>
       </graphic>
-      <graphic scale='.7'>
+      <graphic rotation="0" scale="0.7">
         <path>grassflecks</path>
         <location>
           <x>700</x>
           <y>200</y>
         </location>
       </graphic>
-      <graphic scale='.8'>
+      <graphic rotation="0" scale="0.8">
         <path>grassflecks</path>
         <location>
           <x>1000</x>
           <y>150</y>
         </location>
       </graphic>
-      <graphic scale='.8'>
+      <graphic rotation="0" scale="0.8">
         <path>calitree1</path>
         <location>
           <x>7500</x>
           <y>250</y>
         </location>
       </graphic>
-      <graphic scale='.8'>
+      <graphic rotation="0" scale="0.8">
         <path>calitree1</path>
         <location>
           <x>7900</x>
           <y>250</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyBlue</path>
         <location>
           <x>7140</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyRed</path>
         <location>
           <x>7400</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyGreen</path>
         <location>
           <x>7640</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyYellow</path>
         <location>
           <x>7880</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyLightBlue</path>
         <location>
           <x>8100</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyBlue</path>
         <location>
           <x>8340</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyRed</path>
         <location>
           <x>8560</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyGreen</path>
         <location>
           <x>8780</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyYellow</path>
         <location>
           <x>9000</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic scale='.3'>
+      <graphic rotation="0" scale="0.3">
         <path>paintedLadyLightBlue</path>
         <location>
           <x>9240</x>
           <y>300</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>calitree1</path>
         <location>
           <x>7500</x>
@@ -166,252 +167,624 @@
         </location>
       </graphic>
     </background>
-    <horizonPath>desertysun</horizonPath>
     <items>
-      <item>
-        <name>surfboard1</name>
-        <loc>1200,100</loc>
+      <item rotation="0">
         <sideLengths>
           <x>50</x>
           <y>161</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
+        <name>surfboard1</name>
+        <loc>1200,100</loc>
         <weight>1</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item>
-        <name>surfboard2</name>
-        <loc>1250,100</loc>
+      <item rotation="0">
         <sideLengths>
           <x>43</x>
           <y>198</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
+        <name>surfboard2</name>
+        <loc>1250,100</loc>
         <weight>1</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item>
-        <name>surfboard3</name>
-        <loc>1000,100</loc>
+      <item rotation="0">
         <sideLengths>
           <x>43</x>
           <y>175</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
+        <name>surfboard3</name>
+        <loc>1000,100</loc>
         <weight>1</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item>
-        <name>trailer</name>
-        <loc>1550,300</loc>
+      <item rotation="0">
         <sideLengths>
           <x>362</x>
           <y>269</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>2</width>
+        <name>trailer</name>
+        <loc>1550,300</loc>
         <weight>20</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item>
-        <name>surfboard3</name>
-        <loc>2100,100</loc>
-        <sideLengths>
-          <x>43</x>
-          <y>175</y>
-        </sideLengths>
-        <startdepth>0</startdepth>
-        <width>1</width>
-        <weight>1</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item>
-        <name>rv</name>
-        <loc>2550,357</loc>
+      <item rotation="0">
         <sideLengths>
           <x>711</x>
           <y>379</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>1</startdepth>
         <width>3</width>
+        <name>rv</name>
+        <loc>2550,357</loc>
         <weight>30</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item rotation='.78'>
-        <name>surfboard1</name>
-        <loc>3350,300</loc>
-        <sideLengths>
-          <x>50</x>
-          <y>161</y>
-        </sideLengths>
-        <startdepth>3</startdepth>
-        <width>1</width>
-        <weight>5</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item rotation='.78'>
-        <name>surfboard2</name>
-        <loc>3250,100</loc>
+      <item rotation="0">
         <sideLengths>
           <x>43</x>
-          <y>198</y>
+          <y>175</y>
         </sideLengths>
-        <startdepth>3</startdepth>
+        <immovable>False</immovable>
+        <startdepth>0</startdepth>
         <width>1</width>
-        <weight>5</weight>
-        <polygonType>Rectangle</polygonType>
+        <name>surfboard3</name>
+        <loc>1970,132</loc>
+        <weight>1</weight>
       </item>
-      <item>
-        <name>box</name>
-        <loc>3390,150</loc>
+      <item rotation="0">
         <sideLengths>
-          <x>50</x>
-          <y>50</y>
+          <x>711</x>
+          <y>379</y>
         </sideLengths>
-        <startdepth>3</startdepth>
-        <width>1</width>
-        <weight>5</weight>
-        <polygonType>Rectangle</polygonType>
+        <immovable>False</immovable>
+        <startdepth>0</startdepth>
+        <width>2</width>
+        <name>rv</name>
+        <loc>3802,563</loc>
+        <weight>30</weight>
       </item>
-      <item>
-        <name>box</name>
-        <loc>3390,0</loc>
+      <item rotation="0">
+        <sideLengths>
+          <x>362</x>
+          <y>269</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>2</width>
+        <name>trailer</name>
+        <loc>4057,139</loc>
+        <weight>20</weight>
+      </item>
+      <item rotation="0">
         <sideLengths>
           <x>50</x>
           <y>100</y>
         </sideLengths>
+        <immovable>False</immovable>
         <startdepth>3</startdepth>
         <width>1</width>
+        <name>box</name>
+        <loc>3847,165</loc>
         <weight>5</weight>
-        <polygonType>Rectangle</polygonType>
       </item>
-      <item>
-        <name>rv</name>
-        <loc>3550,357</loc>
+      <item rotation="0">
         <sideLengths>
-          <x>711</x>
-          <y>379</y>
+          <x>50</x>
+          <y>50</y>
         </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3844,245</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3837,58</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3787,189</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3805,255</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3784,68</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>100</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3683,63</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>100</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3689,172</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>100</x>
+          <y>100</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3576,76</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>100</x>
+          <y>80</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3591,165</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>130</x>
+          <y>130</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3475,82</loc>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3522,189</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3498,190</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3531,218</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3479,180</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3627,234</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3755,250</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3725,247</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3373,58</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3368,122</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3314,66</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3306,130</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3258,55</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3261,107</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3208,38</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>50</x>
+          <y>50</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3146,49</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3226,74</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3228,102</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3202,72</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3118,32</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3277,144</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3333,163</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3389,150</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3366,165</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3393,176</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3598,227</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3628,261</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3754,281</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3693,248</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3726,275</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>25</x>
+          <y>25</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>box</name>
+        <loc>3862,279</loc>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>2048</x>
+          <y>901</y>
+        </sideLengths>
+        <immovable>True</immovable>
         <startdepth>0</startdepth>
-        <width>2</width>
-        <weight>30</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item>
-        <name>trailer</name>
-        <loc>3600,300</loc>
-        <sideLengths>
-          <x>362</x>
-          <y>269</y>
-        </sideLengths>
-        <startdepth>2</startdepth>
-        <width>2</width>
-        <weight>20</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1200,454</loc>
-        <count>2</count>
-        <bosses>0</bosses>
-        <type>hippie</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1400,454</loc>
-        <count>1</count>
-        <bosses>0</bosses>
-        <type>cowboy</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>1500,454</loc>
-        <count>2</count>
-        <bosses>0</bosses>
-        <type>nerd</type>
-        <weight>1</weight>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>2000,454</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>cowboy</type>
-        <weight>1</weight>
+        <width>4</width>
+        <name>building_green_big</name>
+        <loc>5474,458</loc>
+        <weight>10</weight>
       </item>
     </items>
-    <story>
-      <element>
-        <aveXTrigger>1</aveXTrigger>
-        <startX>100</startX>
-        <cutsceneLength>4000</cutsceneLength>
-        <pathSegments>
-          <pathSegment>
-            <begin>
-              <x>0</x>
-              <y>0</y>
-            </begin>
-            <end>
-              <x>300</x>
-              <y>0</y>
-            </end>
-            <msSpan>1000</msSpan>
-            <msStart>1000</msStart>
-          </pathSegment>
-        </pathSegments>
-        <audioElements>
-          <audioElement>
-            <audioPath>Sound\water_shot</audioPath>
-            <startTime>100</startTime>
-          </audioElement>
-        </audioElements>
-        <animations>
-          <animation animationName='cow' entranceMS='150' startDepth='2'>
-            <timeAnimationStruct time='200'>walk</timeAnimationStruct>
-            <startLocation>
-              <x>400</x>
-              <y>64</y>
-            </startLocation>
-            <action>
-              <actionEnum>Move</actionEnum>
-              <time>500</time>
-              <intensity>30</intensity>
-            </action>
-            <action>
-              <actionEnum>Move</actionEnum>
-              <time>1500</time>
-              <intensity>-30</intensity>
-            </action>
-            <action>
-              <actionEnum>Stop</actionEnum>
-              <time>2500</time>
-            </action>
-          </animation>
-        </animations>
-      </element>
-    </story>
-    <location>
-      <x>237</x><y>169</y>
-    </location>
+    <location>1024,150</location>
     <number>0</number>
     <prereq />
   </level>
-  <level length='3500' name='levelTwo'>
+  <level length="3500" name="levelTwo">
     <adj>0</adj>
+    <horizonPath>horizon1</horizonPath>
     <background>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>background01_1</path>
         <location>
           <x>0</x>
           <y>0</y>
         </location>
       </graphic>
-      <graphic>
+      <graphic rotation="0" scale="1">
         <path>background01_2</path>
         <location>
           <x>2048</x>
@@ -419,67 +792,70 @@
         </location>
       </graphic>
     </background>
-    <horizonPath>horizon1</horizonPath>
     <items>
-      <item>
+      <item rotation="0">
+        <sideLengths>
+          <x>1</x>
+          <y>1</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>0</startdepth>
+        <width>1</width>
         <name>log</name>
         <loc>139,541</loc>
-        <radius>30</radius>
+        <weight>1</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>1</x>
+          <y>1</y>
+        </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
-        <weight>1</weight>
-        <polygonType>Circle</polygonType>
-      </item>
-      <item>
         <name>log</name>
         <loc>175,530</loc>
-        <radius>50</radius>
+        <weight>2</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>1</x>
+          <y>1</y>
+        </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
-        <weight>2</weight>
-        <polygonType>Circle</polygonType>
-      </item>
-      <item>
         <name>log</name>
         <loc>235,520</loc>
-        <radius>70</radius>
+        <weight>4</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>1</x>
+          <y>1</y>
+        </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
-        <weight>4</weight>
-        <polygonType>Circle</polygonType>
-      </item>
-      <item>
         <name>box</name>
         <loc>312,507</loc>
-        <radius>90</radius>
+        <weight>5</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>1</x>
+          <y>1</y>
+        </sideLengths>
+        <immovable>False</immovable>
         <startdepth>0</startdepth>
         <width>1</width>
-        <weight>5</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item>
         <name>box</name>
         <loc>410,480</loc>
-        <radius>110</radius>
-        <startdepth>0</startdepth>
-        <width>1</width>
         <weight>8</weight>
-        <polygonType>Rectangle</polygonType>
-      </item>
-      <item>
-        <name>enemies</name>
-        <loc>800,454</loc>
-        <count>4</count>
-        <bosses>0</bosses>
-        <type>cow</type>
-        <weight>1</weight>
       </item>
     </items>
-    <location>
-      <x>237</x>
-      <y>169</y>
-    </location>
+    <location>0,0</location>
     <number>1</number>
     <prereq>1</prereq>
   </level>
-</root>
+</Root>
