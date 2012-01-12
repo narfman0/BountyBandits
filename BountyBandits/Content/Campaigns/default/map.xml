@@ -213,7 +213,7 @@
         <startdepth>0</startdepth>
         <width>2</width>
         <name>trailer</name>
-        <loc>1550,300</loc>
+        <loc>1558,136</loc>
         <weight>20</weight>
       </item>
       <item rotation="0">
@@ -225,7 +225,7 @@
         <startdepth>1</startdepth>
         <width>3</width>
         <name>rv</name>
-        <loc>2550,357</loc>
+        <loc>2543,191</loc>
         <weight>30</weight>
       </item>
       <item rotation="0">
@@ -249,7 +249,7 @@
         <startdepth>0</startdepth>
         <width>2</width>
         <name>rv</name>
-        <loc>3802,563</loc>
+        <loc>3798,191</loc>
         <weight>30</weight>
       </item>
       <item rotation="0">
@@ -261,7 +261,7 @@
         <startdepth>2</startdepth>
         <width>2</width>
         <name>trailer</name>
-        <loc>4057,139</loc>
+        <loc>4041,134</loc>
         <weight>20</weight>
       </item>
       <item rotation="0">
@@ -273,7 +273,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3847,165</loc>
+        <loc>3816,165</loc>
         <weight>5</weight>
       </item>
       <item rotation="0">
@@ -285,7 +285,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3844,245</loc>
+        <loc>3817,244</loc>
         <weight>5</weight>
       </item>
       <item rotation="0">
@@ -297,7 +297,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3837,58</loc>
+        <loc>3815,62</loc>
         <weight>5</weight>
       </item>
       <item rotation="0">
@@ -309,7 +309,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3787,189</loc>
+        <loc>3763,186</loc>
         <weight>5</weight>
       </item>
       <item rotation="0">
@@ -321,7 +321,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3805,255</loc>
+        <loc>3784,250</loc>
         <weight>1</weight>
       </item>
       <item rotation="0">
@@ -333,7 +333,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3784,68</loc>
+        <loc>3762,76</loc>
         <weight>5</weight>
       </item>
       <item rotation="0">
@@ -753,7 +753,7 @@
         <startdepth>3</startdepth>
         <width>1</width>
         <name>box</name>
-        <loc>3862,279</loc>
+        <loc>3834,280</loc>
         <weight>1</weight>
       </item>
       <item rotation="0">
@@ -765,7 +765,7 @@
         <startdepth>0</startdepth>
         <width>4</width>
         <name>building_green_big</name>
-        <loc>5474,458</loc>
+        <loc>5574,450</loc>
         <weight>10</weight>
       </item>
     </items>

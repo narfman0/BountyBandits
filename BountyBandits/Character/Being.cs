@@ -274,7 +274,8 @@ namespace BountyBandits.Character
             if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 * getSpeedMultiplier()
                 && isTouchingGeom(true) && !currAnimation.name.Contains("attack"))
             {
-                body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y));
+                body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y) * .95f);
+                body.Position += (force * .1f);
                 isFacingLeft = (force.X > 0) ? false : true;
             }
         }
