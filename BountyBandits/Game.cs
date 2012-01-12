@@ -864,8 +864,12 @@ namespace BountyBandits
                     player.unlocked.add(mapManager, difficulty);
                 SaveManager.saveCharacter(player);
             }
+            bool autoProgress = mapManager.getCurrentLevel().autoProgress;
             mapManager.incrementCurrentLevel(increment);
-            currentState.setState(GameState.WorldMap);
+            if (autoProgress)
+                newLevel();
+            else
+                currentState.setState(GameState.WorldMap);
         }
         public Vector2 getAvePosition()
         {

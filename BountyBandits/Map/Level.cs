@@ -24,6 +24,7 @@ namespace BountyBandits.Map
         public List<StoryElement> storyElements = new List<StoryElement>();
         public List<GameItem> items = new List<GameItem>();
         public List<SpawnPoint> spawns = new List<SpawnPoint>();
+        public bool autoProgress = false;
         #endregion
 
         public void resetStoryElements()
@@ -46,7 +47,9 @@ namespace BountyBandits.Map
         public static Level fromXML(XmlElement node, Game gameref, String campaignPath)
         {
             Level newLvl = new Level();
-            newLvl.number =int.Parse(node.GetElementsByTagName("number")[0].FirstChild.Value);
+            newLvl.number = int.Parse(node.GetElementsByTagName("number")[0].FirstChild.Value);
+            if(node.HasAttribute("autoProgress"))
+                newLvl.autoProgress = bool.Parse(node.GetAttribute("autoProgress"));
             newLvl.name = node.GetAttribute("name");
             foreach (string singleAdj in node.GetElementsByTagName("adj")[0].FirstChild.Value.Split(','))
             newLvl.adjacent.Add(Int32.Parse(singleAdj));
