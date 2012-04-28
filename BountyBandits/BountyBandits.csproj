@@ -110,6 +110,14 @@
     <Compile Include="Character\Enemy.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameItem.cs" />
+    <Compile Include="GameScreen\BaseGameScreen.cs" />
+    <Compile Include="GameScreen\CharacterSelectionScreen.cs" />
+    <Compile Include="GameScreen\CutsceneScreen.cs" />
+    <Compile Include="GameScreen\GameplayScreen.cs" />
+    <Compile Include="GameScreen\JoinScreen.cs" />
+    <Compile Include="GameScreen\MainScreen.cs" />
+    <Compile Include="GameScreen\MultiplayerScreen.cs" />
+    <Compile Include="GameScreen\WorldMapScreen.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Inventory\ItemClass.cs" />
     <Compile Include="Inventory\Item.cs" />

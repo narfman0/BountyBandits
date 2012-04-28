@@ -33,11 +33,14 @@ namespace BountyBandits
         public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 10000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
-        GameTime previousGameTime = new GameTime();
-        SpriteBatch spriteBatch;
+        public SpriteBatch spriteBatch;
         public Dictionary<Guid, Being> players = new Dictionary<Guid, Being>();
         public Dictionary<Guid, GameItem> activeItems;
-        StoryElement storyElement; double timeStoryElementStarted; Dictionary<int, Being> storyBeings;
+        
+        public StoryElement storyElement;
+        public Dictionary<int, Being> storyBeings;
+        public double timeStoryElementStarted;
+
         public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
         public AnimationManager animationManager;
@@ -53,9 +56,9 @@ namespace BountyBandits
         public NetworkManager network;
         public StateManager currentState;
         //choosing characters
-        List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
-        Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>(); int selectedMenuItem = 0;
-        List<Input> inputs = new List<Input>();
+        public List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
+        public Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>();
+        public List<Input> inputs = new List<Input>();
         public static Game instance;
         #endregion
         public Game()
@@ -77,7 +80,6 @@ namespace BountyBandits
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                 inputs.Add(new Input(playerIndex));
             inputs[0].useKeyboard = true;
-            currentState = new StateManager(this);
             network = new NetworkManager(this);
             base.Initialize();
         }
@@ -102,13 +104,13 @@ namespace BountyBandits
                     selectedMenuIndex.Add(playerIndex, -1);
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            currentState = new StateManager(this);
         }
         protected override void UnloadContent()
         {
         }
         protected override void Update(GameTime gameTime)
         {
-            float timeElapsed = (float)(gameTime.ElapsedGameTime.Milliseconds - previousGameTime.ElapsedGameTime.Milliseconds);
             network.update(gameTime);
             #region fullscreen
 #if WINDOWS
@@ -121,435 +123,9 @@ namespace BountyBandits
             }
 #endif
             #endregion
-            switch (currentState.getState())
-            {
-                #region RootMenu
-                case GameState.RootMenu:
-                    foreach (Input input in inputs)
-                    {
-                        input.update();
-                        updateMenu(input, Enum.GetValues(typeof(RootMenuOptions)).Length);
-                        if (input.getButtonHit(Buttons.A))
-                        {
-                            switch (selectedMenuItem)
-                            {
-                                case 0:
-                                    currentState.setState(GameState.CharacterSelection);
-                                    break;
-                                case 1:
-                                    currentState.setState(GameState.Multiplayer);
-                                    break;
-                                case 2:
-                                    Exit();
-                                    break;
-                            }
-                        }
-                    }
-                    break;
-                #endregion
-                #region Multiplayer
-                case GameState.Multiplayer:
-                    foreach (Input input in inputs)
-                    {
-                        input.update();
-                        updateMenu(input, Enum.GetValues(typeof(MultiplayerMenuOptions)).Length);
-                        if (input.getButtonHit(Buttons.A))
-                        {
-                            switch (selectedMenuItem)
-                            {
-                                case 0:
-                                    network.startServer();
-                                    currentState.setState(GameState.CharacterSelection);
-                                    break;
-                                case 1:
-                                    currentState.setState(GameState.JoinScreen);
-                                    break;
-                                case 2:
-                                    currentState.setState(GameState.RootMenu);
-                                    break;
-                            }
-                        }
-                    }
-                    break;
-                #endregion
-                #region JoinScreen
-                case GameState.JoinScreen:
-                    foreach (Input input in inputs)
-                    {
-                        input.update();
-                        updateMenu(input, Enum.GetValues(typeof(JoinMenuOptions)).Length);
-                        if (input.getButtonHit(Buttons.A))
-                        {
-                            switch (selectedMenuItem)
-                            {
-                                case 0://join
-                                    if (network.startClient())
-                                        currentState.setState(GameState.CharacterSelection);
-                                    break;
-                                case 1:
-                                    currentState.setState(GameState.Multiplayer);
-                                    break;
-                            }
-                        }
-#if WINDOWS
-                        foreach (Keys key in input.getKeysHit())
-                        {
-                            try
-                            {
-                                if (key == Keys.Back)
-                                    NetworkManager.joinString = NetworkManager.joinString.Substring(0, NetworkManager.joinString.Length - 1);
-                                else if (key >= Keys.A && key <= Keys.Z)
-                                    NetworkManager.joinString += Convert.ToChar(key);
-                                else if (key == Keys.OemPeriod)
-                                    NetworkManager.joinString += ".";
-                                else if (key == Keys.OemMinus)
-                                    NetworkManager.joinString += "-";
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e.StackTrace);
-                                NetworkManager.joinString = "";
-                            }
-                        }
-#else
-                        throw new NotImplementedException();
-#endif
-                    }
-                    break;
-                #endregion
-                #region cutscene
-                case GameState.Cutscene:
-                    double elapsedCutsceneTime = gameTime.TotalGameTime.TotalMilliseconds - timeStoryElementStarted;
-                    #region audio
-                    AudioElement audio = storyElement.popAudioElement(elapsedCutsceneTime);
-                    if (audio != null)
-                        Content.Load<SoundEffect>(mapManager.currentCampaignPath + audio.audioPath).Play();
-                    #endregion
-                    #region characters
-                    foreach (BeingController controller in storyElement.beingControllers)
-                    {
-                        if (!storyBeings.ContainsKey(controller.entranceMS) &&
-                            controller.entranceMS >= elapsedCutsceneTime)
-                        {
-                            Being being = new Being(controller.entranceMS + "", 1, this, controller.animationController, null, false, true);
-                            being.body.Position = controller.startLocation;
-                            being.changeAnimation(controller.animations[0].animationName);
-                            being.setDepth(controller.startDepth);
-                            storyBeings.Add(controller.entranceMS, being);
-                        }
-                        if (storyBeings.ContainsKey(controller.entranceMS))
-                        {
-                            Being being = storyBeings[controller.entranceMS];
-                            being.changeAnimation(controller.getCurrentAnimation(elapsedCutsceneTime));
-                            ActionStruct currentAction = controller.getCurrentAction(elapsedCutsceneTime);
-                            if (currentAction != null)
-                            {
-                                switch (currentAction.action)
-                                {
-                                    case ActionEnum.Jump:
-                                        being.jump();
-                                        break;
-                                    case ActionEnum.Stop:
-                                        being.body.ApplyForce(-being.body.Force);
-                                        break;
-                                    case ActionEnum.Move:
-                                        being.move(new Vector2(currentAction.intensity, 0));
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                    foreach (Being being in storyBeings.Values)
-                        being.update(gameTime);
-                    #endregion
-                    #region quit cutscene
-                    bool startPressed = false;
-                    foreach (Being player in players.Values)
-                        if (player.isLocal && player.input.getButtonHit(Buttons.Start))
-                            startPressed = true;
-                    double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
-                    if (startPressed || storyElement.cutsceneLength + 500 < msTotal - timeStoryElementStarted)
-                    {
-                        currentState.setState(GameState.Gameplay);
-                        storyElement = null;
-                        storyBeings.Clear();
-                    }
-                    #endregion
-                    physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
-                    break;
-                #endregion
-                #region gameplay
-                case GameState.Gameplay:
-                    if (isEndLevel())
-                        endLevel(true);
-                    foreach (Being currentplayer in players.Values)
-                    {
-                        if (currentplayer.getPos().X < 0)
-                            endLevel(false);
-                        currentplayer.update(gameTime);
-                        #region Input
-                        if (currentplayer.isLocal)
-                        {
-                            currentplayer.input.update();
-                            if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickLeft))
-                                currentplayer.move(new Vector2(-FORCE_AMOUNT, 0));
-                            if (currentplayer.input.getButtonDown(Buttons.LeftThumbstickRight))
-                                currentplayer.move(new Vector2(FORCE_AMOUNT, 0));
-                            if (currentplayer.input.getButtonHit(Buttons.A))
-                            {
-                                if (currentplayer.menu.isMenuActive() && 
-                                    currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data && 
-                                    currentplayer.unusedAttr > 0)
-                                {
-                                    if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
-                                    else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
-                                    else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
-                                    else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
-                                    currentplayer.unusedAttr--;
-                                }
-                                currentplayer.jump();
-                            }
-                            if (currentplayer.input.getButtonHit(Buttons.X))
-                                currentplayer.attack("attack1");
-                            if (currentplayer.input.getButtonHit(Buttons.Back))
-                                currentplayer.menu.toggleMenu();
-                            if (currentplayer.input.getButtonDown(Buttons.DPadDown))
-                                if (currentplayer.menu.isMenuActive())
-                                    currentplayer.menu.changeMenuItem(false);
-                                else
-                                    currentplayer.lane(false);
-                            if (currentplayer.input.getButtonDown(Buttons.DPadUp))
-                                if (currentplayer.menu.isMenuActive())
-                                    currentplayer.menu.changeMenuItem(true);
-                                else
-                                    currentplayer.lane(true);
-                            if (currentplayer.input.getButtonHit(Buttons.DPadRight))
-                                currentplayer.menu.changeMenuScreen(true);
-                            if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
-                                currentplayer.menu.changeMenuScreen(false);
-                            if (currentplayer.input.getButtonHit(Buttons.Start))
-                                endLevel(false);
-#if WINDOWS
-                            if (Keyboard.GetState().IsKeyDown(Keys.F2))
-                                endLevel(false);
-#endif
-                            if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
-                            {
-                                //pick up closest item and throw the equipped one on the ground
-                                DropItem dropItem = getClosestDropItem(currentplayer);
-                                if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < DROP_ITEM_MAX_DISTANCE)
-                                {
-                                    Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
-                                    currentplayer.getItemManager().putItem(dropItem.getItem());
-                                    if (playerItem != null)
-                                    {
-                                        dropItem.setItem(playerItem);
-                                        dropItem.body.LinearVelocity.Y += 25f;
-                                        dropItem.body.ApplyTorque((float)rand.NextDouble() * .25f - .125f);
-                                    }
-                                    else
-                                        activeItems.Remove(dropItem.guid);
-                                }
-                            }
-#if DEBUG
-                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
-                                spawnManager.spawnGroup("sumo", 1, 1);
-                            if (Keyboard.GetState().IsKeyDown(Keys.F4))
-                                foreach (Being player in players.Values)
-                                    player.giveXP(xpManager.getXPToLevelUp(player.level - 1));
-                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F5) && Keyboard.GetState().IsKeyDown(Keys.F5))
-                            {
-                                dropItem(1 * currentplayer.body.Position, currentplayer);
-                            }
-                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F6) && Keyboard.GetState().IsKeyDown(Keys.F6))
-                            {
-                                string[] chartypes = {"amish","buddhistmonk","cow","cowboy","frenchman","godzilla",
-                                                         "governator","hippie","hitler","kimjongil","mexican","mountie",
-                                                     "nerd","obama","panda","pedobear","pirate","seal","shakespeare","sloth",
-                                                     "stalin","sumo","tikiSmile","tikiTeeth"};
-                                spawnManager.spawnGroup(chartypes[rand.Next(chartypes.Length)], 1, 1);
-                            }
-                            if (inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
-                            {
-                                GameItem gameItem = new GameItem();
-                                gameItem.loc = getAvePosition() + new Vector2(32, res.ScreenHeight);
-                                gameItem.polygonType = PhysicsPolygonType.Rectangle;
-                                gameItem.sideLengths = new Vector2((float)rand.NextDouble() * 32f + 32f, (float)rand.NextDouble() * 32f + 32f);
-                                gameItem.weight = 1;
-                                gameItem.name = "box";
-                                gameItem.startdepth = (uint)rand.Next(4);
-                                addGameItem(gameItem);
-                            }
-#endif
-                        }
-                        #endregion
-                    }
-                    if (!network.isClient())
-                        spawnManager.update(gameTime);
-                    else
-                        spawnManager.updateEnemies(gameTime);
-                    physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
-                    #region initiate cutscene
-                    storyElement = mapManager.getCurrentLevel().popStoryElement(getAvePosition().X);
-                    if (storyElement != null)
-                    {
-                        timeStoryElementStarted = gameTime.TotalGameTime.TotalMilliseconds;
-                        currentState.setState(GameState.Cutscene);
-                        storyBeings = new Dictionary<int, Being>();
-                    }
-                    #endregion
-                    break;
-                #endregion
-                #region CharacterSelection
-                case GameState.CharacterSelection:
-                    foreach (Input input in inputs)
-                    {
-                        input.update();
-
-                        if (input.getButtonHit(Buttons.A))
-                        {
-                            bool isPlayerOneAdded = false;
-                            foreach (Being player in players.Values)
-                                if (player.input.useKeyboard)
-                                    isPlayerOneAdded = true;
-
-                            if (selectedMenuIndex[input.getPlayerIndex()] == -1)
-                                selectedMenuIndex[input.getPlayerIndex()] = 0;
-                            else
-                            {
-                                Being player = new Being(nameGenerator.NextName, 1, this, animationManager.getController("pirate"), input, true, true);
-                                if (selectedMenuIndex[input.getPlayerIndex()] != 0)
-                                {
-                                    int charindex = selectedMenuIndex[input.getPlayerIndex()] - 1;
-                                    String characterName = characterOptions[charindex];
-                                    player = SaveManager.loadCharacter(characterName, this);
-                                    player.isLocal = true;
-                                    player.isPlayer = true;
-                                    player.input = input;
-                                }
-                                List<Guid> killGuids = new List<Guid>();
-                                foreach (Being extraPlayer in players.Values)
-                                    if (extraPlayer.input.getPlayerIndex() == input.getPlayerIndex())
-                                        killGuids.Add(extraPlayer.guid);
-                                foreach (Guid kill in killGuids)
-                                    players.Remove(kill);
-                                players.Add(player.guid, player);
-                            }
-                            //go to worldmap if player one hits a
-                            if (isPlayerOneAdded && input.getPlayerIndex() == PlayerIndex.One)
-                            {
-                                if (network.isClient())
-                                {
-                                    network.sendFullPlayersUpdateClient();
-                                    currentState.setState(GameState.WorldMap);
-                                }
-                                else
-                                    foreach (Being player in players.Values)
-                                        if (player.input.getButtonHit(Buttons.A))
-                                            currentState.setState(GameState.WorldMap);
-                            }
-                        }
-                        if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
-                        {
-                            int selected = selectedMenuIndex[input.getPlayerIndex()] + 1;
-                            PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
-                            for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
-                            {
-                                if (input.getPlayerIndex() != indices[playerIndex] && //same player
-                                    selectedMenuIndex[indices[playerIndex]] == selected)
-                                {
-                                    selected++;
-                                    playerIndex = 0;
-                                }
-                            }
-                            selectedMenuIndex[input.getPlayerIndex()] = selected;
-                            if (characterOptions.Count < selected)
-                                selectedMenuIndex[input.getPlayerIndex()] = 0;
-                        }
-                        if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
-                        {
-                            int selected = selectedMenuIndex[input.getPlayerIndex()] - 1;
-                            PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
-                            for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
-                            {
-                                if (indices[playerIndex] != input.getPlayerIndex() && //same player
-                                    selected != 0 && selectedMenuIndex[indices[playerIndex]] == selected)
-                                {
-                                    selected--;
-                                    playerIndex = 0;
-                                }
-                            }
-                            if (selected <= 0)
-                                selected = 0;
-                            selectedMenuIndex[input.getPlayerIndex()] = selected;
-                        }
-                    }
-                    break;
-                #endregion
-                #region world map
-                case GameState.WorldMap:
-                    foreach (Being player in players.Values)
-                    {
-                        if (player.isLocal)
-                        {
-                            player.input.update();
-                            if (player.input.getButtonHit(Buttons.Back))
-                                currentState.setState(GameState.CharacterSelection);
-                            if (player.input.getButtonHit(Buttons.A) && !network.isClient())
-                                newLevel();
-                            if (player.input.getButtonHit(Buttons.DPadRight))
-                            {
-                                int newLevelIndex = mapManager.getCurrentLevelIndex() + 1;
-                                if (isUnlocked(newLevelIndex))
-                                {
-                                    if (network.isClient())
-                                        network.sendIncrementLevelRequest(true);
-                                    else
-                                    {
-                                        mapManager.incrementCurrentLevel(true);
-                                        if (network.isServer())
-                                            network.sendLevelIndexChange(newLevelIndex);
-                                    }
-                                }
-                            }
-                            if (player.input.getButtonHit(Buttons.DPadLeft))
-                            {
-                                int newLevelIndex = mapManager.getCurrentLevelIndex() - 1;
-                                if (isUnlocked(newLevelIndex))
-                                {
-                                    if (network.isClient())
-                                        network.sendIncrementLevelRequest(false);
-                                    else
-                                    {
-                                        mapManager.incrementCurrentLevel(false);
-                                        if (network.isServer())
-                                            network.sendLevelIndexChange(newLevelIndex);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    break;
-                #endregion
-            }
-            previousGameTime = gameTime;
+            currentState.getScreen().Update(gameTime);
             Thread.Sleep(5);
             base.Update(gameTime);
-        }
-        public void updateMenu(Input input, int menuItemCount)
-        {
-            if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
-            {
-                selectedMenuItem++;
-                if (selectedMenuItem >= menuItemCount)
-                    selectedMenuItem = menuItemCount - 1;
-            }
-            if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
-            {
-                selectedMenuItem--;
-                if (selectedMenuItem <= 0)
-                    selectedMenuItem = 0;
-            }
         }
         public void dropItem(Vector2 dropPosition, Being killedBeing)
         {
@@ -571,7 +147,7 @@ namespace BountyBandits
             activeItems.Add(item.guid, item);
             network.sendFullObjectsUpdate();
         }
-        private bool isUnlocked(int level)
+        public bool isUnlocked(int level)
         {
             foreach (Being player in players.Values)
                 if (!player.unlocked.isUnlocked(mapManager.guid, difficulty, level))
@@ -581,87 +157,8 @@ namespace BountyBandits
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            Vector2 fontPos;
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            switch (currentState.getState())
-            {
-                case GameState.RootMenu:
-                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    drawTextBorder(vademecumFont24, "Single Player", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Multiplayer", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Exit", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.Yellow : Color.White, Color.Black, 0);
-                    break;
-                case GameState.Multiplayer:
-                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    drawTextBorder(vademecumFont24, "Host", new Vector2(128, res.ScreenHeight / 2), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Join", new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 2 ? Color.Yellow : Color.White, Color.Black, 0);
-                    break;
-                case GameState.JoinScreen:
-                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    drawTextBorder(vademecumFont24, NetworkManager.joinString, new Vector2(128, res.ScreenHeight / 2 - 32), selectedMenuItem == 0 ? Color.Yellow : Color.White, Color.Black, 0);
-                    drawTextBorder(vademecumFont24, "Back", new Vector2(128, res.ScreenHeight / 2 - 64), selectedMenuItem == 1 ? Color.Yellow : Color.White, Color.Black, 0);
-                    break;
-                #region Cutscene
-                case GameState.Cutscene:
-                    try
-                    {
-                        drawGameplay(getAvePosition() + new Vector2(storyElement.getCameraOffset(gameTime).X, 0f));
-                        foreach (Being storyBeing in storyBeings.Values)
-                            storyBeing.draw();
-                    }
-                    catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
-                    drawTextBorder(vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black, Color.White, 0);
-                    break;
-                #endregion
-                #region Gameplay
-                case GameState.Gameplay:
-                    drawGameplay(getAvePosition());
-                    break;
-                #endregion
-                #region CharacterSelection
-                case GameState.CharacterSelection:
-                    spriteBatch.Draw(texMan.getTex("atmosphere"), new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    fontPos = new Vector2(1.0f, 1.0f);
-                    if (players.Count > 0)
-                        drawTextBorder(vademecumFont24, "Press " + Input.AFFIRM_KEY + " to start game", fontPos, Color.White, Color.Black, 0);
-                    fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
-                    foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
-                    {
-                        if (selectedMenuIndex[playerIndex] == -1)
-                            drawTextBorder(vademecumFont24, "Press " + Input.AFFIRM_KEY + "\nto join", fontPos, Color.White, Color.Black, 0);
-                        else
-                        {
-                            List<String> saves = new List<string>();
-                            saves.Add("Create New...");
-                            saves.AddRange(SaveManager.getAvailableCharacterNames());
-                            for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
-                            {
-                                Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.Yellow : Color.White;
-                                drawTextBorder(vademecumFont24, saves[saveIndex], fontPos, color, Color.Black, 0);
-                                fontPos.Y -= 28f;
-                            }
-                            fontPos.Y = res.ScreenHeight / 2;
-                        }
-                        fontPos.X += res.ScreenWidth / 4;
-                    }
-                    break;
-                #endregion
-                #region worldmap
-                case GameState.WorldMap:
-                    spriteBatch.Draw(mapManager.worldBackground, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
-                    foreach (Level level in mapManager.getLevels())
-                        spriteBatch.Draw(easyLevel, level.loc, Color.White);
-                    const string chooseLevelStr = "Choose level, A to start game";
-                    drawTextBorder(vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - vademecumFont24.MeasureString(chooseLevelStr).X / 2, 1f), Color.Black, Color.DarkGray, 0);
-                    spriteBatch.Draw(texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2), Color.White);
-                    drawTextBorder(vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168), Color.Black, Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 168 - 32), Color.Black, Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, "Level length:", new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 96), Color.Black, Color.DarkGray, 0);
-                    drawTextBorder(vademecumFont24, mapManager.getCurrentLevel().levelLength.ToString(), new Vector2(res.ScreenWidth - texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - texMan.getTex("mapInfo").Height / 2 + 96 - 32), Color.Black, Color.DarkGray, 0);
-                    break;
-                #endregion
-            }
+            currentState.getScreen().Draw(gameTime);
             spriteBatch.End();
             base.Draw(gameTime);
         }
