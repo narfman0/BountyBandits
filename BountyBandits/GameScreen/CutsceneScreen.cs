@@ -12,11 +12,12 @@ namespace BountyBandits.GameScreen
 {
     public class CutsceneScreen : BaseGameScreen
     {
+        private GameTime previousGameTime;
+
         public CutsceneScreen(Game game) : base(game) { }
 
         public override void Update(GameTime gameTime) 
         {
-            float timeElapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
             double elapsedCutsceneTime = gameTime.TotalGameTime.TotalMilliseconds - game.timeStoryElementStarted;
             #region audio
             AudioElement audio = game.storyElement.popAudioElement(elapsedCutsceneTime);
@@ -73,7 +74,13 @@ namespace BountyBandits.GameScreen
                 game.storyBeings.Clear();
             }
             #endregion
+            #region Physics
+            if (previousGameTime == null)
+                previousGameTime = gameTime;
+            float timeElapsed = (float)gameTime.TotalGameTime.TotalMilliseconds - (float)previousGameTime.TotalGameTime.TotalMilliseconds;
             game.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+            previousGameTime = gameTime;
+            #endregion
         }
 
         public override void Draw(GameTime gameTime)

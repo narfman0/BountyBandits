@@ -12,6 +12,8 @@ namespace BountyBandits.GameScreen
 {
     public class GameplayScreen : BaseGameScreen
     {
+        private GameTime previousGameTime;
+
         public GameplayScreen(Game game) : base(game) { }
 
         public override void Update(GameTime gameTime)
@@ -124,9 +126,13 @@ namespace BountyBandits.GameScreen
                 game.spawnManager.update(gameTime);
             else
                 game.spawnManager.updateEnemies(gameTime);
-
-            float timeElapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
+            #region Physics
+            if (previousGameTime == null)
+                previousGameTime = gameTime;
+            float timeElapsed = (float)gameTime.TotalGameTime.TotalMilliseconds - (float)previousGameTime.TotalGameTime.TotalMilliseconds;
+            previousGameTime = gameTime;
             game.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+            #endregion
             #region initiate cutscene
             game.storyElement = game.mapManager.getCurrentLevel().popStoryElement(game.getAvePosition().X);
             if (game.storyElement != null)
