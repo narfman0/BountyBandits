@@ -363,7 +363,9 @@ namespace BountyBandits
             }
             bool autoProgress = mapManager.getCurrentLevel().autoProgress;
             mapManager.incrementCurrentLevel(increment);
-            if (autoProgress)
+            //if the level is supposed to go seemlessly to the next stage 
+            //without worldmap, and the user hasn't quit early, go to next level
+            if (autoProgress && increment)
                 newLevel();
             else
                 currentState.setState(GameState.WorldMap);
