@@ -60,16 +60,9 @@ namespace BountyBandits.Map
             newLvl.loc = XMLUtil.fromXMLVector2(node.GetElementsByTagName("location")[0]);
             newLvl.horizon = gameref.Content.Load<Texture2D>(campaignPath + node.GetElementsByTagName("horizonPath")[0].FirstChild.Value);
             foreach (XmlElement item in node.GetElementsByTagName("items")[0].ChildNodes)
-            {
-                string name = "";
-                foreach (XmlNode itemChild in item.ChildNodes)
-                    if (itemChild.Name.Equals("name"))
-                        name = itemChild.FirstChild.Value;
-                if (name.Equals("enemies"))
-                    newLvl.spawns.Add(SpawnPoint.fromXML(item));
-                else
-                    newLvl.items.Add(GameItem.fromXML(item));
-            }
+                newLvl.items.Add(GameItem.fromXML(item));
+            foreach (XmlElement item in node.GetElementsByTagName("spawns")[0].ChildNodes)
+                newLvl.spawns.Add(SpawnPoint.fromXML(item));
             XmlNodeList storyNodes = node.GetElementsByTagName("story");
             if(storyNodes.Count>0 && storyNodes[0].ChildNodes.Count>0)
                 foreach (XmlNode item in storyNodes[0].ChildNodes)

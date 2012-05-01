@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <Root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length="10000" name="Wine Country" autoProgress="true">
+  <level length="10000" name="Wine Country" autoProgress="True">
     <adj>1</adj>
     <horizonPath>desertysun</horizonPath>
     <background>
@@ -757,11 +757,21 @@
         <weight>1</weight>
       </item>
     </items>
+    <spawns>
+      <enemy>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>nerd</type>
+        <name>nerd</name>
+        <weight>10</weight>
+        <loc>1083,84</loc>
+      </enemy>
+    </spawns>
     <location>1024,150</location>
     <number>0</number>
     <prereq />
   </level>
-  <level length="3500" name="levelTwo">
+  <level length="3500" name="levelTwo" autoProgress="False">
     <adj>0</adj>
     <horizonPath>horizon1</horizonPath>
     <background>
@@ -842,6 +852,7 @@
         <weight>8</weight>
       </item>
     </items>
+    <spawns />
     <location>0,0</location>
     <number>1</number>
     <prereq>1</prereq>
