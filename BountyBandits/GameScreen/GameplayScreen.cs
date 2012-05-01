@@ -137,9 +137,7 @@ namespace BountyBandits.GameScreen
             game.storyElement = game.mapManager.getCurrentLevel().popStoryElement(game.getAvePosition().X);
             if (game.storyElement != null)
             {
-                game.timeStoryElementStarted = gameTime.TotalGameTime.TotalMilliseconds;
                 game.currentState.setState(GameState.Cutscene);
-                game.storyBeings = new Dictionary<int, Being>();
             }
             #endregion
         }

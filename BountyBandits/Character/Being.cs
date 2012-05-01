@@ -87,7 +87,7 @@ namespace BountyBandits.Character
             if (!isDead && !currAnimation.name.Contains("attack"))
             {
                 changeAnimation(attackName);
-                if (isTouchingGeom(true))
+                if (isTouchingGeom(true) != null)
                     body.LinearVelocity /= 2f;
             }
         }
@@ -230,23 +230,30 @@ namespace BountyBandits.Character
                 unusedAttr += 5;
             }
         }
-        public bool isTouchingGeom(bool countGround)
+        public Geom isTouchingGeom(bool countGround)
         {
             foreach (Geom geometry in gameref.physicsSimulator.GeomList)
                 if (geom != geometry &&
                     (geom.CollisionCategories & geometry.CollisionCategories) != CollisionCategory.None &&
-                    AABB.Intersect(ref geom.AABB, ref geometry.AABB))
+                    AABB.Intersect(ref geom.AABB, ref geometry.AABB) && geom.Collide(geometry))
                     if (countGround || !geometry.Equals(gameref.groundGeom))
-                        return true;
-            return false;
+                        return geom;
+            return null;
         }
         public void jump()
         {
             if (Environment.TickCount - timeOfLastJump > 750 && !isDead)
             {
                 timeOfLastJump = Environment.TickCount;
-                if (isTouchingGeom(true))
-                    body.ApplyForce(new Vector2(0, 250 + 4 * getStat(StatType.Strength) + 4 * getStat(StatType.Agility)));
+                Geom touching = isTouchingGeom(true);
+                if (touching != null)
+                {
+                    float jumpForce = 250 + 4 * getStat(StatType.Strength) + 4 * getStat(StatType.Agility);
+                    //Vector2 pos = body.Position;
+                    //Feature nearest = touching.GetNearestFeature(ref pos, 1);
+                    Vector2 featureNormal = new Vector2(0, 1);//nearest.Normal;
+                    body.ApplyForce(jumpForce * featureNormal);
+                }
             }
         }
         public bool lane(bool up)
@@ -257,7 +264,7 @@ namespace BountyBandits.Character
             {
                 if (up) setCollisionCategories((CollisionCategory)((int)geom.CollisionCategories / 2));
                 else setCollisionCategories((CollisionCategory)(2 * (int)geom.CollisionCategories));
-                if (isTouchingGeom(false))
+                if (isTouchingGeom(false) != null)
                     if (up) setCollisionCategories((CollisionCategory)(2 * (int)geom.CollisionCategories));
                     else setCollisionCategories((CollisionCategory)((int)geom.CollisionCategories / 2));
                 else
@@ -272,7 +279,7 @@ namespace BountyBandits.Character
         public void move(Vector2 force)
         {
             if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 * getSpeedMultiplier()
-                && isTouchingGeom(true) && !currAnimation.name.Contains("attack"))
+                && isTouchingGeom(true) != null && !currAnimation.name.Contains("attack"))
             {
                 body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y) * .95f);
                 body.Position += (force * .1f);

@@ -32,7 +32,7 @@ namespace BountyBandits.Character
             Being targetBeing = gameref.players[targetPlayer];
             if (targetBeing.getDepth() < getDepth()) lane(true);
             else if (targetBeing.getDepth() > getDepth()) lane(false);
-            if (isTouchingGeom(false) &&
+            if (isTouchingGeom(false) != null &&
                 body.LinearVelocity.X < .01f &&
                 getPos().Y + 10 < targetBeing.getPos().Y)
                 jump();

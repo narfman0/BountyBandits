@@ -45,7 +45,7 @@ namespace BountyBandits
                 Vector2 posOffset = new Vector2(side * (gameref.res.ScreenWidth / 2 + enemy.controller.frames[0].Width + 18), enemy.controller.frames[0].Height + 1),
                     avePosition = gameref.getAvePosition();
                 enemy.body.Position = new Vector2(avePosition.X + posOffset.X, avePosition.Y - gameref.res.ScreenHeight / 2 + posOffset.Y);
-                while (enemy.isTouchingGeom(false))
+                while (enemy.isTouchingGeom(false) != null)
                     enemy.body.Position = new Vector2(enemy.body.Position.X + side * enemy.controller.frames[0].Width, enemy.body.Position.Y);
                 enemies.Add(enemy.guid, enemy);
                 gameref.network.sendNewEnemy(enemy);

@@ -36,11 +36,7 @@ namespace BountyBandits
         public SpriteBatch spriteBatch;
         public Dictionary<Guid, Being> players = new Dictionary<Guid, Being>();
         public Dictionary<Guid, GameItem> activeItems;
-        
         public StoryElement storyElement;
-        public Dictionary<int, Being> storyBeings;
-        public double timeStoryElementStarted;
-
         public SpriteFont vademecumFont24, vademecumFont12, vademecumFont18;
         public MapManager mapManager;
         public AnimationManager animationManager;

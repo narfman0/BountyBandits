@@ -12,13 +12,18 @@ namespace BountyBandits.GameScreen
 {
     public class CutsceneScreen : BaseGameScreen
     {
+        public Dictionary<int, Being> storyBeings;
+        public double timeStoryElementStarted;
         private GameTime previousGameTime;
 
-        public CutsceneScreen(Game game) : base(game) { }
+        public CutsceneScreen(Game game) : base(game) {
+            timeStoryElementStarted = Environment.TickCount;
+            storyBeings = new Dictionary<int, Being>();
+        }
 
         public override void Update(GameTime gameTime) 
         {
-            double elapsedCutsceneTime = gameTime.TotalGameTime.TotalMilliseconds - game.timeStoryElementStarted;
+            double elapsedCutsceneTime = Environment.TickCount - timeStoryElementStarted;
             #region audio
             AudioElement audio = game.storyElement.popAudioElement(elapsedCutsceneTime);
             if (audio != null)
@@ -27,18 +32,18 @@ namespace BountyBandits.GameScreen
             #region characters
             foreach (BeingController controller in game.storyElement.beingControllers)
             {
-                if (!game.storyBeings.ContainsKey(controller.entranceMS) &&
+                if (!storyBeings.ContainsKey(controller.entranceMS) &&
                     controller.entranceMS >= elapsedCutsceneTime)
                 {
                     Being being = new Being(controller.entranceMS + "", 1, game, controller.animationController, null, false, true);
                     being.body.Position = controller.startLocation;
                     being.changeAnimation(controller.animations[0].animationName);
                     being.setDepth(controller.startDepth);
-                    game.storyBeings.Add(controller.entranceMS, being);
+                    storyBeings.Add(controller.entranceMS, being);
                 }
-                if (game.storyBeings.ContainsKey(controller.entranceMS))
+                if (storyBeings.ContainsKey(controller.entranceMS))
                 {
-                    Being being = game.storyBeings[controller.entranceMS];
+                    Being being = storyBeings[controller.entranceMS];
                     being.changeAnimation(controller.getCurrentAnimation(elapsedCutsceneTime));
                     ActionStruct currentAction = controller.getCurrentAction(elapsedCutsceneTime);
                     if (currentAction != null)
@@ -58,7 +63,7 @@ namespace BountyBandits.GameScreen
                     }
                 }
             }
-            foreach (Being being in game.storyBeings.Values)
+            foreach (Being being in storyBeings.Values)
                 being.update(gameTime);
             #endregion
             #region quit cutscene
@@ -66,12 +71,11 @@ namespace BountyBandits.GameScreen
             foreach (Being player in game.players.Values)
                 if (player.isLocal && player.input.getButtonHit(Buttons.Start))
                     startPressed = true;
-            double msTotal = gameTime.TotalGameTime.TotalMilliseconds;
-            if (startPressed || game.storyElement.cutsceneLength + 500 < msTotal - game.timeStoryElementStarted)
+            if (startPressed || game.storyElement.cutsceneLength + 500 < Environment.TickCount - timeStoryElementStarted)
             {
                 game.currentState.setState(GameState.Gameplay);
                 game.storyElement = null;
-                game.storyBeings.Clear();
+                storyBeings.Clear();
             }
             #endregion
             #region Physics
@@ -88,7 +92,7 @@ namespace BountyBandits.GameScreen
             try
             {
                 game.drawGameplay(game.getAvePosition() + new Vector2(game.storyElement.getCameraOffset(gameTime).X, 0f));
-                foreach (Being storyBeing in game.storyBeings.Values)
+                foreach (Being storyBeing in storyBeings.Values)
                     storyBeing.draw();
             }
             catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
