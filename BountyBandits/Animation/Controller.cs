@@ -47,7 +47,6 @@ namespace BountyBandits.Animation
                         foreach (XmlNode node in monsterchild.ChildNodes)
                         {
                             AnimationInfo anim = new AnimationInfo();
-                            anim.slowIfTouchingGeom = true;
                             foreach (XmlNode subnode in node.ChildNodes)
                                 if (subnode.Name.Equals("name"))
                                     anim.name = subnode.FirstChild.Value;
@@ -59,8 +58,18 @@ namespace BountyBandits.Animation
                                     anim.keyframe = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("slowIfTouchingGeom"))
                                     anim.slowIfTouchingGeom = bool.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("stun"))
+                                    anim.stun = bool.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("aoe"))
+                                    anim.aoe = bool.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("force"))
                                     anim.force = XMLUtil.fromXMLVector2(subnode);
+                                else if (subnode.Name.Equals("targets"))
+                                    anim.targets = int.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("stunDuration"))
+                                    anim.stunDuration = int.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("dmgMultiplier"))
+                                    anim.dmgMultiplier = float.Parse(subnode.FirstChild.Value);
                             animations.Add(anim);
                         }
 
@@ -134,11 +143,12 @@ namespace BountyBandits.Animation
             return new AnimationInfo();
         }
     }
-    public struct AnimationInfo
+    public class AnimationInfo
     {
         public string name;
-        public int start, end, keyframe;
-        public bool slowIfTouchingGeom;
+        public int start, end, keyframe, targets = 5, stunDuration;
+        public bool slowIfTouchingGeom = true, stun = false, aoe = false;
+        public float dmgMultiplier = 1f;
         public Vector2 force;
     }
 }

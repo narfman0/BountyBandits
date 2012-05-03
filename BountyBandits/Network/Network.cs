@@ -294,6 +294,7 @@ namespace BountyBandits.Network
                         player.body.Position = player.body.Position + (difference * .1f);
                         player.isFacingLeft = state.isFacingLeft;
                         player.CurrentHealth = state.currentHP;
+                        player.stunDuration = state.stunDuration;
                         if (state.depth != player.getDepth())
                         {
                             player.timeOfLastDepthChange = Environment.TickCount;

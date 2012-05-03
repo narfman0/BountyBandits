@@ -25,7 +25,7 @@ namespace BountyBandits.Character
         private InventoryManager itemManager = new InventoryManager();
         private const int TIME_TO_CHANGE_DEPTHS = 300;
         int timeOfLastJump = 0, timeToNextHeal = 0;
-        public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0;
+        public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0, stunDuration = 0;
         public float currentspecial = 5;
         private float currentHealth = 5f, weight = 1f;
         public bool isFacingLeft = false, isDead = false, isMovingUp;
@@ -106,19 +106,24 @@ namespace BountyBandits.Character
             if ((toHit > (float)gameref.rand.NextDouble() * .1f) && !enemy.isDead &&
                 (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None)
             {
-                Vector2 dimensions = new Vector2(getRange(), controller.frames[getCurrentFrame()].Height + getStat(StatType.Range)),
-                    positionOffset = new Vector2(getFacingMultiplier() * controller.frames[getCurrentFrame()].Width / 2, 0);
+                Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(), controller.frames[getCurrentFrame()].Height + getStat(StatType.Range)),
+                    positionOffset = currAnimation.aoe ? Vector2.Zero : new Vector2(getFacingMultiplier() * controller.frames[getCurrentFrame()].Width / 2, 0);
                 Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, dimensions.X, dimensions.Y, positionOffset, 0);
                 collisionGeom.CollisionCategories = geom.CollisionCategories;
                 collisionGeom.CollidesWith = geom.CollidesWith;
 
                 if (enemy.geom.Collide(collisionGeom))
                 {
+                    if (currAnimation.stun)
+                    {
+                        enemy.stunDuration = currAnimation.stunDuration;
+                        enemy.changeAnimation("idle");
+                    }
                     int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
                     bool criticalHit = (getStat(StatType.Agility) - enemy.getStat(StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
                     if (currAnimation.name.Contains("attack"))
                     {
-                        float damage = getDamage();
+                        float damage = getDamage() * currAnimation.dmgMultiplier;
                         damage -= enemy.getStat(StatType.DamageReduction);
                         damage /= enemy.getDefense();
                         if (criticalHit)
@@ -149,7 +154,7 @@ namespace BountyBandits.Character
         }
         public void changeAnimation(string name)
         {
-            if (currAnimation.name != name)
+            if (currAnimation == null || currAnimation.name != name)
             {
                 if (isLocal || (this is Enemy && gameref.network.isServer()))
                     gameref.network.sendBeingAnimationChange(guid, name);
@@ -308,6 +313,10 @@ namespace BountyBandits.Character
         {
             if (!isDead)
             {
+                #region Stunned
+                stunDuration -= gameTime.ElapsedGameTime.Milliseconds;
+                stunDuration = Math.Max(0, stunDuration);
+                #endregion
                 #region Dead
                 if (CurrentHealth <= 0f)
                 {
