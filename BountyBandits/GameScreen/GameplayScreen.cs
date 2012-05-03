@@ -47,8 +47,48 @@ namespace BountyBandits.GameScreen
                         }
                         currentplayer.jump();
                     }
-                    if (currentplayer.input.getButtonHit(Buttons.X))
-                        currentplayer.attack("attack1");
+                    if (currentplayer.input.getButtonHit(Buttons.X)
+#if WINDOWS
+ || Mouse.GetState().LeftButton == ButtonState.Pressed
+#endif
+                        )
+                    {
+                        if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
+                            currentplayer.attack("attack2");
+                        else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
+                            currentplayer.attack("attack3");
+                        else
+                        {
+                            //pick up closest item and throw the equipped one on the ground
+                            DropItem dropItem = game.getClosestDropItem(currentplayer);
+                            if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
+                            {
+                                Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
+                                currentplayer.getItemManager().putItem(dropItem.getItem());
+                                if (playerItem != null)
+                                {
+                                    dropItem.setItem(playerItem);
+                                    dropItem.body.LinearVelocity.Y += 25f;
+                                    dropItem.body.ApplyTorque((float)game.rand.NextDouble() * .25f - .125f);
+                                }
+                                else
+                                    game.activeItems.Remove(dropItem.guid);
+                            }else
+                                currentplayer.attack("attack1");
+                        }
+                    }
+                    if (currentplayer.input.getButtonHit(Buttons.Y)
+#if WINDOWS
+ || Mouse.GetState().RightButton == ButtonState.Pressed
+#endif
+                        ){
+                            if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
+                                currentplayer.attack("attackCC");
+                            //else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
+                            //    currentplayer.attack("attack3");
+                            else
+                                currentplayer.attack("attackMove");
+                    }
                     if (currentplayer.input.getButtonHit(Buttons.Back))
                         currentplayer.menu.toggleMenu();
                     if (currentplayer.input.getButtonDown(Buttons.DPadDown))
@@ -71,24 +111,6 @@ namespace BountyBandits.GameScreen
                     if (Keyboard.GetState().IsKeyDown(Keys.F2))
                         game.endLevel(false);
 #endif
-                    if (currentplayer.input.getButtonHit(Buttons.RightShoulder))
-                    {
-                        //pick up closest item and throw the equipped one on the ground
-                        DropItem dropItem = game.getClosestDropItem(currentplayer);
-                        if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
-                        {
-                            Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
-                            currentplayer.getItemManager().putItem(dropItem.getItem());
-                            if (playerItem != null)
-                            {
-                                dropItem.setItem(playerItem);
-                                dropItem.body.LinearVelocity.Y += 25f;
-                                dropItem.body.ApplyTorque((float)game.rand.NextDouble() * .25f - .125f);
-                            }
-                            else
-                                game.activeItems.Remove(dropItem.guid);
-                        }
-                    }
 #if DEBUG
                     if (game.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
                         game.spawnManager.spawnGroup("sumo", 1, 1);

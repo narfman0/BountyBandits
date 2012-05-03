@@ -11,20 +11,32 @@
       <animation>
         <name>attack1</name>
         <start>50</start>
-        <end>70</end>
-        <keyframe>56</keyframe>
+        <end>63</end>
+        <keyframe>54</keyframe>
       </animation>
       <animation>
         <name>attack2</name>
-        <start>70</start>
-        <end>126</end>
-        <keyframe>94</keyframe>
+        <start>63</start>
+        <end>116</end>
+        <keyframe>84</keyframe>
       </animation>
       <animation>
         <name>attack3</name>
-        <start>125</start>
-        <end>155</end>
-        <keyframe>145</keyframe>
+        <start>116</start>
+        <end>141</end>
+        <keyframe>129</keyframe>
+      </animation>
+      <animation>
+        <name>attackMove</name>
+        <start>141</start>
+        <end>189</end>
+        <keyframe>150</keyframe>
+      </animation>
+      <animation>
+        <name>attackCC</name>
+        <start>189</start>
+        <end>220</end>
+        <keyframe>197</keyframe>
       </animation>
       <animation>
         <name>idle</name>
@@ -33,8 +45,8 @@
       </animation>
       <animation>
         <name>death1</name>
-        <start>155</start>
-        <end>200</end>
+        <start>220</start>
+        <end>265</end>
       </animation>
     </animations>
     <colorPermutations />

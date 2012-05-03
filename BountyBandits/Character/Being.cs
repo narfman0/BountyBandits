@@ -258,15 +258,13 @@ namespace BountyBandits.Character
         }
         public bool lane(bool up)
         {
-            if (Environment.TickCount - timeOfLastDepthChange > TIME_TO_CHANGE_DEPTHS && !isDead &&
-                ((up && geom.CollisionCategories != CollisionCategory.Cat1) ||
-                    (!up && geom.CollisionCategories != CollisionCategory.Cat4)))
+            if (!currAnimation.name.Contains("attack") && 
+                Environment.TickCount - timeOfLastDepthChange > TIME_TO_CHANGE_DEPTHS && !isDead &&
+                ((up && getDepth() != 0) || (!up && getDepth() != 3)))
             {
-                if (up) setCollisionCategories((CollisionCategory)((int)geom.CollisionCategories / 2));
-                else setCollisionCategories((CollisionCategory)(2 * (int)geom.CollisionCategories));
+                setDepth(getDepth() + (up ? -1 : 1));
                 if (isTouchingGeom(false) != null)
-                    if (up) setCollisionCategories((CollisionCategory)(2 * (int)geom.CollisionCategories));
-                    else setCollisionCategories((CollisionCategory)((int)geom.CollisionCategories / 2));
+                    setDepth(getDepth()  + (up ? -1 : 1));
                 else
                 {
                     timeOfLastDepthChange = Environment.TickCount;
@@ -299,11 +297,6 @@ namespace BountyBandits.Character
             CurrentHealth = (float)getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
 
-        }
-        public void setCollisionCategories(CollisionCategory newCat)
-        {
-            geom.CollisionCategories = newCat;
-            geom.CollidesWith = newCat;
         }
         public virtual void update(GameTime gameTime)
         {
@@ -420,7 +413,9 @@ namespace BountyBandits.Character
         }
         public void setDepth(int depth)
         {
-            setCollisionCategories(PhysicsHelper.depthToCollisionCategory(depth));
+            CollisionCategory newCat = PhysicsHelper.depthToCollisionCategory(depth);
+            geom.CollisionCategories = newCat;
+            geom.CollidesWith = newCat;
         }
         public int getCurrentFrame()
         {
