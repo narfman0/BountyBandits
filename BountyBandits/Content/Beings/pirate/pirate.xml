@@ -31,6 +31,11 @@
         <start>141</start>
         <end>189</end>
         <keyframe>150</keyframe>
+        <slowIfTouchingGeom>true</slowIfTouchingGeom>
+        <force>
+          <x>500</x>
+          <y>0</y>
+        </force>
       </animation>
       <animation>
         <name>attackCC</name>

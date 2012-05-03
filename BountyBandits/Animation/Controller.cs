@@ -47,6 +47,7 @@ namespace BountyBandits.Animation
                         foreach (XmlNode node in monsterchild.ChildNodes)
                         {
                             AnimationInfo anim = new AnimationInfo();
+                            anim.slowIfTouchingGeom = true;
                             foreach (XmlNode subnode in node.ChildNodes)
                                 if (subnode.Name.Equals("name"))
                                     anim.name = subnode.FirstChild.Value;
@@ -56,6 +57,10 @@ namespace BountyBandits.Animation
                                     anim.end = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("keyframe"))
                                     anim.keyframe = int.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("slowIfTouchingGeom"))
+                                    anim.slowIfTouchingGeom = bool.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("force"))
+                                    anim.force = XMLUtil.fromXMLVector2(subnode);
                             animations.Add(anim);
                         }
 
@@ -133,5 +138,7 @@ namespace BountyBandits.Animation
     {
         public string name;
         public int start, end, keyframe;
+        public bool slowIfTouchingGeom;
+        public Vector2 force;
     }
 }

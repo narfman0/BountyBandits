@@ -87,8 +87,14 @@ namespace BountyBandits.Character
             if (!isDead && !currAnimation.name.Contains("attack"))
             {
                 changeAnimation(attackName);
-                if (isTouchingGeom(true) != null)
+                if (isTouchingGeom(true) != null && currAnimation.slowIfTouchingGeom)
                     body.LinearVelocity /= 2f;
+                if (currAnimation.force != null)
+                {
+                    Vector2 force = currAnimation.force;
+                    force.X *= isFacingLeft ? -1 : 1;
+                    body.ApplyForce(force * body.Mass);
+                }
             }
         }
         public void attackCompute(Being enemy)
@@ -264,7 +270,7 @@ namespace BountyBandits.Character
             {
                 setDepth(getDepth() + (up ? -1 : 1));
                 if (isTouchingGeom(false) != null)
-                    setDepth(getDepth()  + (up ? -1 : 1));
+                    setDepth(getDepth()  + (up ? 1 : -1));
                 else
                 {
                     timeOfLastDepthChange = Environment.TickCount;
