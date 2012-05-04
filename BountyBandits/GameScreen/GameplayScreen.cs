@@ -14,16 +14,14 @@ namespace BountyBandits.GameScreen
     {
         private GameTime previousGameTime;
 
-        public GameplayScreen(Game game) : base(game) { }
-
         public override void Update(GameTime gameTime)
         {
-            if (game.isEndLevel())
-                game.endLevel(true);
-            foreach (Being currentplayer in game.players.Values)
+            if (Game.instance.isEndLevel())
+                Game.instance.endLevel(true);
+            foreach (Being currentplayer in Game.instance.players.Values)
             {
                 if (currentplayer.getPos().X < 0)
-                    game.endLevel(false);
+                    Game.instance.endLevel(false);
                 currentplayer.update(gameTime);
                 #region Input
                 if (currentplayer.isLocal)
@@ -60,7 +58,7 @@ namespace BountyBandits.GameScreen
                         else
                         {
                             //pick up closest item and throw the equipped one on the ground
-                            DropItem dropItem = game.getClosestDropItem(currentplayer);
+                            DropItem dropItem = Game.instance.getClosestDropItem(currentplayer);
                             if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
                             {
                                 Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
@@ -69,10 +67,10 @@ namespace BountyBandits.GameScreen
                                 {
                                     dropItem.setItem(playerItem);
                                     dropItem.body.LinearVelocity.Y += 25f;
-                                    dropItem.body.ApplyTorque((float)game.rand.NextDouble() * .25f - .125f);
+                                    dropItem.body.ApplyTorque((float)Game.instance.rand.NextDouble() * .25f - .125f);
                                 }
                                 else
-                                    game.activeItems.Remove(dropItem.guid);
+                                    Game.instance.activeItems.Remove(dropItem.guid);
                             }else
                                 currentplayer.attack("attack1");
                         }
@@ -106,67 +104,67 @@ namespace BountyBandits.GameScreen
                     if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
                         currentplayer.menu.changeMenuScreen(false);
                     if (currentplayer.input.getButtonHit(Buttons.Start))
-                        game.endLevel(false);
+                        Game.instance.endLevel(false);
 #if WINDOWS
                     if (Keyboard.GetState().IsKeyDown(Keys.F2))
-                        game.endLevel(false);
+                        Game.instance.endLevel(false);
 #endif
 #if DEBUG
-                    if (game.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
-                        game.spawnManager.spawnGroup("sumo", 1, 1);
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
+                        Game.instance.spawnManager.spawnGroup("sumo", 1, 1);
                     if (Keyboard.GetState().IsKeyDown(Keys.F4))
-                        foreach (Being player in game.players.Values)
-                            player.giveXP(game.xpManager.getXPToLevelUp(player.level - 1));
-                    if (game.inputs[0].keyPreviousState.IsKeyUp(Keys.F5) && Keyboard.GetState().IsKeyDown(Keys.F5))
+                        foreach (Being player in Game.instance.players.Values)
+                            player.giveXP(Game.instance.xpManager.getXPToLevelUp(player.level - 1));
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F5) && Keyboard.GetState().IsKeyDown(Keys.F5))
                     {
-                        game.dropItem(1 * currentplayer.body.Position, currentplayer);
+                        Game.instance.dropItem(1 * currentplayer.body.Position, currentplayer);
                     }
-                    if (game.inputs[0].keyPreviousState.IsKeyUp(Keys.F6) && Keyboard.GetState().IsKeyDown(Keys.F6))
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F6) && Keyboard.GetState().IsKeyDown(Keys.F6))
                     {
                         string[] chartypes = {"amish","buddhistmonk","cow","cowboy","frenchman","godzilla",
                                                          "governator","hippie","hitler","kimjongil","mexican","mountie",
                                                      "nerd","obama","panda","pedobear","pirate","seal","shakespeare","sloth",
                                                      "stalin","sumo","tikiSmile","tikiTeeth"};
-                        game.spawnManager.spawnGroup(chartypes[game.rand.Next(chartypes.Length)], 1, 1);
+                        Game.instance.spawnManager.spawnGroup(chartypes[Game.instance.rand.Next(chartypes.Length)], 1, 1);
                     }
-                    if (game.inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
                     {
                         GameItem gameItem = new GameItem();
-                        gameItem.loc = game.getAvePosition() + new Vector2(32, res.ScreenHeight);
+                        gameItem.loc = Game.instance.getAvePosition() + new Vector2(32, res.ScreenHeight);
                         gameItem.polygonType = PhysicsPolygonType.Rectangle;
-                        gameItem.sideLengths = new Vector2((float)game.rand.NextDouble() * 32f + 32f, (float)game.rand.NextDouble() * 32f + 32f);
+                        gameItem.sideLengths = new Vector2((float)Game.instance.rand.NextDouble() * 32f + 32f, (float)Game.instance.rand.NextDouble() * 32f + 32f);
                         gameItem.weight = 1;
                         gameItem.name = "box";
-                        gameItem.startdepth = (uint)game.rand.Next(4);
-                        game.addGameItem(gameItem);
+                        gameItem.startdepth = (uint)Game.instance.rand.Next(4);
+                        Game.instance.addGameItem(gameItem);
                     }
 #endif
                 }
                 #endregion
             }
-            if (!game.network.isClient())
-                game.spawnManager.update(gameTime);
+            if (!Game.instance.network.isClient())
+                Game.instance.spawnManager.update(gameTime);
             else
-                game.spawnManager.updateEnemies(gameTime);
+                Game.instance.spawnManager.updateEnemies(gameTime);
             #region Physics
             if (previousGameTime == null)
                 previousGameTime = gameTime;
             float timeElapsed = (float)gameTime.TotalGameTime.TotalMilliseconds - (float)previousGameTime.TotalGameTime.TotalMilliseconds;
             previousGameTime = gameTime;
-            game.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+            Game.instance.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
             #endregion
             #region initiate cutscene
-            game.storyElement = game.mapManager.getCurrentLevel().popStoryElement(game.getAvePosition().X);
-            if (game.storyElement != null)
+            Game.instance.storyElement = Game.instance.mapManager.getCurrentLevel().popStoryElement(Game.instance.getAvePosition().X);
+            if (Game.instance.storyElement != null)
             {
-                game.currentState.setState(GameState.Cutscene);
+                Game.instance.currentState.setState(GameState.Cutscene);
             }
             #endregion
         }
 
         public override void Draw(GameTime gameTime)
         {
-            game.drawGameplay(game.getAvePosition());
+            drawGameplay(Game.instance.getAvePosition());
         }
     }
 }

@@ -16,7 +16,7 @@ namespace BountyBandits.GameScreen
         public double timeStoryElementStarted;
         private GameTime previousGameTime;
 
-        public CutsceneScreen(Game game) : base(game) {
+        public CutsceneScreen() {
             timeStoryElementStarted = Environment.TickCount;
             storyBeings = new Dictionary<int, Being>();
         }
@@ -25,17 +25,17 @@ namespace BountyBandits.GameScreen
         {
             double elapsedCutsceneTime = Environment.TickCount - timeStoryElementStarted;
             #region audio
-            AudioElement audio = game.storyElement.popAudioElement(elapsedCutsceneTime);
+            AudioElement audio = Game.instance.storyElement.popAudioElement(elapsedCutsceneTime);
             if (audio != null)
-                game.Content.Load<SoundEffect>(game.mapManager.currentCampaignPath + audio.audioPath).Play();
+                Game.instance.Content.Load<SoundEffect>(Game.instance.mapManager.currentCampaignPath + audio.audioPath).Play();
             #endregion
             #region characters
-            foreach (BeingController controller in game.storyElement.beingControllers)
+            foreach (BeingController controller in Game.instance.storyElement.beingControllers)
             {
                 if (!storyBeings.ContainsKey(controller.entranceMS) &&
                     controller.entranceMS >= elapsedCutsceneTime)
                 {
-                    Being being = new Being(controller.entranceMS + "", 1, game, controller.animationController, null, false, true);
+                    Being being = new Being(controller.entranceMS + "", 1, Game.instance, controller.animationController, null, false, true);
                     being.body.Position = controller.startLocation;
                     being.changeAnimation(controller.animations[0].animationName);
                     being.setDepth(controller.startDepth);
@@ -68,13 +68,13 @@ namespace BountyBandits.GameScreen
             #endregion
             #region quit cutscene
             bool startPressed = false;
-            foreach (Being player in game.players.Values)
+            foreach (Being player in Game.instance.players.Values)
                 if (player.isLocal && player.input.getButtonHit(Buttons.Start))
                     startPressed = true;
-            if (startPressed || game.storyElement.cutsceneLength + 500 < Environment.TickCount - timeStoryElementStarted)
+            if (startPressed || Game.instance.storyElement.cutsceneLength + 500 < Environment.TickCount - timeStoryElementStarted)
             {
-                game.currentState.setState(GameState.Gameplay);
-                game.storyElement = null;
+                Game.instance.currentState.setState(GameState.Gameplay);
+                Game.instance.storyElement = null;
                 storyBeings.Clear();
             }
             #endregion
@@ -82,7 +82,7 @@ namespace BountyBandits.GameScreen
             if (previousGameTime == null)
                 previousGameTime = gameTime;
             float timeElapsed = (float)gameTime.TotalGameTime.TotalMilliseconds - (float)previousGameTime.TotalGameTime.TotalMilliseconds;
-            game.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+            Game.instance.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
             previousGameTime = gameTime;
             #endregion
         }
@@ -91,12 +91,12 @@ namespace BountyBandits.GameScreen
         {
             try
             {
-                game.drawGameplay(game.getAvePosition() + new Vector2(game.storyElement.getCameraOffset(gameTime).X, 0f));
+                drawGameplay(Game.instance.getAvePosition() + new Vector2(Game.instance.storyElement.getCameraOffset(gameTime).X, 0f));
                 foreach (Being storyBeing in storyBeings.Values)
                     storyBeing.draw();
             }
             catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
-            game.drawTextBorder(game.vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black, Color.White, 0);
+            drawTextBorder(Game.instance.vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black, Color.White, 0);
         }
     }
 }

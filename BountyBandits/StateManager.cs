@@ -8,14 +8,12 @@ namespace BountyBandits
 {
     public class StateManager
     {
-        private Game gameref;
         private GameState current = GameState.RootMenu;
         private BaseGameScreen screen;
 
-        public StateManager(Game gameref)
+        public StateManager()
         {
-            this.gameref = gameref;
-            screen = new MainScreen(gameref);
+            screen = new MainScreen();
         }
 
         public void setState(GameState newState){
@@ -25,29 +23,29 @@ namespace BountyBandits
             switch (current)
             {
                 case GameState.CharacterSelection:
-                    screen = new CharacterSelectionScreen(gameref);
+                    screen = new CharacterSelectionScreen();
                     break;
                 case GameState.Cutscene:
-                    screen = new CutsceneScreen(gameref);
+                    screen = new CutsceneScreen();
                     break;
                 case GameState.Gameplay:
-                    screen = new GameplayScreen(gameref);
+                    screen = new GameplayScreen();
                     break;
                 case GameState.JoinScreen:
-                    screen = new JoinScreen(gameref);
+                    screen = new JoinScreen();
                     break;
                 case GameState.Multiplayer:
-                    screen = new MultiplayerScreen(gameref);
+                    screen = new MultiplayerScreen();
                     break;
                 case GameState.RootMenu:
-                    screen = new MainScreen(gameref);
+                    screen = new MainScreen();
                     break;
                 case GameState.WorldMap:
-                    screen = new WorldMapScreen(gameref);
+                    screen = new WorldMapScreen();
                     break;
             }
             if(!skip)
-                gameref.network.sendGameStateUpdate();
+                Game.instance.network.sendGameStateUpdate();
         }
 
         public GameState getState() { return current; }

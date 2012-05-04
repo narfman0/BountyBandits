@@ -32,7 +32,7 @@ namespace BountyBandits.Character
                 items.RemoveAt(0);
         }
 
-        public void draw(Game gameref, Vector2 drawPos, int depth)
+        public void draw(Vector2 drawPos, int depth)
         {
             for(int i=0; i<items.Count; i++)
             {
@@ -51,7 +51,7 @@ namespace BountyBandits.Character
                         break;
                 }
                 text.yOffset += (Environment.TickCount - text.time) / 20;
-                gameref.drawTextBorder(gameref.vademecumFont12, text.text, drawPos + new Vector2(0, text.yOffset), color, Color.Black, depth);
+                Game.instance.currentState.getScreen().drawTextBorder(Game.instance.vademecumFont12, text.text, drawPos + new Vector2(0, text.yOffset), color, Color.Black, depth);
             }
         }
 
