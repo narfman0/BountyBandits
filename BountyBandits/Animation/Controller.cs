@@ -18,6 +18,17 @@ namespace BountyBandits.Animation
         public List<AnimationInfo> animations = new List<AnimationInfo>();
         public StatSet statRatios = new StatSet();
         public List<Color[]> permutations = new List<Color[]>();
+
+        //hiding constructor because it is only fromXML
+        private AnimationController() { }
+
+        public Vector2 getFrameDimensions(int frame)
+        {
+            if (frames.Count > frame)
+                return new Vector2(frames[frame].Width, frames[frame].Height);
+            return new Vector2(128, 128);
+        }
+
         public int PermutationCount { get {
             //int i = 1;
             //foreach (Color[] colors in permutations)
@@ -29,10 +40,15 @@ namespace BountyBandits.Animation
             return i;
         }}
 
-        public void fromXML(ContentManager content, string name)
+        public static AnimationController fromXML(ContentManager content, string name)
         {
-            this.name = name;
-            string xmlPath = @"Content\Beings\" + name + @"\" + name + ".xml";
+            AnimationController controller = new AnimationController();
+            controller.name = name;
+            string folderPath = @"Content\Beings\" + name + @"\";
+            bool isUnitTest = !Directory.Exists(folderPath);
+            if (isUnitTest)
+                folderPath = @"..\..\..\BountyBandits\" + folderPath;
+            string xmlPath = folderPath + name + ".xml";
             FileStream fs = new FileStream(xmlPath, FileMode.Open, FileAccess.Read);
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(fs);
@@ -58,8 +74,6 @@ namespace BountyBandits.Animation
                                     anim.keyframe = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("slowIfTouchingGeom"))
                                     anim.slowIfTouchingGeom = bool.Parse(subnode.FirstChild.Value);
-                                else if (subnode.Name.Equals("stun"))
-                                    anim.stun = bool.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("aoe"))
                                     anim.aoe = bool.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("force"))
@@ -70,32 +84,34 @@ namespace BountyBandits.Animation
                                     anim.stunDuration = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("dmgMultiplier"))
                                     anim.dmgMultiplier = float.Parse(subnode.FirstChild.Value);
-                            animations.Add(anim);
+                            controller.animations.Add(anim);
                         }
-
-                        int highestActiveFrame = 0;
-                        foreach (XmlNode node in monsterchild.ChildNodes)
-                            foreach (XmlNode subnode in node.ChildNodes)
-                                if (subnode.Name.Equals("end"))
-                                    if (int.Parse(subnode.FirstChild.Value) > highestActiveFrame)
-                                        highestActiveFrame = int.Parse(subnode.FirstChild.Value);
-                        for (int frameIndex = 1; frameIndex <= highestActiveFrame; ++frameIndex)
+                        if (!isUnitTest)
                         {
-                            string frameIndexOffset = "";
-                            if (frameIndex < 10) frameIndexOffset = "000";
-                            else if (frameIndex < 100) frameIndexOffset = "00";
-                            else if (frameIndex < 1000) frameIndexOffset = "0";
-                            string newFramePath = @"Beings\" + name + @"\" + name + frameIndexOffset + frameIndex.ToString();
-                            Texture2D newFrame = content.Load<Texture2D>(newFramePath);
-                            getAlphaFromTex(ref newFrame);
-                            frames.Add(newFrame);
+                            int highestActiveFrame = 0;
+                            foreach (XmlNode node in monsterchild.ChildNodes)
+                                foreach (XmlNode subnode in node.ChildNodes)
+                                    if (subnode.Name.Equals("end"))
+                                        if (int.Parse(subnode.FirstChild.Value) > highestActiveFrame)
+                                            highestActiveFrame = int.Parse(subnode.FirstChild.Value);
+                            for (int frameIndex = 1; frameIndex <= highestActiveFrame; ++frameIndex)
+                            {
+                                string frameIndexOffset = "";
+                                if (frameIndex < 10) frameIndexOffset = "000";
+                                else if (frameIndex < 100) frameIndexOffset = "00";
+                                else if (frameIndex < 1000) frameIndexOffset = "0";
+                                string newFramePath = @"Beings\" + name + @"\" + name + frameIndexOffset + frameIndex.ToString();
+                                Texture2D newFrame = content.Load<Texture2D>(newFramePath);
+                                getAlphaFromTex(ref newFrame);
+                                controller.frames.Add(newFrame);
+                            }
                         }
                     } else if (monsterchild.Name == "stats")
                         foreach (XmlNode node in monsterchild.ChildNodes)
                         {
                             StatType statType = (StatType)Enum.Parse(typeof(StatType), node.Attributes.GetNamedItem("type").Value);
                             int value = int.Parse(node.Attributes.GetNamedItem("value").Value);
-                            statRatios.addStatValue(statType, value);
+                            controller.statRatios.addStatValue(statType, value);
                         }
                     else if (monsterchild.Name == "colorPermutations")
                         foreach (XmlNode permutationNode in monsterchild.ChildNodes)
@@ -103,17 +119,18 @@ namespace BountyBandits.Animation
                             Color[] colors = new Color[permutationNode.ChildNodes.Count];
                             for (int colorIndex = 0; colorIndex < colors.Length; colorIndex++)
                                 colors[colorIndex] = XMLUtil.fromXMLColor(permutationNode.ChildNodes.Item(colorIndex));
-                            permutations.Add(colors);
+                            controller.permutations.Add(colors);
                         }
                 }
-                foreach(string str in Directory.GetFiles(@"Content\Beings\" + name))
-                    if (str.Contains("portrait"))
+                foreach (string str in Directory.GetFiles(folderPath))
+                    if (str.Contains("portrait") && !isUnitTest)
                     {
-                        portrait = content.Load<Texture2D>(@"Beings\" + name + @"\portrait");
-                        AnimationController.getAlphaFromTex(ref portrait);
+                        controller.portrait = content.Load<Texture2D>(@"Beings\" + name + @"\portrait");
+                        AnimationController.getAlphaFromTex(ref controller.portrait);
                         break;
                     }
             }
+            return controller;
         }
 
         /// <summary>
@@ -147,7 +164,7 @@ namespace BountyBandits.Animation
     {
         public string name;
         public int start, end, keyframe, targets = 5, stunDuration;
-        public bool slowIfTouchingGeom = true, stun = false, aoe = false;
+        public bool slowIfTouchingGeom = true, aoe = false;
         public float dmgMultiplier = 1f;
         public Vector2 force;
     }

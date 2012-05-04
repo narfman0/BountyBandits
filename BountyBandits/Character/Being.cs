@@ -45,6 +45,7 @@ namespace BountyBandits.Character
         public Menu menu = new Menu();
         #endregion
         #region Properties
+        public bool IsStunned {get { return stunDuration > 0; } }
         public float CurrentHealth
         {
             get { return currentHealth; }
@@ -52,7 +53,7 @@ namespace BountyBandits.Character
             {
                 float difference = value - currentHealth;
                 currentHealth = value;
-                if (Game.instance.network.isServer())
+                if (Game.instance.network != null && Game.instance.network.isServer())
                     gameref.network.sendBeingCurrentHP(guid, CurrentHealth);
             }
         }
@@ -97,60 +98,58 @@ namespace BountyBandits.Character
                 }
             }
         }
-        public void attackCompute(Being enemy)
+        public float attackCompute(Being enemy)
         {
-            float toHit = .95f; //calculate ths, prob from agility;
-            toHit = Math.Min(.95f, toHit);
-            toHit = Math.Max(.05f, toHit);
+            float toHit = .95f, damage = 0; //calculate ths, prob from agility;
+            toHit = Math.Max(.05f,Math.Min(.95f, toHit));
 
             if ((toHit > (float)gameref.rand.NextDouble() * .1f) && !enemy.isDead &&
                 (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None)
             {
-                Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(), controller.frames[getCurrentFrame()].Height + getStat(StatType.Range)),
-                    positionOffset = currAnimation.aoe ? Vector2.Zero : new Vector2(getFacingMultiplier() * controller.frames[getCurrentFrame()].Width / 2, 0);
+                Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(), controller.getFrameDimensions(getCurrentFrame()).Y + getStat(StatType.Range)),
+                    positionOffset = currAnimation.aoe ? Vector2.Zero : new Vector2(getFacingMultiplier() * controller.getFrameDimensions(getCurrentFrame()).X / 2, 0);
                 Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, dimensions.X, dimensions.Y, positionOffset, 0);
                 collisionGeom.CollisionCategories = geom.CollisionCategories;
                 collisionGeom.CollidesWith = geom.CollidesWith;
 
                 if (enemy.geom.Collide(collisionGeom))
                 {
-                    if (currAnimation.stun)
+                    if (currAnimation.stunDuration > 0)
                     {
-                        enemy.stunDuration = currAnimation.stunDuration;
+                        enemy.stunDuration = Math.Max(currAnimation.stunDuration, enemy.stunDuration);
                         enemy.changeAnimation("idle");
                     }
                     int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
                     bool criticalHit = (getStat(StatType.Agility) - enemy.getStat(StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
-                    if (currAnimation.name.Contains("attack"))
+                    damage = getDamage() * currAnimation.dmgMultiplier;
+                    damage -= enemy.getStat(StatType.DamageReduction);
+                    damage /= enemy.getDefense();
+                    if (criticalHit)
+                        damage *= 2;
+                    if (damage > 0)
                     {
-                        float damage = getDamage() * currAnimation.dmgMultiplier;
-                        damage -= enemy.getStat(StatType.DamageReduction);
-                        damage /= enemy.getDefense();
-                        if (criticalHit)
-                            damage *= 2;
-                        if (damage > 0)
+                        float lifeSteal = getLifeSteal();
+                        if (lifeSteal > 0f)
                         {
-                            float lifeSteal = getLifeSteal();
-                            if (lifeSteal > 0f)
-                            {
-                                CurrentHealth += damage * lifeSteal;
-                                combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
-                            }
-                            enemy.CurrentHealth -= damage;
-                            if(Game.instance.network.isServer())
-                                gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
-                            enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
+                            CurrentHealth += damage * lifeSteal;
+                            combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
                         }
-                        if (enemy.CurrentHealth <= 0f && isPlayer)
-                            foreach (Being being in gameref.players.Values)
-                                being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
-                        Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
-                        if (getStat(StatType.Knockback) > 0)
-                            enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
+                        enemy.CurrentHealth -= damage;
+                        if (Game.instance.network != null && Game.instance.network.isServer())
+                            gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
+                        enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                     }
+                    if (enemy.CurrentHealth <= 0f && isPlayer)
+                        foreach (Being being in gameref.players.Values)
+                            being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                    if(Game.instance.network != null)
+                        Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
+                    if (getStat(StatType.Knockback) > 0)
+                        enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
                 }
                 gameref.physicsSimulator.Remove(collisionGeom);
             }
+            return damage;
         }
         public void changeAnimation(string name)
         {
@@ -166,7 +165,7 @@ namespace BountyBandits.Character
         }
         public void draw()
         {
-            Vector2 drawPoint = Vector2.Zero;
+            Vector2 drawPoint = Vector2.Zero, frameDimensions = controller.getFrameDimensions(getCurrentFrame());
             currFrame += getAttackSpeed();
             if (currFrame >= currAnimation.end)
             {
@@ -195,17 +194,16 @@ namespace BountyBandits.Character
                     slidey -= 4 * Game.DEPTH_MULTIPLE;
                 }
                 slidey -= ((controller.frames[getCurrentFrame()].Height / 128) - 1) * 128f;
-                drawPoint = new Vector2(getPos().X - (controller.frames[getCurrentFrame()].Width / 2f) - slidex, getPos().Y - (controller.frames[getCurrentFrame()].Height / 2) - slidey);
+                drawPoint = new Vector2(getPos().X - (frameDimensions.X / 2f) - slidex, getPos().Y - (frameDimensions.Y / 2) - slidey);
             }
             else
-                drawPoint = new Vector2(getPos().X - (controller.frames[getCurrentFrame()].Width / 2f), getPos().Y + controller.frames[getCurrentFrame()].Height / 2f);
+                drawPoint = new Vector2(getPos().X - (frameDimensions.X / 2f), getPos().Y + frameDimensions.Y / 2f);
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Texture2D texture = controller.frames[getCurrentFrame()];
             Vector2 avePos = gameref.getAvePosition(),
                 drawPos = new Vector2(drawPoint.X - avePos.X + gameref.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + gameref.res.ScreenHeight / 2);
-            combatText.draw(gameref, new Vector2(drawPos.X + texture.Width / 2, drawPos.Y), getDepth());
-            gameref.drawGameItem(texture, drawPos, 0, getDepth(), Vector2.One, effects, Vector2.Zero);
+            combatText.draw(gameref, new Vector2(drawPos.X + frameDimensions.X / 2, drawPos.Y), getDepth());
+            gameref.drawGameItem(controller.frames[getCurrentFrame()], drawPos, 0, getDepth(), Vector2.One, effects, Vector2.Zero);
         }
         public int getDepth()
         {
@@ -298,10 +296,11 @@ namespace BountyBandits.Character
         public void newLevel()
         {
             combatText = new CombatTextManager();
-            Texture2D tex = controller.frames[getCurrentFrame()];
-            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, tex.Width / 2, tex.Height, Weight);
-            body.Position = new Vector2(10 + tex.Width, 10 + tex.Height / 2);
-            geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, tex.Width / 2, tex.Height);
+            Vector2 texDimensions = controller.frames.Count == 0 ? new Vector2(128, 128) : 
+                controller.getFrameDimensions(getCurrentFrame());
+            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, texDimensions.X / 2, texDimensions.Y, Weight);
+            body.Position = new Vector2(10 + texDimensions.X, 10 + texDimensions.Y / 2);
+            geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, texDimensions.X / 2, texDimensions.Y);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
             setDepth(input == null ? gameref.rand.Next(4) : (int)input.getPlayerIndex());
@@ -343,13 +342,16 @@ namespace BountyBandits.Character
                 else if (!attackComputed && currAnimation.keyframe <= currFrame)
                 {
                     attackComputed = true;
-                    List<Being> enemies = new List<Being>();
-                    if (!isPlayer)
-                        enemies.AddRange(gameref.players.Values);
-                    else
-                        enemies.AddRange(gameref.spawnManager.enemies.Values);
-                    foreach (Being enemy in enemies)
-                        attackCompute(enemy);
+                    if (!IsStunned)
+                    {
+                        List<Being> enemies = new List<Being>();
+                        if (!isPlayer)
+                            enemies.AddRange(gameref.players.Values);
+                        else
+                            enemies.AddRange(gameref.spawnManager.enemies.Values);
+                        foreach (Being enemy in enemies)
+                            attackCompute(enemy);
+                    }
                 }
                 #endregion
                 #region Health regen
@@ -389,7 +391,7 @@ namespace BountyBandits.Character
         public float getRange()
         {
             //range of character from character midpoint
-            return controller.frames[getCurrentFrame()].Width / 2 + getStat(StatType.Range);
+            return controller.getFrameDimensions(getCurrentFrame()).X / 2 + getStat(StatType.Range);
         }
         public XmlElement asXML(XmlNode parentNode)
         {

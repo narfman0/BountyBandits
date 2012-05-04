@@ -58,7 +58,8 @@ namespace BountyBandits.Character
         public void add(Guid guid, string text, CombatTextType type)
         {
             items.Add(new CombatText(Environment.TickCount, text, type));
-            Game.instance.network.sendNewCombatText(guid, text, type);
+            if(Game.instance.network != null)
+                Game.instance.network.sendNewCombatText(guid, text, type);
         }
     }
 }

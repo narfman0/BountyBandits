@@ -37,8 +37,7 @@ namespace BountyBandits.Animation
                 String dirName = dirPath.Substring(dirPath.LastIndexOf('\\')+1);
                 if (dirName.Equals(controllerName))
                 {
-                    AnimationController baseController = new AnimationController();
-                    baseController.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
+                    AnimationController baseController = AnimationController.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]); ;
                     controllerMap.Add(baseController.name + "_p00", baseController);
 
                     int count = 0;
@@ -47,8 +46,7 @@ namespace BountyBandits.Animation
                         for (int dest = 0; dest < baseController.permutations[permutations].Length; dest++)
                         {
                             count++;
-                            AnimationController controller = new AnimationController();
-                            controller.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
+                            AnimationController controller = AnimationController.fromXML(gameref.Content, dirPath.Split('\\')[dirPath.Split('\\').Length - 1]);
                             for (int textureIndex = 0; textureIndex < controller.frames.Count; textureIndex++)
                             {
                                 Texture2D tex = controller.frames[textureIndex];

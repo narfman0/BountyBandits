@@ -60,19 +60,18 @@ namespace BountyBandits
         public Game()
         {
             instance = this;
+            rand = new Random();
+            activeItems = new Dictionary<Guid, GameItem>();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
         protected override void Initialize()
         {
-            activeItems = new Dictionary<Guid, GameItem>();
             res = Resolution.Initialize(graphics);
 #if XBOX
                 graphics.IsFullScreen = true;
 #endif
-
             spawnManager = new SpawnManager(this);
-            rand = new Random();
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                 inputs.Add(new Input(playerIndex));
             inputs[0].useKeyboard = true;
@@ -409,13 +408,13 @@ namespace BountyBandits
         }
         public void newLevel()
         {
-            physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
+            resetPhysics();
             foreach (Being player in players.Values)
                 if (player.isLocal)
                     player.newLevel();
             #region add gameitems
             activeItems.Clear();
-            if (!network.isClient())
+            if (network != null && !network.isClient())
             {
                 foreach (SpawnPoint spawn in mapManager.getCurrentLevel().spawns)
                     if (spawn.type != null)
@@ -426,16 +425,17 @@ namespace BountyBandits
             #endregion
             spawnManager.newLevel(mapManager.getCurrentLevel());
             mapManager.getCurrentLevel().resetStoryElements();
-            #region physics - add ground and side wall
-            const int GROUND_WIDTH = 10000;
-            const int GROUND_HEIGHT = 100;
+            currentState.setState(GameState.Gameplay);
+        }
+        public void resetPhysics()
+        {
+            physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
+            const int GROUND_WIDTH = 10000, GROUND_HEIGHT = 100;
             Body ground = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, GROUND_WIDTH, GROUND_HEIGHT, 100);
             groundGeom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, ground, GROUND_WIDTH, GROUND_HEIGHT);
             groundGeom.FrictionCoefficient = 1;
             ground.Position = new Vector2(GROUND_WIDTH / 2 - 32, -GROUND_HEIGHT / 2);
             ground.IsStatic = true;
-            #endregion
-            currentState.setState(GameState.Gameplay);
         }
         public void addGameItem(GameItem item)
         {
