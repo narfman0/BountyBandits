@@ -34,7 +34,14 @@ namespace BountyBandits.Character
         public Geom geom;
         public AnimationController controller;
         private float currFrame;
-        public AnimationInfo currAnimation;
+        public AnimationInfo currAnimation; 
+        /// <summary>
+        /// List to hold force frames. When the frame is hit, a force is applied.
+        /// This is a mutable list, whereas the one in currAnimation is immutable.
+        /// Each force will be popped off as it is applied, so the enxt ready
+        /// is always at index 0
+        /// </summary>
+        private List<ForceFrame> currAnimationForceFrames = new List<ForceFrame>();
         public Input input;
         public bool isPlayer, isLocal;
         public Guid guid;
@@ -100,12 +107,6 @@ namespace BountyBandits.Character
                 changeAnimation(attackName);
                 if (isTouchingGeom(true) != null && currAnimation.slowIfTouchingGeom)
                     body.LinearVelocity /= 2f;
-                if (currAnimation.force != null)
-                {
-                    Vector2 force = currAnimation.force;
-                    force.X *= isFacingLeft ? -1 : 1;
-                    body.ApplyForce(force * body.Mass);
-                }
             }
         }
         public float attackCompute(Being enemy)
@@ -173,6 +174,8 @@ namespace BountyBandits.Character
                 currFrame = currAnimation.start;
                 if (currAnimation.name.Contains("attack") && !gameref.network.isClient())
                     attackComputed = false;
+                foreach (ForceFrame frame in currAnimation.forces)
+                    currAnimationForceFrames.Add(frame.clone());
             }
         }
         public void draw()
@@ -324,6 +327,15 @@ namespace BountyBandits.Character
         {
             if (!isDead)
             {
+                #region Animation forces
+                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame)
+                {
+                    Vector2 force = currAnimationForceFrames[0].force;
+                    force.X *= isFacingLeft ? -1 : 1;
+                    body.ApplyForce(force * body.Mass);
+                    currAnimationForceFrames.RemoveAt(0);
+                }
+                #endregion
                 #region Stunned
                 stunDuration -= gameTime.ElapsedGameTime.Milliseconds;
                 stunDuration = Math.Max(0, stunDuration);

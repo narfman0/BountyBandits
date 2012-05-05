@@ -1,0 +1,74 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>pirate</name>
+    <animations>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>20</end>
+      </animation>
+      <animation>
+        <name>walk</name>
+        <start>20</start>
+        <end>65</end>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>65</start>
+        <end>89</end>
+        <keyframe>75</keyframe>
+      </animation>
+      <animation>
+        <name>attack3</name>
+        <start>89</start>
+        <end>118</end>
+        <keyframe>101</keyframe>
+      </animation>
+      <animation>
+        <name>attack2</name>
+        <start>118</start>
+        <end>156</end>
+        <keyframe>135</keyframe>
+        <dmgMultiplier>1.2</dmgMultiplier>
+      </animation>
+      <animation>
+        <name>attackMove</name>
+        <start>156</start>
+        <end>185</end>
+        <keyframe>163</keyframe>
+        <force frame='163'>
+          <x>800</x>
+          <y>0</y>
+        </force>
+        <force frame='178'>
+          <x>-800</x>
+          <y>0</y>
+        </force>
+      </animation>
+      <animation>
+        <name>attackCC</name>
+        <start>185</start>
+        <end>218</end>
+        <keyframe>211</keyframe>
+        <aoe>true</aoe>
+        <dmgMultiplier>.5</dmgMultiplier>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>218</start>
+        <end>239</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='5' />
+      <stat type='Magic' value='4' />
+      <stat type='Agility' value='4' />
+      <stat type='Speed' value='4' />
+      <stat type='Range' value='65' />
+      <stat type='Life' value='11' />
+      <stat type='Special' value='10' />
+    </stats>
+  </monster>
+</Root>

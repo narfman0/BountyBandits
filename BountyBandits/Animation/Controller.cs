@@ -77,7 +77,11 @@ namespace BountyBandits.Animation
                                 else if (subnode.Name.Equals("aoe"))
                                     anim.aoe = bool.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("force"))
-                                    anim.force = XMLUtil.fromXMLVector2(subnode);
+                                {
+                                    anim.forces.Add(new ForceFrame(
+                                        int.Parse(((XmlElement)subnode).GetAttribute("frame")),
+                                        XMLUtil.fromXMLVector2(subnode)));
+                                }
                                 else if (subnode.Name.Equals("targets"))
                                     anim.targets = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("stunDuration"))
@@ -160,12 +164,29 @@ namespace BountyBandits.Animation
             return new AnimationInfo();
         }
     }
+
     public class AnimationInfo
     {
         public string name;
         public int start, end, keyframe, targets = 5, stunDuration;
         public bool slowIfTouchingGeom = true, aoe = false;
         public float dmgMultiplier = 1f;
-        public Vector2 force;
+        public List<ForceFrame> forces = new List<ForceFrame>();
+
+    }
+
+    public class ForceFrame
+    {
+        public readonly int frame;
+        public readonly Vector2 force;
+        public ForceFrame(int frame, Vector2 force)
+        {
+            this.frame = frame;
+            this.force = force;
+        }
+        public ForceFrame clone()
+        {
+            return new ForceFrame(frame, new Vector2(force.X, force.Y));
+        }
     }
 }
