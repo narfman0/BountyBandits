@@ -26,4 +26,14 @@ namespace BountyBandits
     {
         Join, Back
     }
+    public enum BeingTypes
+    {
+        amish, buddhistmonk, cow, cowboy, frenchman, godzilla, governator,
+        hippie, hitler, kimjongil, mexican, mountie, nerd, obama, panda,
+        pedobear, seal, shakespeare, sloth, stalin, sumo, tikiSmile, tikiTeeth
+    }
+    public enum PlayerTypes
+    {
+        pirate
+    }
 }

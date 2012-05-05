@@ -21,7 +21,7 @@ namespace BountyBandits.Character
         #region Fields
         protected Game gameref;
         public string name;
-        private StatSet myStats = new StatSet();
+        private StatSet stats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
         private const int TIME_TO_CHANGE_DEPTHS = 300;
         int timeOfLastJump = 0, timeToNextHeal = 0;
@@ -58,7 +58,7 @@ namespace BountyBandits.Character
             }
         }
         public float Weight {
-            get { return weight + ((float)myStats.getStatValue(StatType.Strength) / 50f); }
+            get { return weight + ((float)stats.getStatValue(StatType.Strength) / 50f); }
             set { weight = value; } 
         }
         #endregion
@@ -73,8 +73,18 @@ namespace BountyBandits.Character
             this.isLocal = isLocal;
             this.input = input;
             changeAnimation("idle");
-            foreach (Stat stat in controller.statRatios.statsTable.Values)
-                myStats.setStatValue(stat.getType(), stat.getValue() * level);
+            if (isPlayer)
+            {
+                stats.setStatValue(StatType.Agility, 10);
+                stats.setStatValue(StatType.Life, 10);
+                stats.setStatValue(StatType.Magic, 10);
+                stats.setStatValue(StatType.Strength, 10);
+                stats.setStatValue(StatType.Speed, 10);
+                foreach (Stat stat in controller.statRatios.statsTable.Values)
+                    stats.addStatValue(stat.getType(), stat.getValue() * (level - 1));
+            }else
+                foreach (Stat stat in controller.statRatios.statsTable.Values)
+                    stats.setStatValue(stat.getType(), stat.getValue() * level);
             guid = Guid.NewGuid();
             newLevel();
         }
@@ -100,7 +110,7 @@ namespace BountyBandits.Character
         }
         public float attackCompute(Being enemy)
         {
-            float toHit = .95f, damage = 0; //calculate ths, prob from agility;
+            float toHit = .95f, damage = 0; //TODO calculate ths, prob from agility;
             toHit = Math.Max(.05f,Math.Min(.95f, toHit));
 
             if ((toHit > (float)gameref.rand.NextDouble() * .1f) && !enemy.isDead &&
@@ -119,13 +129,15 @@ namespace BountyBandits.Character
                         enemy.stunDuration = Math.Max(currAnimation.stunDuration, enemy.stunDuration);
                         enemy.changeAnimation("idle");
                     }
-                    int opposingRoll = 0; for (int i = 0; i < 5; ++i) opposingRoll += gameref.rand.Next(20);
-                    bool criticalHit = (getStat(StatType.Agility) - enemy.getStat(StatType.Agility) + gameref.rand.Next(100) > opposingRoll) ? true : false;
+
                     damage = getDamage() * currAnimation.dmgMultiplier;
                     damage -= enemy.getStat(StatType.DamageReduction);
                     damage /= enemy.getDefense();
-                    if (criticalHit)
+
+                    //Check crit
+                    if (getCritChance(enemy) >= Game.instance.rand.NextDouble())
                         damage *= 2;
+
                     if (damage > 0)
                     {
                         float lifeSteal = getLifeSteal();
@@ -216,11 +228,11 @@ namespace BountyBandits.Character
         public InventoryManager getItemManager() { return itemManager; }
         public int getStat(StatType type)
         {
-            return myStats.getStat(type).getValue() + itemManager.getStatBonus(type);
+            return stats.getStat(type).getValue() + itemManager.getStatBonus(type);
         }
         public void upgradeStat(StatType type, int value)
         {
-            myStats.addStatValue(type, value);
+            stats.addStatValue(type, value);
         }
         public Vector2 getPos()
         {
@@ -233,8 +245,8 @@ namespace BountyBandits.Character
             if (this.xp >= xpOfNextLevel)
             {
                 //TODOjrob make some fancy effect on levelup
-                myStats.setStatValue(StatType.Life, myStats.getStatValue(StatType.Life) + 1);
-                myStats.setStatValue(StatType.Special, myStats.getStatValue(StatType.Special) + 1);
+                stats.setStatValue(StatType.Life, stats.getStatValue(StatType.Life) + 1);
+                stats.setStatValue(StatType.Special, stats.getStatValue(StatType.Special) + 1);
                 xpOfNextLevel = gameref.xpManager.getXPToLevelUp(++level);
                 unusedAttr += 5;
             }
@@ -403,7 +415,7 @@ namespace BountyBandits.Character
             beingElement.SetAttribute("xpOfNextLevel", xpOfNextLevel.ToString());
             beingElement.SetAttribute("animationControllerName", controller.name);
             beingElement.SetAttribute("guid", guid.ToString());
-            beingElement.AppendChild(myStats.asXML(beingElement));
+            beingElement.AppendChild(stats.asXML(beingElement));
             beingElement.AppendChild(itemManager.asXML(beingElement));
             beingElement.AppendChild(unlocked.asXML(beingElement));
             return beingElement;
@@ -425,7 +437,7 @@ namespace BountyBandits.Character
             guid = new Guid(element.GetAttribute("guid"));
             unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
             foreach (Stat stat in stats.statsTable.Values)
-                myStats.setStatValue(stat.getType(), stat.getValue());
+                stats.setStatValue(stat.getType(), stat.getValue());
             itemManager = InventoryManager.fromXML((XmlElement)element.GetElementsByTagName("inventory").Item(0));
         }
         public void setDepth(int depth)
@@ -439,6 +451,10 @@ namespace BountyBandits.Character
             return (int)currFrame;
         }
         #region Gameplay getter functions
+        public float getCritChance(Being enemy)
+        {
+            return ((getStat(StatType.Agility) * .5f) / level - (enemy.getStat(StatType.Agility) * .1f) / enemy.level) / 100f;
+        }
         public float getAttackSpeed()
         {
             return (100f + getStat(StatType.Speed) + getStat(StatType.Agility) / 3) / 100f;

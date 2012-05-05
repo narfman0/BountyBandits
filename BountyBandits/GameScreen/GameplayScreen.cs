@@ -121,11 +121,9 @@ namespace BountyBandits.GameScreen
                     }
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F6) && Keyboard.GetState().IsKeyDown(Keys.F6))
                     {
-                        string[] chartypes = {"amish","buddhistmonk","cow","cowboy","frenchman","godzilla",
-                                                         "governator","hippie","hitler","kimjongil","mexican","mountie",
-                                                     "nerd","obama","panda","pedobear","pirate","seal","shakespeare","sloth",
-                                                     "stalin","sumo","tikiSmile","tikiTeeth"};
-                        Game.instance.spawnManager.spawnGroup(chartypes[Game.instance.rand.Next(chartypes.Length)], 1, 1);
+                        int num = Game.instance.rand.Next(Enum.GetValues(typeof(BeingTypes)).Length);
+                        BeingTypes spawnType = (BeingTypes)Enum.GetValues(typeof(BeingTypes)).GetValue(num);
+                        Game.instance.spawnManager.spawnGroup(spawnType.ToString(), 1, 1);
                     }
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F7) && Keyboard.GetState().IsKeyDown(Keys.F7))
                     {

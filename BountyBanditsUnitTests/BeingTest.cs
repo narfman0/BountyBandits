@@ -3,6 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using BountyBandits;
 using BountyBandits.Animation;
+using System.Collections.Generic;
+using BountyBandits.GameScreen;
+using Microsoft.Xna.Framework;
 
 namespace BountyBanditsUnitTests
 {
@@ -10,7 +13,6 @@ namespace BountyBanditsUnitTests
     public class BeingTest
     {
         private TestContext testContextInstance;
-
         public TestContext TestContext
         {
             get
@@ -22,30 +24,30 @@ namespace BountyBanditsUnitTests
                 testContextInstance = value;
             }
         }
+        private Dictionary<String, Being> beingsMap;
+        private BountyBandits.Game game;
 
         #region Additional test attributes
-        // 
-        //You can use the following additional attributes as you write your tests:
-        //
-        //Use ClassInitialize to run code before running the first test in the class
         //[ClassInitialize()]
         //public static void MyClassInitialize(TestContext testContext)
         //{
         //}
-        //
-        //Use ClassCleanup to run code after all tests in a class have run
+        
         //[ClassCleanup()]
         //public static void MyClassCleanup()
         //{
         //}
         //
-        //Use TestInitialize to run code before running each test
-        //[TestInitialize()]
-        //public void MyTestInitialize()
-        //{
-        //}
-        //
-        //Use TestCleanup to run code after each test has run
+        [TestInitialize()]
+        public void Initialize()
+        {
+            game = new BountyBandits.Game();
+            game.resetPhysics();
+            beingsMap = new Dictionary<String, Being>();
+            foreach (BeingTypes beingType in Enum.GetValues(typeof(BeingTypes)))
+                beingsMap.Add(beingType.ToString(), new Being(beingType.ToString(), 1, game, AnimationController.fromXML(game.Content, beingType.ToString()), null, true, false));
+        }
+        
         //[TestCleanup()]
         //public void MyTestCleanup()
         //{
@@ -56,15 +58,34 @@ namespace BountyBanditsUnitTests
         [TestMethod()]
         public void attackComputeTest()
         {
-            Game game = new Game();
-            game.resetPhysics();
-            Being attacker = new Being("test-attacker", 1, game, AnimationController.fromXML(game.Content, "pirate"), null, true, false);
-            Being target = new Being("test-target", 1, game, AnimationController.fromXML(game.Content, "nerd"), null, true, false);
-            attacker.setDepth(1);
-            target.setDepth(1);
-            float damage = attacker.attackCompute(target);
-            Console.Out.WriteLine("damage=" + damage);
-            Assert.IsTrue(damage > 0f);
+            foreach (PlayerTypes playerType in Enum.GetValues(typeof(PlayerTypes)))
+                foreach (BeingTypes beingType in Enum.GetValues(typeof(BeingTypes)))
+                    for (int level = 1; level < 99; level++)
+                    {
+                        Being attacker = new Being("test-" + playerType.ToString(), level, game, AnimationController.fromXML(game.Content, playerType.ToString()), null, true, false);
+                        Being target = new Being("test-target-" + beingType.ToString(), level, game, AnimationController.fromXML(game.Content, beingType.ToString()), null, false, false);
+                        attacker.body.Position = new Vector2(-48,0);
+                        target.body.Position = new Vector2(48, 0);
+                        attacker.isFacingLeft = false;
+                        target.isFacingLeft = true;
+                        attacker.setDepth(1);
+                        target.setDepth(1);
+                        float attackerDmg = attacker.attackCompute(target);
+                        float targetDmg = target.attackCompute(attacker);
+                        Assert.IsTrue(attackerDmg > level / 2);
+                        Assert.IsTrue(3 * targetDmg < attacker.getStat(BountyBandits.Stats.StatType.Life));
+                    }
+        }
+
+        [TestMethod()]
+        public void getCritChanceTest()
+        {
+            Being attacker = new Being("test-pirate", 1, game, AnimationController.fromXML(game.Content, "pirate"), null, true, false);
+            Being target = new Being("test-amish", 1, game, AnimationController.fromXML(game.Content, "amish"), null, true, false);
+            float pirateCrit = attacker.getCritChance(target);
+            float amishCrit = target.getCritChance(attacker);
+            Assert.AreEqual(pirateCrit, .05f, .05f);
+            Assert.AreEqual(amishCrit, .01f, .05f);
         }
     }
 }
