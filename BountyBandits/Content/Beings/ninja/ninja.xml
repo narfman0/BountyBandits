@@ -44,9 +44,13 @@
         <end>197</end>
         <keyframe>176</keyframe>
         <dmgMultiplier>.7</dmgMultiplier>
-        <force frame='176'>
+        <force frame='175'>
           <x>0</x>
           <y>-100</y>
+        </force>
+        <force isEnemy='true' frame='176'>
+          <x>-200</x>
+          <y>300</y>
         </force>
       </animation>
       <animation>

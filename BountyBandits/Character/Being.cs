@@ -115,54 +115,59 @@ namespace BountyBandits.Character
             toHit = Math.Max(.05f,Math.Min(.95f, toHit));
 
             if ((toHit > (float)gameref.rand.NextDouble() * .1f) && !enemy.isDead &&
-                (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None)
+                (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None &&
+                isInRange(enemy))
             {
-                Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(), controller.getFrameDimensions(getCurrentFrame()).Y + getStat(StatType.Range)),
-                    positionOffset = currAnimation.aoe ? Vector2.Zero : new Vector2(getFacingMultiplier() * controller.getFrameDimensions(getCurrentFrame()).X / 2, 0);
-                Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, dimensions.X, dimensions.Y, positionOffset, 0);
-                collisionGeom.CollisionCategories = geom.CollisionCategories;
-                collisionGeom.CollidesWith = geom.CollidesWith;
-
-                if (enemy.geom.Collide(collisionGeom))
+                if (currAnimation.stunDuration > 0)
                 {
-                    if (currAnimation.stunDuration > 0)
-                    {
-                        enemy.stunDuration = Math.Max(currAnimation.stunDuration, enemy.stunDuration);
-                        enemy.changeAnimation("idle");
-                    }
-
-                    damage = getDamage() * currAnimation.dmgMultiplier;
-                    damage -= enemy.getStat(StatType.DamageReduction);
-                    damage /= enemy.getDefense();
-
-                    //Check crit
-                    if (getCritChance(enemy) >= Game.instance.rand.NextDouble())
-                        damage *= 2;
-
-                    if (damage > 0)
-                    {
-                        float lifeSteal = getLifeSteal();
-                        if (lifeSteal > 0f)
-                        {
-                            CurrentHealth += damage * lifeSteal;
-                            combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
-                        }
-                        enemy.CurrentHealth -= damage;
-                        if (Game.instance.network != null && Game.instance.network.isServer())
-                            gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
-                        enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
-                    }
-                    if (enemy.CurrentHealth <= 0f && isPlayer)
-                        foreach (Being being in gameref.players.Values)
-                            being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
-                    if(Game.instance.network != null)
-                        Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
-                    if (getStat(StatType.Knockback) > 0)
-                        enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
+                    enemy.stunDuration = Math.Max(currAnimation.stunDuration, enemy.stunDuration);
+                    enemy.changeAnimation("idle");
                 }
-                gameref.physicsSimulator.Remove(collisionGeom);
+
+                damage = getDamage() * currAnimation.dmgMultiplier;
+                damage -= enemy.getStat(StatType.DamageReduction);
+                damage /= enemy.getDefense();
+
+                //Check crit
+                if (getCritChance(enemy) >= Game.instance.rand.NextDouble())
+                    damage *= 2;
+
+                if (damage > 0)
+                {
+                    float lifeSteal = getLifeSteal();
+                    if (lifeSteal > 0f)
+                    {
+                        CurrentHealth += damage * lifeSteal;
+                        combatText.add(enemy.guid, "+" + (int)damage, CombatTextType.HealthAdded);
+                    }
+                    enemy.CurrentHealth -= damage;
+                    if (Game.instance.network != null && Game.instance.network.isServer())
+                        gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
+                    enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
+                }
+                if (enemy.CurrentHealth <= 0f && isPlayer)
+                    foreach (Being being in gameref.players.Values)
+                        being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                if (Game.instance.network != null)
+                    Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
+                if (getStat(StatType.Knockback) > 0)
+                    enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
             }
             return damage;
+        }
+        public bool isInRange(Being target)
+        {
+            Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(),
+                controller.getFrameDimensions(getCurrentFrame()).Y + getStat(StatType.Range));
+            Vector2 positionOffset = currAnimation.aoe ? Vector2.Zero : 
+                new Vector2(getFacingMultiplier() * controller.getFrameDimensions(getCurrentFrame()).X / 2, 0);
+            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, 
+                body, dimensions.X, dimensions.Y, positionOffset, 0);
+            collisionGeom.CollisionCategories = geom.CollisionCategories;
+            collisionGeom.CollidesWith = geom.CollidesWith;
+            bool inRange = target.geom.Collide(collisionGeom);
+            gameref.physicsSimulator.Remove(collisionGeom);
+            return inRange;
         }
         public void changeAnimation(string name)
         {
@@ -239,7 +244,8 @@ namespace BountyBandits.Character
         }
         public Vector2 getPos()
         {
-            if (!isDead) return body.Position;
+            if (!isDead) 
+                return body.Position;
             else return pos;
         }
         public void giveXP(int xp)
@@ -328,12 +334,19 @@ namespace BountyBandits.Character
             if (!isDead)
             {
                 #region Animation forces
-                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame)
-                {
-                    Vector2 force = currAnimationForceFrames[0].force;
-                    force.X *= isFacingLeft ? -1 : 1;
-                    body.ApplyForce(force * body.Mass);
-                    currAnimationForceFrames.RemoveAt(0);
+                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame){
+                    if (!currAnimationForceFrames[0].isEnemy)
+                    {
+                        foreach (Being enemy in gameref.spawnManager.enemies.Values)
+                            if (isInRange(enemy))
+                                abilityForce(enemy);
+                        currAnimationForceFrames.RemoveAt(0);
+                    }
+                    else
+                    {
+                        abilityForce(this);
+                        currAnimationForceFrames.RemoveAt(0);
+                    }
                 }
                 #endregion
                 #region Stunned
@@ -461,6 +474,12 @@ namespace BountyBandits.Character
         public int getCurrentFrame()
         {
             return (int)currFrame;
+        }
+        private void abilityForce(Being being)
+        {
+            Vector2 force = currAnimationForceFrames[0].force;
+            force.X *= isFacingLeft ? -1 : 1;
+            being.body.ApplyForce(force * body.Mass);
         }
         #region Gameplay getter functions
         public float getCritChance(Being enemy)
