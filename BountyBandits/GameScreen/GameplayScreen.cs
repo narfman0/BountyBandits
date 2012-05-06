@@ -45,48 +45,40 @@ namespace BountyBandits.GameScreen
                         }
                         currentplayer.jump();
                     }
-                    if (currentplayer.input.getButtonHit(Buttons.X)
-#if WINDOWS
- || Mouse.GetState().LeftButton == ButtonState.Pressed
-#endif
-                        )
+                    if (currentplayer.input.getButtonHit(Buttons.X))
                     {
                         if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
                             currentplayer.attack("attack2");
                         else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
                             currentplayer.attack("attack3");
+                        else if (!pickupClosestItem(currentplayer))
+                            currentplayer.attack("attack1");
+                    }
+                    if (currentplayer.input.getButtonHit(Buttons.Y)){
+                        if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
+                            currentplayer.attack("attackCC");
+                        //else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
+                        //    currentplayer.attack("attack3");
                         else
-                        {
-                            //pick up closest item and throw the equipped one on the ground
-                            DropItem dropItem = Game.instance.getClosestDropItem(currentplayer);
-                            if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, currentplayer.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
-                            {
-                                Item playerItem = currentplayer.getItemManager().getItem(dropItem.getItem().getItemType());
-                                currentplayer.getItemManager().putItem(dropItem.getItem());
-                                if (playerItem != null)
-                                {
-                                    dropItem.setItem(playerItem);
-                                    dropItem.body.LinearVelocity.Y += 25f;
-                                    dropItem.body.ApplyTorque((float)Game.instance.rand.NextDouble() * .25f - .125f);
-                                }
-                                else
-                                    Game.instance.activeItems.Remove(dropItem.guid);
-                            }else
-                                currentplayer.attack("attack1");
-                        }
+                            currentplayer.attack("attackMove");
                     }
-                    if (currentplayer.input.getButtonHit(Buttons.Y)
 #if WINDOWS
- || Mouse.GetState().RightButton == ButtonState.Pressed
-#endif
-                        ){
-                            if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
-                                currentplayer.attack("attackCC");
-                            //else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
-                            //    currentplayer.attack("attack3");
-                            else
-                                currentplayer.attack("attackMove");
+                    if (currentplayer.input.useKeyboard)
+                    {
+                        if (currentplayer.input.isKeyHit(Keys.Q))
+                            currentplayer.attack("attack1");
+                        else if (currentplayer.input.isKeyHit(Keys.W))
+                            currentplayer.attack("attack2");
+                        else if (currentplayer.input.isKeyHit(Keys.E))
+                            currentplayer.attack("attack3");
+                        else if (currentplayer.input.isKeyHit(Keys.A))
+                            currentplayer.attack("attackMove");
+                        //else if (currentplayer.input.isKeyHit(Keys.S))
+                        //    currentplayer.attack("attackRanged");
+                        else if (currentplayer.input.isKeyHit(Keys.D))
+                            currentplayer.attack("attackCC");
                     }
+#endif
                     if (currentplayer.input.getButtonHit(Buttons.Back))
                         currentplayer.menu.toggleMenu();
                     if (currentplayer.input.getButtonDown(Buttons.DPadDown))
@@ -163,6 +155,32 @@ namespace BountyBandits.GameScreen
         public override void Draw(GameTime gameTime)
         {
             drawGameplay(Game.instance.getAvePosition());
+        }
+
+        /// <summary>
+        /// pick up closest item and throw the equipped one on the ground
+        /// </summary>
+        /// <param name="player">player to pick up item</param>
+        /// <returns>true if item picked up</returns>
+        private bool pickupClosestItem(Being player)
+        {
+            DropItem dropItem = Game.instance.getClosestDropItem(player);
+            if (dropItem != null && Vector2.DistanceSquared(dropItem.body.Position, player.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
+            {
+                Item playerItem = player.getItemManager().getItem(dropItem.getItem().getItemType());
+                player.getItemManager().putItem(dropItem.getItem());
+                if (playerItem != null)
+                {
+                    dropItem.setItem(playerItem);
+                    dropItem.body.LinearVelocity.Y += 25f;
+                    dropItem.body.ApplyTorque((float)Game.instance.rand.NextDouble() * .25f - .125f);
+                }
+                else
+                    Game.instance.activeItems.Remove(dropItem.guid);
+            }
+            else
+                return false;
+            return true;
         }
     }
 }

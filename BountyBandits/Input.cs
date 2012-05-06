@@ -24,23 +24,21 @@ namespace BountyBandits
             this.index = index;
             xboxButtonToKeyboardKey.Add(Buttons.A, Keys.Space);
             xboxButtonToKeyboardKey.Add(Buttons.X, Keys.Q);
-            xboxButtonToKeyboardKey.Add(Buttons.Y, Keys.E);
+            xboxButtonToKeyboardKey.Add(Buttons.Y, Keys.A);
             xboxButtonToKeyboardKey.Add(Buttons.Start, Keys.Escape);
             xboxButtonToKeyboardKey.Add(Buttons.DPadLeft, Keys.Left);
             xboxButtonToKeyboardKey.Add(Buttons.DPadRight, Keys.Right);
             xboxButtonToKeyboardKey.Add(Buttons.DPadUp, Keys.Up);
             xboxButtonToKeyboardKey.Add(Buttons.DPadDown, Keys.Down);
-            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickLeft, Keys.A);
-            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickRight, Keys.D);
-            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickUp, Keys.W);
-            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickDown, Keys.S);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickLeft, Keys.Left);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickRight, Keys.Right);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickUp, Keys.Up);
+            xboxButtonToKeyboardKey.Add(Buttons.LeftThumbstickDown, Keys.Down);
             xboxButtonToKeyboardKey.Add(Buttons.RightTrigger, Keys.LeftShift);
             xboxButtonToKeyboardKey.Add(Buttons.LeftTrigger, Keys.LeftAlt);
             xboxButtonToKeyboardKey.Add(Buttons.Back, Keys.C);
-            xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadUp, Keys.W);
-            xboxButtonToKeyboardKeySecondary.Add(Buttons.DPadDown, Keys.S);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.A, Keys.Enter);
-            xboxButtonToKeyboardKeySecondary.Add(Buttons.X, Keys.LeftControl);
+            //xboxButtonToKeyboardKeySecondary.Add(Buttons.X, Keys.LeftControl);
             update();
         }
 
@@ -96,6 +94,14 @@ namespace BountyBandits
                         keys.Add(key);
             }
             return keys;
+        }
+
+        public bool isKeyHit(Keys key)
+        {
+            foreach (Keys hitkey in getKeysHit())
+                if (key == hitkey)
+                    return true;
+            return false;
         }
 #endif
     }
