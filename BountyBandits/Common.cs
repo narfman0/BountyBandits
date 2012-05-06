@@ -34,6 +34,6 @@ namespace BountyBandits
     }
     public enum PlayerTypes
     {
-        pirate, russian
+        pirate, russian, ninja
     }
 }

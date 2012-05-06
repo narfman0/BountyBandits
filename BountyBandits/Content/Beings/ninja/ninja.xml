@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
 <Root>
   <monster>
-    <name>pirate</name>
+    <name>ninja</name>
     <animations>
       <animation>
         <name>idle</name>
@@ -11,69 +11,56 @@
       <animation>
         <name>walk</name>
         <start>20</start>
-        <end>65</end>
+        <end>50</end>
       </animation>
       <animation>
         <name>attack1</name>
-        <start>65</start>
-        <end>89</end>
-        <keyframe>75</keyframe>
+        <start>50</start>
+        <end>78</end>
+        <keyframe>58</keyframe>
       </animation>
       <animation>
         <name>attack3</name>
-        <start>89</start>
-        <end>118</end>
-        <keyframe>101</keyframe>
+        <start>78</start>
+        <end>93</end>
+        <keyframe>86</keyframe>
       </animation>
       <animation>
         <name>attack2</name>
-        <start>118</start>
-        <end>156</end>
-        <keyframe>135</keyframe>
+        <start>93</start>
+        <end>124</end>
+        <keyframe>107</keyframe>
         <dmgMultiplier>1.2</dmgMultiplier>
       </animation>
       <animation>
         <name>attackMove</name>
-        <start>156</start>
-        <end>185</end>
-        <keyframe>163</keyframe>
-        <force frame='163'>
-          <x>800</x>
-          <y>0</y>
-        </force>
-        <force frame='178'>
-          <x>-800</x>
-          <y>0</y>
-        </force>
+        <start>124</start>
+        <end>163</end>
+        <keyframe>151</keyframe>
       </animation>
       <animation>
         <name>attackCC</name>
-        <start>185</start>
-        <end>218</end>
-        <keyframe>211</keyframe>
-        <aoe>true</aoe>
-        <dmgMultiplier>.5</dmgMultiplier>
-        <force frame='190'>
+        <start>163</start>
+        <end>197</end>
+        <keyframe>176</keyframe>
+        <dmgMultiplier>.7</dmgMultiplier>
+        <force frame='176'>
           <x>0</x>
-          <y>300</y>
-        </force>
-        <force frame='206'>
-          <x>0</x>
-          <y>-600</y>
+          <y>-100</y>
         </force>
       </animation>
       <animation>
         <name>death1</name>
-        <start>218</start>
-        <end>239</end>
+        <start>197</start>
+        <end>228</end>
       </animation>
     </animations>
     <colorPermutations />
     <stats>
-      <stat type='Strength' value='5' />
+      <stat type='Strength' value='4' />
       <stat type='Magic' value='4' />
-      <stat type='Agility' value='4' />
-      <stat type='Speed' value='4' />
+      <stat type='Agility' value='5' />
+      <stat type='Speed' value='5' />
       <stat type='Range' value='65' />
       <stat type='Life' value='11' />
       <stat type='Special' value='10' />

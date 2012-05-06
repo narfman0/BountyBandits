@@ -27,7 +27,7 @@ namespace BountyBandits.GameScreen
                         Game.instance.selectedMenuIndex[input.getPlayerIndex()] = 0;
                     else
                     {
-                        Being player = new Being(Game.nameGenerator.NextName, 1, Game.instance, Game.instance.animationManager.getController("russian"), input, true, true);
+                        Being player = new Being(Game.nameGenerator.NextName, 1, Game.instance, Game.instance.animationManager.getController("ninja"), input, true, true);
                         if (Game.instance.selectedMenuIndex[input.getPlayerIndex()] != 0)
                         {
                             int charindex = Game.instance.selectedMenuIndex[input.getPlayerIndex()] - 1;
