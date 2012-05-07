@@ -10,6 +10,17 @@ namespace BountyBandits.GameScreen
 {
     public class CharacterSelectionScreen : BaseGameScreen
     {
+        private List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
+        private Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>();
+
+        public CharacterSelectionScreen()
+            : base()
+        {
+            foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
+                if (!selectedMenuIndex.ContainsKey(playerIndex))
+                    selectedMenuIndex.Add(playerIndex, -1);
+        }
+
         public override void Update(GameTime gameTime)
         {
             foreach (Input input in Game.instance.inputs)
@@ -23,15 +34,15 @@ namespace BountyBandits.GameScreen
                         if (player.input.useKeyboard)
                             isPlayerOneAdded = true;
 
-                    if (Game.instance.selectedMenuIndex[input.getPlayerIndex()] == -1)
-                        Game.instance.selectedMenuIndex[input.getPlayerIndex()] = 0;
+                    if (selectedMenuIndex[input.getPlayerIndex()] == -1)
+                        selectedMenuIndex[input.getPlayerIndex()] = 0;
                     else
                     {
                         Being player = new Being(Game.nameGenerator.NextName, 1, Game.instance.animationManager.getController("ninja"), input, true, true);
-                        if (Game.instance.selectedMenuIndex[input.getPlayerIndex()] != 0)
+                        if (selectedMenuIndex[input.getPlayerIndex()] != 0)
                         {
-                            int charindex = Game.instance.selectedMenuIndex[input.getPlayerIndex()] - 1;
-                            String characterName = Game.instance.characterOptions[charindex];
+                            int charindex = selectedMenuIndex[input.getPlayerIndex()] - 1;
+                            String characterName = characterOptions[charindex];
                             player = SaveManager.loadCharacter(characterName, Game.instance);
                             player.isLocal = true;
                             player.isPlayer = true;
@@ -61,29 +72,29 @@ namespace BountyBandits.GameScreen
                 }
                 if (input.getButtonHit(Buttons.DPadDown) || input.getButtonHit(Buttons.LeftThumbstickDown))
                 {
-                    int selected = Game.instance.selectedMenuIndex[input.getPlayerIndex()] + 1;
+                    int selected = selectedMenuIndex[input.getPlayerIndex()] + 1;
                     PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                     for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                     {
                         if (input.getPlayerIndex() != indices[playerIndex] && //same player
-                            Game.instance.selectedMenuIndex[indices[playerIndex]] == selected)
+                            selectedMenuIndex[indices[playerIndex]] == selected)
                         {
                             selected++;
                             playerIndex = 0;
                         }
                     }
-                    Game.instance.selectedMenuIndex[input.getPlayerIndex()] = selected;
-                    if (Game.instance.characterOptions.Count < selected)
-                        Game.instance.selectedMenuIndex[input.getPlayerIndex()] = 0;
+                    selectedMenuIndex[input.getPlayerIndex()] = selected;
+                    if (characterOptions.Count < selected)
+                        selectedMenuIndex[input.getPlayerIndex()] = 0;
                 }
                 if (input.getButtonHit(Buttons.DPadUp) || input.getButtonHit(Buttons.LeftThumbstickUp))
                 {
-                    int selected = Game.instance.selectedMenuIndex[input.getPlayerIndex()] - 1;
+                    int selected = selectedMenuIndex[input.getPlayerIndex()] - 1;
                     PlayerIndex[] indices = (PlayerIndex[])Enum.GetValues(typeof(PlayerIndex));
                     for (int playerIndex = 0; playerIndex < indices.Length; playerIndex++)
                     {
                         if (indices[playerIndex] != input.getPlayerIndex() && //same player
-                            selected != 0 && Game.instance.selectedMenuIndex[indices[playerIndex]] == selected)
+                            selected != 0 && selectedMenuIndex[indices[playerIndex]] == selected)
                         {
                             selected--;
                             playerIndex = 0;
@@ -91,7 +102,7 @@ namespace BountyBandits.GameScreen
                     }
                     if (selected <= 0)
                         selected = 0;
-                    Game.instance.selectedMenuIndex[input.getPlayerIndex()] = selected;
+                    selectedMenuIndex[input.getPlayerIndex()] = selected;
                 }
             }
         }
@@ -105,7 +116,7 @@ namespace BountyBandits.GameScreen
             fontPos = new Vector2(1.0f, res.ScreenHeight / 2);
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
             {
-                if (Game.instance.selectedMenuIndex[playerIndex] == -1)
+                if (selectedMenuIndex[playerIndex] == -1)
                     drawTextBorder(Game.instance.vademecumFont24, "Press " + Input.AFFIRM_KEY + "\nto join", fontPos, Color.White, Color.Black, 0);
                 else
                 {
@@ -114,7 +125,7 @@ namespace BountyBandits.GameScreen
                     saves.AddRange(SaveManager.getAvailableCharacterNames());
                     for (int saveIndex = 0; saveIndex < saves.Count; saveIndex++)
                     {
-                        Color color = Game.instance.selectedMenuIndex[playerIndex] == saveIndex ? Color.Yellow : Color.White;
+                        Color color = selectedMenuIndex[playerIndex] == saveIndex ? Color.Yellow : Color.White;
                         drawTextBorder(Game.instance.vademecumFont24, saves[saveIndex], fontPos, color, Color.Black, 0);
                         fontPos.Y -= 28f;
                     }

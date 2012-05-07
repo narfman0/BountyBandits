@@ -6,11 +6,23 @@ using Microsoft.Xna.Framework;
 using BountyBandits.Character;
 using Microsoft.Xna.Framework.Input;
 using BountyBandits.Map;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace BountyBandits.GameScreen
 {
     public class WorldMapScreen : BaseGameScreen
     {
+        private Texture2D easyLevel, extremeLevel, hardLevel, mediumLevel;
+
+        public WorldMapScreen()
+            : base()
+        {
+            easyLevel = Game.instance.Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "easyLevel");
+            extremeLevel = Game.instance.Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "extremeLevel");
+            hardLevel = Game.instance.Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "hardLevel");
+            mediumLevel = Game.instance.Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "mediumLevel");
+        }
+
         public override void Update(GameTime gameTime)
         {
             foreach (Being player in Game.instance.players.Values)
@@ -60,7 +72,7 @@ namespace BountyBandits.GameScreen
         {
             spriteBatch.Draw(Game.instance.mapManager.worldBackground, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
             foreach (Level level in Game.instance.mapManager.getLevels())
-                spriteBatch.Draw(Game.instance.easyLevel, level.loc, Color.White);
+                spriteBatch.Draw(easyLevel, level.loc, Color.White);
             const string chooseLevelStr = "Choose level, A to start game";
             drawTextBorder(Game.instance.vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - Game.instance.vademecumFont24.MeasureString(chooseLevelStr).X / 2, 1f), Color.Black, Color.DarkGray, 0);
             spriteBatch.Draw(Game.instance.texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2), Color.White);

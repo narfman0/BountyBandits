@@ -42,7 +42,6 @@ namespace BountyBandits
         public MapManager mapManager;
         public AnimationManager animationManager;
         public SpawnManager spawnManager;
-        public Texture2D easyLevel, extremeLevel, hardLevel, mediumLevel;
         public PhysicsSimulator physicsSimulator;
         public Resolution res;
         public Random rand;
@@ -52,9 +51,6 @@ namespace BountyBandits
         public static MarkovNameGenerator nameGenerator;
         public NetworkManager network;
         public StateManager currentState;
-        //choosing characters
-        public List<String> characterOptions = new List<string>(SaveManager.getAvailableCharacterNames());
-        public Dictionary<PlayerIndex, int> selectedMenuIndex = new Dictionary<PlayerIndex, int>();
         public List<Input> inputs = new List<Input>();
         public static Game instance;
         #endregion
@@ -86,19 +82,9 @@ namespace BountyBandits
             vademecumFont12 = Content.Load<SpriteFont>(@"Fonts\vademecum12");
             vademecumFont18 = Content.Load<SpriteFont>(@"Fonts\vademecum18");
             vademecumFont24 = Content.Load<SpriteFont>(@"Fonts\vademecum24");
-
-            easyLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "easyLevel");
-            extremeLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "extremeLevel");
-            hardLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "hardLevel");
-            mediumLevel = Content.Load<Texture2D>(MapManager.CAMPAIGNS_PATH + "mediumLevel");
             animationManager = new AnimationManager(this);
             mapManager = new MapManager(this, MapManager.DEFAULT_CAMPAIGN_PATH);
-
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
-            foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
-                if (!selectedMenuIndex.ContainsKey(playerIndex))
-                    selectedMenuIndex.Add(playerIndex, -1);
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentState = new StateManager();
         }

@@ -16,7 +16,9 @@ namespace BountyBandits.GameScreen
         public double timeStoryElementStarted;
         private GameTime previousGameTime;
 
-        public CutsceneScreen() {
+        public CutsceneScreen()
+            : base()
+        {
             timeStoryElementStarted = Environment.TickCount;
             storyBeings = new Dictionary<int, Being>();
         }
