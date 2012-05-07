@@ -48,7 +48,6 @@ namespace BountyBandits
         public Geom groundGeom;
         public TextureManager texMan;
         public XPManager xpManager = new XPManager();
-        public static MarkovNameGenerator nameGenerator;
         public NetworkManager network;
         public StateManager currentState;
         public List<Input> inputs = new List<Input>();
@@ -77,7 +76,6 @@ namespace BountyBandits
         }
         protected override void LoadContent()
         {
-            nameGenerator = new MarkovNameGenerator(MarkovNameGenerator.SAMPLES, 3, 5);
             texMan = new TextureManager(Content);
             vademecumFont12 = Content.Load<SpriteFont>(@"Fonts\vademecum12");
             vademecumFont18 = Content.Load<SpriteFont>(@"Fonts\vademecum18");
