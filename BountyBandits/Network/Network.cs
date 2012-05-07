@@ -324,7 +324,7 @@ namespace BountyBandits.Network
             int count = im.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                Being being = Being.fromXML(XMLUtil.asXML(im.ReadString()), gameref);
+                Being being = Being.fromXML(XMLUtil.asXML(im.ReadString()));
                 if(!gameref.players.ContainsKey(being.guid))
                     gameref.players.Add(being.guid,being);
             }
@@ -427,7 +427,7 @@ namespace BountyBandits.Network
         }
         public void receiveNewEnemy(NetIncomingMessage im)
         {
-            Enemy being = Enemy.fromXML(XMLUtil.asXML(im.ReadString()), gameref);
+            Enemy being = Enemy.fromXML(XMLUtil.asXML(im.ReadString()));
             if (!gameref.spawnManager.enemies.ContainsKey(being.guid))
                 gameref.spawnManager.enemies.Add(being.guid, being);
         }

@@ -45,7 +45,7 @@ namespace BountyBanditsUnitTests
             game.resetPhysics();
             beingsMap = new Dictionary<String, Being>();
             foreach (BeingTypes beingType in Enum.GetValues(typeof(BeingTypes)))
-                beingsMap.Add(beingType.ToString(), new Being(beingType.ToString(), 1, game, AnimationController.fromXML(game.Content, beingType.ToString()), null, true, false));
+                beingsMap.Add(beingType.ToString(), new Being(beingType.ToString(), 1, AnimationController.fromXML(game.Content, beingType.ToString()), null, true, false));
         }
         
         //[TestCleanup()]
@@ -62,8 +62,8 @@ namespace BountyBanditsUnitTests
                 foreach (BeingTypes beingType in Enum.GetValues(typeof(BeingTypes)))
                     for (int level = 1; level < 99; level++)
                     {
-                        Being attacker = new Being("test-" + playerType.ToString(), level, game, AnimationController.fromXML(game.Content, playerType.ToString()), null, true, false);
-                        Being target = new Being("test-target-" + beingType.ToString(), level, game, AnimationController.fromXML(game.Content, beingType.ToString()), null, false, false);
+                        Being attacker = new Being("test-" + playerType.ToString(), level, AnimationController.fromXML(game.Content, playerType.ToString()), null, true, false);
+                        Being target = new Being("test-target-" + beingType.ToString(), level, AnimationController.fromXML(game.Content, beingType.ToString()), null, false, false);
                         attacker.body.Position = new Vector2(-48,0);
                         target.body.Position = new Vector2(48, 0);
                         attacker.isFacingLeft = false;
@@ -80,8 +80,8 @@ namespace BountyBanditsUnitTests
         [TestMethod()]
         public void getCritChanceTest()
         {
-            Being attacker = new Being("test-pirate", 1, game, AnimationController.fromXML(game.Content, "pirate"), null, true, false);
-            Being target = new Being("test-amish", 1, game, AnimationController.fromXML(game.Content, "amish"), null, true, false);
+            Being attacker = new Being("test-pirate", 1, AnimationController.fromXML(game.Content, "pirate"), null, true, false);
+            Being target = new Being("test-amish", 1, AnimationController.fromXML(game.Content, "amish"), null, true, false);
             float pirateCrit = attacker.getCritChance(target);
             float amishCrit = target.getCritChance(attacker);
             Assert.AreEqual(pirateCrit, .05f, .05f);

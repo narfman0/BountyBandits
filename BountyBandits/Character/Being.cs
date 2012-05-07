@@ -19,7 +19,6 @@ namespace BountyBandits.Character
     public class Being
     {
         #region Fields
-        protected Game gameref;
         public string name;
         private StatSet stats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
@@ -61,7 +60,7 @@ namespace BountyBandits.Character
                 float difference = value - currentHealth;
                 currentHealth = value;
                 if (Game.instance.network != null && Game.instance.network.isServer())
-                    gameref.network.sendBeingCurrentHP(guid, CurrentHealth);
+                    Game.instance.network.sendBeingCurrentHP(guid, CurrentHealth);
             }
         }
         public float Weight {
@@ -69,10 +68,9 @@ namespace BountyBandits.Character
             set { weight = value; } 
         }
         #endregion
-        public Being(string name, int level, Game gameref, AnimationController controller,
+        public Being(string name, int level, AnimationController controller,
             Input input, bool isPlayer, bool isLocal)
         {
-            this.gameref = gameref;
             this.name = name;
             this.controller = controller;
             this.level = level;
@@ -97,8 +95,8 @@ namespace BountyBandits.Character
         }
         ~Being()
         {
-            if (geom != null) gameref.physicsSimulator.Remove(geom);
-            if (body != null) gameref.physicsSimulator.Remove(body);
+            if (geom != null) Game.instance.physicsSimulator.Remove(geom);
+            if (body != null) Game.instance.physicsSimulator.Remove(body);
         }
         public void attack(string attackName)
         {
@@ -114,7 +112,7 @@ namespace BountyBandits.Character
             float toHit = .95f, damage = 0; //TODO calculate ths, prob from agility;
             toHit = Math.Max(.05f,Math.Min(.95f, toHit));
 
-            if ((toHit > (float)gameref.rand.NextDouble() * .1f) && !enemy.isDead &&
+            if ((toHit > (float)Game.instance.rand.NextDouble() * .1f) && !enemy.isDead &&
                 (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None &&
                 isInRange(enemy))
             {
@@ -142,12 +140,12 @@ namespace BountyBandits.Character
                     }
                     enemy.CurrentHealth -= damage;
                     if (Game.instance.network != null && Game.instance.network.isServer())
-                        gameref.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
+                        Game.instance.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
                     enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                 }
                 if (enemy.CurrentHealth <= 0f && isPlayer)
-                    foreach (Being being in gameref.players.Values)
-                        being.giveXP(gameref.xpManager.getKillXPPerLevel(enemy.level));
+                    foreach (Being being in Game.instance.players.Values)
+                        being.giveXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
                 if (Game.instance.network != null)
                     Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
                 if (getStat(StatType.Knockback) > 0)
@@ -161,23 +159,23 @@ namespace BountyBandits.Character
                 controller.getFrameDimensions(getCurrentFrame()).Y + getStat(StatType.Range));
             Vector2 positionOffset = currAnimation.aoe ? Vector2.Zero : 
                 new Vector2(getFacingMultiplier() * controller.getFrameDimensions(getCurrentFrame()).X / 2, 0);
-            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, 
+            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(Game.instance.physicsSimulator, 
                 body, dimensions.X, dimensions.Y, positionOffset, 0);
             collisionGeom.CollisionCategories = geom.CollisionCategories;
             collisionGeom.CollidesWith = geom.CollidesWith;
             bool inRange = target.geom.Collide(collisionGeom);
-            gameref.physicsSimulator.Remove(collisionGeom);
+            Game.instance.physicsSimulator.Remove(collisionGeom);
             return inRange;
         }
         public void changeAnimation(string name)
         {
             if (currAnimation == null || currAnimation.name != name)
             {
-                if (isLocal || (this is Enemy && gameref.network.isServer()))
-                    gameref.network.sendBeingAnimationChange(guid, name);
+                if (isLocal || (this is Enemy && Game.instance.network.isServer()))
+                    Game.instance.network.sendBeingAnimationChange(guid, name);
                 currAnimation = controller.getAnimationInfo(name);
                 currFrame = currAnimation.start;
-                if (currAnimation.name.Contains("attack") && !gameref.network.isClient())
+                if (currAnimation.name.Contains("attack") && !Game.instance.network.isClient())
                     attackComputed = false;
                 foreach (ForceFrame frame in currAnimation.forces)
                     currAnimationForceFrames.Add(frame.clone());
@@ -220,8 +218,8 @@ namespace BountyBandits.Character
                 drawPoint = new Vector2(getPos().X - (frameDimensions.X / 2f), getPos().Y + frameDimensions.Y / 2f);
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 avePos = gameref.getAvePosition(),
-                drawPos = new Vector2(drawPoint.X - avePos.X + gameref.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + gameref.res.ScreenHeight / 2);
+            Vector2 avePos = Game.instance.getAvePosition(),
+                drawPos = new Vector2(drawPoint.X - avePos.X + Game.instance.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + Game.instance.res.ScreenHeight / 2);
             combatText.draw(new Vector2(drawPos.X + frameDimensions.X / 2, drawPos.Y), getDepth());
             Game.instance.currentState.getScreen().drawGameItem(controller.frames[getCurrentFrame()], drawPos, 0, getDepth(), Vector2.One, effects, Vector2.Zero);
         }
@@ -256,17 +254,17 @@ namespace BountyBandits.Character
                 //TODOjrob make some fancy effect on levelup
                 stats.setStatValue(StatType.Life, stats.getStatValue(StatType.Life) + 1);
                 stats.setStatValue(StatType.Special, stats.getStatValue(StatType.Special) + 1);
-                xpOfNextLevel = gameref.xpManager.getXPToLevelUp(++level);
+                xpOfNextLevel = Game.instance.xpManager.getXPToLevelUp(++level);
                 unusedAttr += 5;
             }
         }
         public Geom isTouchingGeom(bool countGround)
         {
-            foreach (Geom geometry in gameref.physicsSimulator.GeomList)
+            foreach (Geom geometry in Game.instance.physicsSimulator.GeomList)
                 if (geom != geometry &&
                     (geom.CollisionCategories & geometry.CollisionCategories) != CollisionCategory.None &&
                     AABB.Intersect(ref geom.AABB, ref geometry.AABB) && geom.Collide(geometry))
-                    if (countGround || !geometry.Equals(gameref.groundGeom))
+                    if (countGround || !geometry.Equals(Game.instance.groundGeom))
                         return geom;
             return null;
         }
@@ -319,12 +317,12 @@ namespace BountyBandits.Character
             combatText = new CombatTextManager();
             Vector2 texDimensions = controller.frames.Count == 0 ? new Vector2(128, 128) : 
                 controller.getFrameDimensions(getCurrentFrame());
-            body = BodyFactory.Instance.CreateRectangleBody(gameref.physicsSimulator, texDimensions.X / 2, texDimensions.Y, Weight);
+            body = BodyFactory.Instance.CreateRectangleBody(Game.instance.physicsSimulator, texDimensions.X / 2, texDimensions.Y, Weight);
             body.Position = new Vector2(10 + texDimensions.X, 10 + texDimensions.Y / 2);
-            geom = GeomFactory.Instance.CreateRectangleGeom(gameref.physicsSimulator, body, texDimensions.X / 2, texDimensions.Y);
+            geom = GeomFactory.Instance.CreateRectangleGeom(Game.instance.physicsSimulator, body, texDimensions.X / 2, texDimensions.Y);
             geom.FrictionCoefficient = .1f;
             body.MomentOfInertia = float.MaxValue;
-            setDepth(input == null ? gameref.rand.Next(4) : (int)input.getPlayerIndex());
+            setDepth(input == null ? Game.instance.rand.Next(4) : (int)input.getPlayerIndex());
             CurrentHealth = (float)getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
 
@@ -336,17 +334,12 @@ namespace BountyBandits.Character
                 #region Animation forces
                 if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame){
                     if (!currAnimationForceFrames[0].isEnemy)
-                    {
-                        foreach (Being enemy in gameref.spawnManager.enemies.Values)
+                        foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                             if (isInRange(enemy))
                                 abilityForce(enemy);
-                        currAnimationForceFrames.RemoveAt(0);
-                    }
                     else
-                    {
                         abilityForce(this);
-                        currAnimationForceFrames.RemoveAt(0);
-                    }
+                    currAnimationForceFrames.RemoveAt(0);
                 }
                 #endregion
                 #region Stunned
@@ -360,10 +353,10 @@ namespace BountyBandits.Character
                     isDead = true;
                     changeAnimation("death1");
                     pos = body.Position;
-                    gameref.physicsSimulator.Remove(body);
-                    gameref.physicsSimulator.Remove(geom);
-                    if (!isPlayer && gameref.rand.Next(20) == 0 && !gameref.network.isClient())   //nodrop check. should query entity
-                        gameref.dropItem(pos, this);
+                    Game.instance.physicsSimulator.Remove(body);
+                    Game.instance.physicsSimulator.Remove(geom);
+                    if (!isPlayer && Game.instance.rand.Next(20) == 0 && !Game.instance.network.isClient())   //nodrop check. should query entity
+                        Game.instance.dropItem(pos, this);
                 }
                 #endregion
                 #region Change animation to idle/walk
@@ -383,9 +376,9 @@ namespace BountyBandits.Character
                     {
                         List<Being> enemies = new List<Being>();
                         if (!isPlayer)
-                            enemies.AddRange(gameref.players.Values);
+                            enemies.AddRange(Game.instance.players.Values);
                         else
-                            enemies.AddRange(gameref.spawnManager.enemies.Values);
+                            enemies.AddRange(Game.instance.spawnManager.enemies.Values);
                         foreach (Being enemy in enemies)
                             attackCompute(enemy);
                     }
@@ -396,10 +389,10 @@ namespace BountyBandits.Character
                 {
                     timeToNextHeal = Environment.TickCount;
                     bool isEnemyAlive = false;
-                    foreach (Being enemy in gameref.spawnManager.enemies.Values)
+                    foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                         if (enemy.CurrentHealth > 0f)
                             isEnemyAlive = true;
-                    if (gameref.spawnManager.enemies.Count < 1 && isPlayer && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
+                    if (Game.instance.spawnManager.enemies.Count < 1 && isPlayer && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
                     {
                         CurrentHealth += (float)getStat(StatType.Life) / 5f + (float)getStat(StatType.Agility) / 10f;
                         if (CurrentHealth > (float)getStat(StatType.Life))
@@ -412,7 +405,7 @@ namespace BountyBandits.Character
             else
             {
                 bool enemiesAlive = false;
-                foreach (Being enemy in gameref.spawnManager.enemies.Values)
+                foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                     if (enemy == this || enemy.CurrentHealth > 0f)
                         enemiesAlive = true;
                 if (!enemiesAlive)
@@ -445,10 +438,10 @@ namespace BountyBandits.Character
             beingElement.AppendChild(unlocked.asXML(beingElement));
             return beingElement;
         }
-        public static Being fromXML(XmlElement element, Game gameref)
+        public static Being fromXML(XmlElement element)
         {
-            AnimationController controller = gameref.animationManager.getController(element.GetAttribute("animationControllerName"));
-            Being being = new Being(element.GetAttribute("name"), 1, gameref, controller, null, true, false);
+            AnimationController controller = Game.instance.animationManager.getController(element.GetAttribute("animationControllerName"));
+            Being being = new Being(element.GetAttribute("name"), 1, controller, null, true, false);
             being.copyValues(element);
             return being;
         }
@@ -500,7 +493,7 @@ namespace BountyBandits.Character
         }
         public float getDamage()
         {
-            float damage = getStat(StatType.Agility) / 8f + getStat(StatType.Strength) / 5f + (float)gameref.rand.NextDouble() - .5f;
+            float damage = getStat(StatType.Agility) / 8f + getStat(StatType.Strength) / 5f + (float)Game.instance.rand.NextDouble() - .5f;
             damage *= ((100f + getStat(StatType.EnhancedDamage)) / 100f);
             return damage;
         }

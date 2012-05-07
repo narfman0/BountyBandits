@@ -76,7 +76,7 @@ namespace BountyBandits
             string filename = SAVE_PATH + beingName;
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(filename);
-            return Being.fromXML((XmlElement)xmlDoc.GetElementsByTagName("being").Item(0), gameref);
+            return Being.fromXML((XmlElement)xmlDoc.GetElementsByTagName("being").Item(0));
         }
     }
 }

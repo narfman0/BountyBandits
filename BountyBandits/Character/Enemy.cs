@@ -13,23 +13,23 @@ namespace BountyBandits.Character
         public Guid targetPlayer = Guid.Empty;
         private long timeOfLastAttack = 0;
 
-        public Enemy(string name, int level, Game gameref, AnimationController controller)
-            :base(name, level, gameref, controller, null, false, false) { }
+        public Enemy(string name, int level, AnimationController controller)
+            :base(name, level, controller, null, false, false) { }
 
         public override void update(GameTime gameTime)
         {
             base.update(gameTime);
             //figure out if anyone is alive
             bool someoneAlive = false;
-            foreach (Being player in gameref.players.Values)
+            foreach (Being player in Game.instance.players.Values)
                 if (player.CurrentHealth > 0f)
                     someoneAlive = true;
             //and target that random alive person
-            while (someoneAlive && (targetPlayer == Guid.Empty || gameref.players[targetPlayer].CurrentHealth <= 0f))
-                targetPlayer = gameref.players.Values.ElementAt(gameref.rand.Next(gameref.players.Count)).guid;
+            while (someoneAlive && (targetPlayer == Guid.Empty || Game.instance.players[targetPlayer].CurrentHealth <= 0f))
+                targetPlayer = Game.instance.players.Values.ElementAt(Game.instance.rand.Next(Game.instance.players.Count)).guid;
             if (targetPlayer == Guid.Empty)
                 return;
-            Being targetBeing = gameref.players[targetPlayer];
+            Being targetBeing = Game.instance.players[targetPlayer];
             if (targetBeing.getDepth() < getDepth()) lane(true);
             else if (targetBeing.getDepth() > getDepth()) lane(false);
             if (isTouchingGeom(false) != null &&
@@ -56,10 +56,10 @@ namespace BountyBandits.Character
             return (long)(4073.95 * Math.Pow(Math.E, -.0184674 * level));
         }
 
-        public static new Enemy fromXML(XmlElement element, Game gameref)
+        public static new Enemy fromXML(XmlElement element)
         {
-            AnimationController controller = gameref.animationManager.getController(element.GetAttribute("animationControllerName"));
-            Enemy being = new Enemy(element.GetAttribute("name"), 1, gameref, controller);
+            AnimationController controller = Game.instance.animationManager.getController(element.GetAttribute("animationControllerName"));
+            Enemy being = new Enemy(element.GetAttribute("name"), 1, controller);
             being.copyValues(element);
             return being;
         }

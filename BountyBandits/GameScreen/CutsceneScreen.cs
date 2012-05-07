@@ -35,7 +35,7 @@ namespace BountyBandits.GameScreen
                 if (!storyBeings.ContainsKey(controller.entranceMS) &&
                     controller.entranceMS >= elapsedCutsceneTime)
                 {
-                    Being being = new Being(controller.entranceMS + "", 1, Game.instance, controller.animationController, null, false, true);
+                    Being being = new Being(controller.entranceMS + "", 1, controller.animationController, null, false, true);
                     being.body.Position = controller.startLocation;
                     being.changeAnimation(controller.animations[0].animationName);
                     being.setDepth(controller.startDepth);
