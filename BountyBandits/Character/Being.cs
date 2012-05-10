@@ -321,11 +321,49 @@ namespace BountyBandits.Character
             body.Position = new Vector2(10 + texDimensions.X, 10 + texDimensions.Y / 2);
             geom = GeomFactory.Instance.CreateRectangleGeom(Game.instance.physicsSimulator, body, texDimensions.X / 2, texDimensions.Y);
             geom.FrictionCoefficient = .1f;
+            geom.OnCollision += geomOnCollision;
             body.MomentOfInertia = float.MaxValue;
             setDepth(input == null ? Game.instance.rand.Next(4) : (int)input.getPlayerIndex());
             CurrentHealth = (float)getStat(StatType.Life);
             currentspecial = getStat(StatType.Special);
-
+        }
+        /// <summary>
+        /// Answer partially derived from
+        /// http://stackoverflow.com/questions/3308012/oncollision-event-handler-problems-in-c-sharp-xna-with-farseer-physics
+        /// </summary>
+        private bool geomOnCollision(Geom me, Geom hit, ContactList contactList)
+        {
+            float hitVelocity = 0f;
+            foreach (Contact contact in contactList)
+            {
+                Vector2 position = contact.Position;
+                Vector2 v0, v1 = Vector2.Zero;
+                me.Body.GetVelocityAtWorldPoint(ref position, out v0);
+                if (!hit.Body.IsStatic)
+                    hit.Body.GetVelocityAtWorldPoint(ref position, out v1);
+                v0 -= v1;
+                /*
+                 * Should be:
+                 * hitVelocity = Math.Max(v0.Length(), hitVelocity);
+                 * however, the friction produced by running is so great I need
+                 * to throw it away. Thus, if the geometry is static (terrain)
+                 * and the x is greater magnitude than y (running sideways
+                 * quickly), I am minimizing this force greatly.
+                 */
+                hitVelocity = Math.Max(hit.Body.IsStatic && Math.Abs(v0.X) > v0.Y ? v0.Length()/3 : v0.Length(), hitVelocity);
+            }
+            float force = hitVelocity * me.Body.Mass * hit.Body.Mass;
+            int dmg = (int)getDamageFromForce(force);
+            if (dmg > 0)
+            {
+                CurrentHealth -= dmg;
+                combatText.add(guid, "Force dmg: " + dmg, CombatTextType.HealthTaken);
+            }
+            return true;
+        }
+        public static float getDamageFromForce(float force)
+        {
+            return 2.74737f * (float)Math.Log(force, Math.E) - 21.3741f;
         }
         public virtual void update(GameTime gameTime)
         {

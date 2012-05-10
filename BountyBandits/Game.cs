@@ -224,7 +224,7 @@ namespace BountyBandits
         public void resetPhysics()
         {
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
-            const int GROUND_WIDTH = 10000, GROUND_HEIGHT = 100;
+            const int GROUND_WIDTH = 20000, GROUND_HEIGHT = 100;
             Body ground = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, GROUND_WIDTH, GROUND_HEIGHT, 100);
             groundGeom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, ground, GROUND_WIDTH, GROUND_HEIGHT);
             groundGeom.FrictionCoefficient = 1;
@@ -246,7 +246,7 @@ namespace BountyBandits
                     break;
                 case PhysicsPolygonType.Polygon:
                     item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
-                    geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, item.radius);
+                    geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, 0);
                     break;
             }
             if (item.immovable)

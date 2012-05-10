@@ -6,6 +6,7 @@ using BountyBandits.Animation;
 using System.Collections.Generic;
 using BountyBandits.GameScreen;
 using Microsoft.Xna.Framework;
+using BountyBandits.Stats;
 
 namespace BountyBanditsUnitTests
 {
@@ -86,6 +87,18 @@ namespace BountyBanditsUnitTests
             float amishCrit = target.getCritChance(attacker);
             Assert.AreEqual(pirateCrit, .05f, .05f);
             Assert.AreEqual(amishCrit, .01f, .05f);
+        }
+
+        [TestMethod()]
+        public void getDamageFromForceTest()
+        {
+            Assert.AreEqual(4, Being.getDamageFromForce(10000), .1);
+            Being stationary = new Being("test", 1, AnimationController.fromXML(game.Content, "pirate"), null, true, false);
+            stationary.body.Position = new Vector2(0, 119);
+            stationary.body.ApplyForce(new Vector2(0, -10000));
+            for (int i = 0; i < 1000; i++)
+                game.physicsSimulator.Update(.06f);
+            Assert.AreNotEqual(stationary.CurrentHealth, stationary.getStat(StatType.Life), 1);
         }
     }
 }
