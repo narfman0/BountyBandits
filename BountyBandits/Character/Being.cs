@@ -169,7 +169,7 @@ namespace BountyBandits.Character
         }
         public void changeAnimation(string name)
         {
-            if (currAnimation == null || currAnimation.name != name)
+            if (currAnimation == null || currAnimation.name != name && controller.getAnimationInfo(name) != null)
             {
                 if (isLocal || (this is Enemy && Game.instance.network.isServer()))
                     Game.instance.network.sendBeingAnimationChange(guid, name);
@@ -414,13 +414,18 @@ namespace BountyBandits.Character
                     attackComputed = true;
                     if (!IsStunned)
                     {
-                        List<Being> enemies = new List<Being>();
-                        if (!isPlayer)
-                            enemies.AddRange(Game.instance.players.Values);
+                        if (currAnimation.name.Contains("Ranged") && !Game.instance.network.isClient())
+                            attackRanged();
                         else
-                            enemies.AddRange(Game.instance.spawnManager.enemies.Values);
-                        foreach (Being enemy in enemies)
-                            attackCompute(enemy);
+                        {
+                            List<Being> enemies = new List<Being>();
+                            if (!isPlayer)
+                                enemies.AddRange(Game.instance.players.Values);
+                            else
+                                enemies.AddRange(Game.instance.spawnManager.enemies.Values);
+                            foreach (Being enemy in enemies)
+                                attackCompute(enemy);
+                        }
                     }
                 }
                 #endregion
@@ -457,6 +462,28 @@ namespace BountyBandits.Character
             }
             #endregion
             combatText.update();
+        }
+        private void attackRanged()
+        {
+            Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
+            Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
+            projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
+            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * currAnimation.projectileWeight * (200 + 5 * getStat(StatType.Agility)), 10));
+            projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
+            GameItem item = new GameItem();
+            item.body = projectileGeom.Body;
+            item.loc = projectileGeom.Body.Position;
+            item.width = 1;
+            item.startdepth = (uint)getDepth();
+            item.rotation = projectileGeom.Body.Rotation;
+            #region Collision Categories
+            geom.CollisionCategories = CollisionCategory.None;
+            for (int depth = (int)item.startdepth; depth < item.width + item.startdepth; depth++)
+                geom.CollisionCategories |= (CollisionCategory)PhysicsHelper.depthToCollisionCategory(depth);
+            geom.CollidesWith = geom.CollisionCategories;
+            #endregion
+            Game.instance.activeItems.Add(item.guid, item);
+            Game.instance.network.sendFullObjectsUpdate();
         }
         public float getRange()
         {

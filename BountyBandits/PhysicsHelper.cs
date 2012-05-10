@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FarseerGames.FarseerPhysics;
+using Microsoft.Xna.Framework.Graphics;
+using FarseerGames.FarseerPhysics.Collisions;
+using Microsoft.Xna.Framework;
+using FarseerGames.FarseerPhysics.Factories;
+using FarseerGames.FarseerPhysics.Dynamics;
 
 namespace BountyBandits
 {
@@ -38,6 +43,15 @@ namespace BountyBandits
                     return 3;
             }
             return -1;
+        }
+
+        public static Geom textureToGeom(PhysicsSimulator physicsSimulator, Texture2D tex, float mass)
+        {
+            uint[] data = new uint[tex.Width * tex.Height];
+            tex.GetData(data);
+            Vertices verts = Vertices.CreatePolygon(data, tex.Width, tex.Height);
+            Body body = BodyFactory.Instance.CreatePolygonBody(physicsSimulator, verts, mass);
+            return GeomFactory.Instance.CreatePolygonGeom(physicsSimulator, body, verts, 0);
         }
     }
 }

@@ -88,6 +88,10 @@ namespace BountyBandits.Animation
                                     anim.targets = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("stunDuration"))
                                     anim.stunDuration = int.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("projectileTexture"))
+                                    anim.projectileTexture = subnode.FirstChild.Value;
+                                else if (subnode.Name.Equals("projectileWeight"))
+                                    anim.projectileWeight = float.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("dmgMultiplier"))
                                     anim.dmgMultiplier = float.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("teleport"))
@@ -165,16 +169,16 @@ namespace BountyBandits.Animation
             foreach (AnimationInfo animInf in animations)
                 if (animInf.name.Equals(name))
                     return animInf;
-            return new AnimationInfo();
+            return null;
         }
     }
 
     public class AnimationInfo
     {
-        public string name;
+        public string name, projectileTexture;
         public int start, end, keyframe, targets = 5, stunDuration;
         public bool slowIfTouchingGeom = true, aoe = false;
-        public float dmgMultiplier = 1f;
+        public float dmgMultiplier = 1f, projectileWeight;
         public Vector2 teleport;
         public List<ForceFrame> forces = new List<ForceFrame>();
 

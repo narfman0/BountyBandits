@@ -57,8 +57,8 @@ namespace BountyBandits.GameScreen
                     if (currentplayer.input.getButtonHit(Buttons.Y)){
                         if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
                             currentplayer.attack("attackCC");
-                        //else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
-                        //    currentplayer.attack("attack3");
+                        else if (currentplayer.input.getButtonDown(Buttons.LeftTrigger))
+                            currentplayer.attack("attackRanged");
                         else
                             currentplayer.attack("attackMove");
                     }
@@ -73,8 +73,8 @@ namespace BountyBandits.GameScreen
                             currentplayer.attack("attack3");
                         else if (currentplayer.input.isKeyHit(Keys.A))
                             currentplayer.attack("attackMove");
-                        //else if (currentplayer.input.isKeyHit(Keys.S))
-                        //    currentplayer.attack("attackRanged");
+                        else if (currentplayer.input.isKeyHit(Keys.S))
+                            currentplayer.attack("attackRanged");
                         else if (currentplayer.input.isKeyHit(Keys.D))
                             currentplayer.attack("attackCC");
                     }
