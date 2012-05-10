@@ -90,6 +90,8 @@ namespace BountyBandits.Animation
                                     anim.stunDuration = int.Parse(subnode.FirstChild.Value);
                                 else if (subnode.Name.Equals("dmgMultiplier"))
                                     anim.dmgMultiplier = float.Parse(subnode.FirstChild.Value);
+                                else if (subnode.Name.Equals("teleport"))
+                                    anim.teleport = XMLUtil.fromXMLVector2(subnode);
                             controller.animations.Add(anim);
                         }
                         if (!isUnitTest)
@@ -173,6 +175,7 @@ namespace BountyBandits.Animation
         public int start, end, keyframe, targets = 5, stunDuration;
         public bool slowIfTouchingGeom = true, aoe = false;
         public float dmgMultiplier = 1f;
+        public Vector2 teleport;
         public List<ForceFrame> forces = new List<ForceFrame>();
 
     }

@@ -409,6 +409,8 @@ namespace BountyBandits.Character
                 #region Compute attack
                 else if (!attackComputed && currAnimation.keyframe <= currFrame)
                 {
+                    if (currAnimation.teleport != null)
+                        body.Position += currAnimation.teleport*getFacingMultiplier();
                     attackComputed = true;
                     if (!IsStunned)
                     {

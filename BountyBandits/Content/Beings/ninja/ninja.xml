@@ -37,6 +37,10 @@
         <start>124</start>
         <end>163</end>
         <keyframe>151</keyframe>
+        <teleport>
+          <x>200</x>
+          <y>0</y>
+        </teleport>
       </animation>
       <animation>
         <name>attackCC</name>
