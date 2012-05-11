@@ -468,20 +468,18 @@ namespace BountyBandits.Character
             Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
             Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
             projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
-            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * currAnimation.projectileWeight * (200 + 5 * getStat(StatType.Agility)), 10));
+            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * currAnimation.projectileWeight * (1500 + 50 * getStat(StatType.Agility)), 200*currAnimation.projectileWeight));
             projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
+            projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
+            projectileGeom.CollidesWith = geom.CollisionCategories;
             GameItem item = new GameItem();
             item.body = projectileGeom.Body;
             item.loc = projectileGeom.Body.Position;
             item.width = 1;
             item.startdepth = (uint)getDepth();
             item.rotation = projectileGeom.Body.Rotation;
-            #region Collision Categories
-            geom.CollisionCategories = CollisionCategory.None;
-            for (int depth = (int)item.startdepth; depth < item.width + item.startdepth; depth++)
-                geom.CollisionCategories |= (CollisionCategory)PhysicsHelper.depthToCollisionCategory(depth);
-            geom.CollidesWith = geom.CollisionCategories;
-            #endregion
+            item.name = currAnimation.projectileTexture;
+            item.polygonType = PhysicsPolygonType.Polygon;
             Game.instance.activeItems.Add(item.guid, item);
             Game.instance.network.sendFullObjectsUpdate();
         }

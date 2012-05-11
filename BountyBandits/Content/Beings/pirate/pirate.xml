@@ -47,6 +47,14 @@
         <stunDuration>1500</stunDuration>
       </animation>
       <animation>
+        <name>attackRanged</name>
+        <start>189</start>
+        <end>220</end>
+        <keyframe>197</keyframe>
+        <projectileTexture>grassflecks</projectileTexture>
+        <projectileWeight>2</projectileWeight>
+      </animation>
+      <animation>
         <name>idle</name>
         <start>1</start>
         <end>20</end>

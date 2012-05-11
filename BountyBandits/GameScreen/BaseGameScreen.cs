@@ -84,6 +84,9 @@ namespace BountyBandits.GameScreen
                                     scale = new Vector2((float)gameItem.sideLengths.X / (float)tex.Width, (float)gameItem.sideLengths.Y / (float)tex.Height);
                                     rotation *= -1;
                                     break;
+                                case PhysicsPolygonType.Polygon:
+                                    rotation *= -1;
+                                    break;
                             }
                         drawGameItem(tex, pos, rotation, currentDepth, scale, SpriteEffects.None, origin);
                     }
