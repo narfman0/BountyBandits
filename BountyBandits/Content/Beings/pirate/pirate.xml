@@ -48,11 +48,11 @@
       </animation>
       <animation>
         <name>attackRanged</name>
-        <start>189</start>
-        <end>220</end>
-        <keyframe>197</keyframe>
-        <projectileTexture>grassflecks</projectileTexture>
-        <projectileWeight>2</projectileWeight>
+        <start>220</start>
+        <end>260</end>
+        <keyframe>248</keyframe>
+        <projectileTexture>bottle</projectileTexture>
+        <projectileWeight>1</projectileWeight>
       </animation>
       <animation>
         <name>idle</name>
@@ -61,8 +61,8 @@
       </animation>
       <animation>
         <name>death1</name>
-        <start>220</start>
-        <end>265</end>
+        <start>260</start>
+        <end>305</end>
       </animation>
     </animations>
     <colorPermutations />
