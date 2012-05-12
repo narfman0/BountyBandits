@@ -245,8 +245,8 @@ namespace BountyBandits
                     geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
                     break;
                 case PhysicsPolygonType.Polygon:
-                    item.body = BodyFactory.Instance.CreatePolygonBody(item.vertices, item.weight);
-                    geom = GeomFactory.Instance.CreatePolygonGeom(item.body, item.vertices, 0);
+                    geom = PhysicsHelper.textureToGeom(physicsSimulator, texMan.getTex(item.name), item.weight);
+                    item.body = geom.Body;
                     break;
             }
             if (item.immovable)

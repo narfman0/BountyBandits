@@ -304,7 +304,7 @@ namespace BountyBandits.Character
         }
         public void move(Vector2 force)
         {
-            if (!isDead && Math.Abs(body.LinearVelocity.X) < 25 * getSpeedMultiplier()
+            if (!isDead && Math.Abs(body.LinearVelocity.X) < 20 * getSpeedMultiplier()
                 && isTouchingGeom(true) != null && !currAnimation.name.Contains("attack"))
             {
                 body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y) * .95f);
@@ -468,7 +468,7 @@ namespace BountyBandits.Character
             Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
             Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
             projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
-            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * currAnimation.projectileWeight * (1500 + 50 * getStat(StatType.Agility)), 200*currAnimation.projectileWeight));
+            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (1000 + 50 * getStat(StatType.Agility)), 200*currAnimation.projectileWeight));
             projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
             projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
             projectileGeom.CollidesWith = geom.CollisionCategories;

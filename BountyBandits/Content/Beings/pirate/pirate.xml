@@ -52,7 +52,7 @@
         <end>260</end>
         <keyframe>248</keyframe>
         <projectileTexture>bottle</projectileTexture>
-        <projectileWeight>1</projectileWeight>
+        <projectileWeight>5</projectileWeight>
       </animation>
       <animation>
         <name>idle</name>

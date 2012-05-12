@@ -22,7 +22,6 @@ namespace BountyBandits
         public Guid guid;
         public Vector2 loc, sideLengths = Vector2.One;
         public Body body;
-        public Vertices vertices;
         public float rotation = 0f;
         public bool immovable = false;
         public PhysicsPolygonType polygonType;
@@ -56,12 +55,6 @@ namespace BountyBandits
                     sideLengths = XMLUtil.fromXMLVector2(itemChild);
                 else if (itemChild.Name.Equals("polygonType"))
                     polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), itemChild.FirstChild.Value);
-                else if (itemChild.Name.Equals("vertices"))
-                {
-                    vertices = new Vertices();
-                    foreach (XmlElement vertexElement in itemChild.GetElementsByTagName("vertex"))
-                        vertices.Add(XMLUtil.fromXMLVector2(vertexElement));
-                }
             try
             {
                 guid = Guid.Parse(element.GetAttribute("guid"));
@@ -88,8 +81,7 @@ namespace BountyBandits
                 weightNode = parentNode.OwnerDocument.CreateElement("weight"),
                 widthNode = parentNode.OwnerDocument.CreateElement("width"),
                 immovableNode = parentNode.OwnerDocument.CreateElement("immovable"),
-                polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType"),
-                verticesNode = parentNode.OwnerDocument.CreateElement("vertices");
+                polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType");
             element.SetAttribute("guid", guid.ToString());
             nameNode.InnerText = name;
             radiusNode.InnerText = radius.ToString();
@@ -99,9 +91,6 @@ namespace BountyBandits
             immovableNode.InnerText = immovable.ToString();
             polygonTypeNode.InnerText = polygonType.ToString();
             locationNode.InnerText = loc.X + "," + loc.Y;
-            if(vertices != null)
-                foreach(Vector2 vertex in vertices)
-                    verticesNode.AppendChild(XMLUtil.asXMLVector2(verticesNode, vertex, "vertex"));
             switch(polygonType)
             {
                 case PhysicsPolygonType.Rectangle:
@@ -109,9 +98,6 @@ namespace BountyBandits
                 break;
                 case PhysicsPolygonType.Circle:
                     element.AppendChild(radiusNode);
-                break;
-                case PhysicsPolygonType.Polygon:
-                    element.AppendChild(verticesNode);
                 break;
             }
             element.AppendChild(locationNode);
