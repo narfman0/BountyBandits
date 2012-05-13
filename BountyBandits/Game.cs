@@ -31,7 +31,7 @@ namespace BountyBandits
     public class Game : Microsoft.Xna.Framework.Game
     {
         #region Fields
-        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 10, DROP_ITEM_MAX_DISTANCE = 10000f;
+        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 680, DROP_ITEM_MAX_DISTANCE = 10000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;

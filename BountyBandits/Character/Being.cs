@@ -26,7 +26,7 @@ namespace BountyBandits.Character
         int timeOfLastJump = 0, timeToNextHeal = 0;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0, stunDuration = 0;
         public float currentspecial = 5;
-        private float currentHealth = 5f, weight = 1f;
+        private float currentHealth = 5f, weight = 68f;//68kgs == 150lbs
         public bool isFacingLeft = false, isDead = false, isMovingUp;
         private bool attackComputed = true;
         public Body body; private Vector2 pos; //used to draw when dead
@@ -64,7 +64,7 @@ namespace BountyBandits.Character
             }
         }
         public float Weight {
-            get { return weight + ((float)stats.getStatValue(StatType.Strength) / 50f); }
+            get { return weight + ((float)stats.getStatValue(StatType.Strength) / 2f); }
             set { weight = value; } 
         }
         #endregion
@@ -276,7 +276,7 @@ namespace BountyBandits.Character
                 Geom touching = isTouchingGeom(true);
                 if (touching != null)
                 {
-                    float jumpForce = 250 + 4 * getStat(StatType.Strength) + 4 * getStat(StatType.Agility);
+                    float jumpForce = Weight * (300 + 4 * getStat(StatType.Agility));
                     //Vector2 pos = body.Position;
                     //Feature nearest = touching.GetNearestFeature(ref pos, 1);
                     Vector2 featureNormal = new Vector2(0, 1);//nearest.Normal;
@@ -308,7 +308,7 @@ namespace BountyBandits.Character
                 && isTouchingGeom(true) != null && !currAnimation.name.Contains("attack"))
             {
                 body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y) * .95f);
-                body.Position += (force * .1f);
+                body.Position += (force * .1f/Game.FORCE_AMOUNT);
                 isFacingLeft = (force.X > 0) ? false : true;
             }
         }
@@ -342,18 +342,13 @@ namespace BountyBandits.Character
                 if (!hit.Body.IsStatic)
                     hit.Body.GetVelocityAtWorldPoint(ref position, out v1);
                 v0 -= v1;
-                /*
-                 * Should be:
-                 * hitVelocity = Math.Max(v0.Length(), hitVelocity);
-                 * however, the friction produced by running is so great I need
-                 * to throw it away. Thus, if the geometry is static (terrain)
-                 * and the x is greater magnitude than y (running sideways
-                 * quickly), I am minimizing this force greatly.
-                 */
-                hitVelocity = Math.Max(hit.Body.IsStatic && Math.Abs(v0.X) > v0.Y ? v0.Length()/3 : v0.Length(), hitVelocity);
+                hitVelocity = Math.Max(v0.Length(), hitVelocity);
             }
-            float force = hitVelocity * me.Body.Mass * hit.Body.Mass;
+            //better force calculation, still naive because it doesn't account for multiple
+            //geometries in the game world. better than before, however.
+            float force = hitVelocity * Math.Min(me.Body.Mass, hit.Body.Mass);
             int dmg = (int)getDamageFromForce(force);
+            Log.write(LogType.Debug, "force: " + force + " dmg: " + dmg);
             if (dmg > 0)
             {
                 CurrentHealth -= dmg;
@@ -371,10 +366,12 @@ namespace BountyBandits.Character
             {
                 #region Animation forces
                 if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame){
-                    if (!currAnimationForceFrames[0].isEnemy)
+                    if (currAnimationForceFrames[0].isEnemy)
+                    {
                         foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                             if (isInRange(enemy))
                                 abilityForce(enemy);
+                    }
                     else
                         abilityForce(this);
                     currAnimationForceFrames.RemoveAt(0);
@@ -430,7 +427,7 @@ namespace BountyBandits.Character
                 }
                 #endregion
                 #region Health regen
-                if (Environment.TickCount - timeToNextHeal > 2000)
+                if (Environment.TickCount - timeToNextHeal > 2000 && !isDead)
                 {
                     timeToNextHeal = Environment.TickCount;
                     bool isEnemyAlive = false;
@@ -439,7 +436,7 @@ namespace BountyBandits.Character
                             isEnemyAlive = true;
                     if (Game.instance.spawnManager.enemies.Count < 1 && isPlayer && !isEnemyAlive && body.LinearVelocity.LengthSquared() < 20)
                     {
-                        CurrentHealth += (float)getStat(StatType.Life) / 5f + (float)getStat(StatType.Agility) / 10f;
+                        CurrentHealth += (float)getStat(StatType.Life) / 25f + (float)getStat(StatType.Agility) / 40f;
                         if (CurrentHealth > (float)getStat(StatType.Life))
                             CurrentHealth = (float)getStat(StatType.Life);
                     }
@@ -468,7 +465,7 @@ namespace BountyBandits.Character
             Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
             Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
             projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
-            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (1000 + 50 * getStat(StatType.Agility)), 200*currAnimation.projectileWeight));
+            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (50000 + 5000 * getStat(StatType.Agility)) / currAnimation.projectileWeight, 200 * currAnimation.projectileWeight));
             projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
             projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
             projectileGeom.CollidesWith = geom.CollisionCategories;
