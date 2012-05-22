@@ -52,7 +52,7 @@ namespace BountyBandits.Map
                 newLvl.autoProgress = bool.Parse(node.GetAttribute("autoProgress"));
             newLvl.name = node.GetAttribute("name");
             foreach (string singleAdj in node.GetElementsByTagName("adj")[0].FirstChild.Value.Split(','))
-            newLvl.adjacent.Add(Int32.Parse(singleAdj));
+                newLvl.adjacent.Add(Int32.Parse(singleAdj));
             XmlNodeList list = node.GetElementsByTagName("prereq");
             if (list.Count > 0 && list[0].FirstChild != null)
                 foreach (string singlePrereq in node.GetElementsByTagName("prereq")[0].FirstChild.Value.Split(','))
@@ -81,14 +81,15 @@ namespace BountyBandits.Map
     {
         public string texturePath;
         public Vector2 location;
-        public float rotation, scale;
+        public float rotation, scale, layer;
         public static BackgroundItemStruct fromXML(XmlElement element)
         {
             BackgroundItemStruct str = new BackgroundItemStruct();
             str.location = XMLUtil.fromXMLVector2(element.GetElementsByTagName("location")[0]);
             str.texturePath = element.GetElementsByTagName("path")[0].FirstChild.Value;
-            str.rotation = element.GetAttribute("rotation") != "" ? float.Parse(element.GetAttribute("rotation")) : 0f;
-            str.scale = element.GetAttribute("scale") == "" ? 1f : float.Parse(element.GetAttribute("scale"));
+            str.rotation = element.HasAttribute("rotation") ? float.Parse(element.GetAttribute("rotation")) : 0f;
+            str.scale = element.HasAttribute("scale") ? float.Parse(element.GetAttribute("scale")) : 1f;
+            str.layer = element.HasAttribute("layer") ? float.Parse(element.GetAttribute("layer")) : 1f;
             return str;
         }
     }

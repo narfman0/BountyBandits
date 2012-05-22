@@ -56,7 +56,7 @@ namespace BountyBandits.GameScreen
             }
             foreach (BackgroundItemStruct item in Game.instance.mapManager.getCurrentLevel().backgroundItems)
             {
-                Vector2 position = item.location - new Vector2(avePosition.X - res.ScreenWidth / 2, avePosition.Y - res.ScreenHeight / 2);
+                Vector2 position = item.location - item.layer * new Vector2(avePosition.X - res.ScreenWidth / 2, avePosition.Y - res.ScreenHeight / 2);
                 Texture2D tex = Game.instance.texMan.getTex(item.texturePath);
                 drawItem(tex, position, item.rotation, 0f, new Vector2(item.scale), SpriteEffects.None, new Vector2(tex.Width / 2, tex.Height / 2));
             }
