@@ -1,8 +1,47 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <Root>
   <guid>7b89b16c-bf87-4496-80d0-06e6c4d93112</guid>
-  <level length="10000" name="Wine Country" autoProgress="True">
+  <level length="10000" name="VIetnam" autoProgress="True">
     <adj>1</adj>
+    <background>
+      <graphic rotation="0" scale="1">
+        <path>vietnam1</path>
+        <location>
+          <x>1024</x>
+          <y>605</y>
+        </location>
+      </graphic>
+      <graphic rotation="0" scale="1">
+        <path>vietnam2</path>
+        <location>
+          <x>3072</x>
+          <y>605</y>
+        </location>
+      </graphic>
+      <graphic rotation="0" scale="1">
+        <path>vietnam3</path>
+        <location>
+          <x>5110</x>
+          <y>605</y>
+        </location>
+      </graphic>
+    </background>
+    <spawns>
+      <enemy>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>panda</type>
+        <name>panda</name>
+        <weight>10</weight>
+        <loc>1083,84</loc>
+      </enemy>
+    </spawns>
+    <location>904,150</location>
+    <number>0</number>
+    <prereq />
+  </level>
+  <level length="10000" name="Wine Country" autoProgress="True">
+    <adj>2</adj>
     <horizonPath>desertysun</horizonPath>
     <background>
       <graphic rotation="0" scale="1">
@@ -768,7 +807,7 @@
       </enemy>
     </spawns>
     <location>1024,150</location>
-    <number>0</number>
+    <number>1</number>
     <prereq />
   </level>
   <level length="3500" name="levelTwo" autoProgress="False">
@@ -854,7 +893,7 @@
     </items>
     <spawns />
     <location>0,0</location>
-    <number>1</number>
+    <number>2</number>
     <prereq>1</prereq>
   </level>
 </Root>
