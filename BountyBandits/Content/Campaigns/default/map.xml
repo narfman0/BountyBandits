@@ -5,24 +5,24 @@
     <adj>1</adj>
     <background>
       <graphic rotation="0" scale="1">
-        <path>vietnam1</path>
+        <path>vietnam0</path>
         <location>
           <x>1024</x>
-          <y>605</y>
+          <y>505</y>
+        </location>
+      </graphic>
+      <graphic rotation="0" scale="1">
+        <path>vietnam1</path>
+        <location>
+          <x>3072</x>
+          <y>505</y>
         </location>
       </graphic>
       <graphic rotation="0" scale="1">
         <path>vietnam2</path>
         <location>
-          <x>3072</x>
-          <y>605</y>
-        </location>
-      </graphic>
-      <graphic rotation="0" scale="1">
-        <path>vietnam3</path>
-        <location>
           <x>5110</x>
-          <y>605</y>
+          <y>505</y>
         </location>
       </graphic>
     </background>

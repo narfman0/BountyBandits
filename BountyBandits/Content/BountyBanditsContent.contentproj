@@ -22183,8 +22183,10 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Campaigns\default\vietnam\vietnam3.png">
-      <Name>vietnam3</Name>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Campaigns\default\vietnam\vietnam0.png">
+      <Name>vietnam0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
