@@ -325,11 +325,6 @@ namespace BountyBandits.Network
             for (int i = 0; i < count; i++)
             {
                 Being being = Being.fromXML(XMLUtil.asXML(im.ReadString()));
-                int depth = being.getDepth();
-                Vector2 pos = being.getPos();
-                being.newLevel();
-                being.setDepth(depth);
-                being.body.Position = pos;
                 if(!gameref.players.ContainsKey(being.guid))
                     gameref.players.Add(being.guid,being);
             }

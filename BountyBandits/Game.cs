@@ -204,7 +204,7 @@ namespace BountyBandits
         {
             resetPhysics();
             foreach (Being player in players.Values)
-                if (player.isLocal)
+                if (player.isLocal || network.isServer())
                     player.newLevel();
             #region add gameitems
             activeItems.Clear();
