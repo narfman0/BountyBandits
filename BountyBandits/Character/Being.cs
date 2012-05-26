@@ -275,7 +275,7 @@ namespace BountyBandits.Character
                 Geom touching = isTouchingGeom(true);
                 if (touching != null)
                 {
-                    float jumpForce = Weight * (300 + 4 * getStat(StatType.Agility));
+                    float jumpForce = Weight * (450 + 6 * getStat(StatType.Agility));
                     //Vector2 pos = body.Position;
                     //Feature nearest = touching.GetNearestFeature(ref pos, 1);
                     Vector2 featureNormal = new Vector2(0, 1);//nearest.Normal;
@@ -307,7 +307,7 @@ namespace BountyBandits.Character
                 && isTouchingGeom(true) != null && !currAnimation.name.Contains("attack"))
             {
                 body.ApplyForce(new Vector2(getSpeedMultiplier() * force.X, force.Y) * .95f);
-                body.Position += (force * .1f/Game.FORCE_AMOUNT);
+                body.Position += (force / Game.FORCE_AMOUNT);
                 isFacingLeft = (force.X > 0) ? false : true;
             }
         }
@@ -346,6 +346,15 @@ namespace BountyBandits.Character
             //better force calculation, still naive because it doesn't account for multiple
             //geometries in the game world. better than before, however.
             float force = hitVelocity * Math.Min(me.Body.Mass, hit.Body.Mass);
+            #region Apply tag multipliers
+            if (hit.Body.Tag != null)
+            {
+                force *= (int)hit.Body.Tag;
+                hit.Body.Tag = (int)(hit.Body.Tag) / 10;
+                if ((int)hit.Body.Tag <= 1)
+                    hit.Body.Tag = null;
+            }
+            #endregion
             int dmg = (int)getDamageFromForce(force);
             Log.write(LogType.Debug, "force: " + force + " dmg: " + dmg);
             if (dmg > 0)
@@ -357,7 +366,7 @@ namespace BountyBandits.Character
         }
         public static float getDamageFromForce(float force)
         {
-            return 2.74737f * (float)Math.Log(force, Math.E) - 21.3741f;
+            return 2.74737f * (float)Math.Log(force, Math.E) - 23f;
         }
         public virtual void update(GameTime gameTime)
         {
@@ -473,10 +482,11 @@ namespace BountyBandits.Character
             Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
             Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
             projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
-            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (50000 + 5000 * getStat(StatType.Agility)) / currAnimation.projectileWeight, 200 * currAnimation.projectileWeight));
+            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (9000 + 2000 * getStat(StatType.Agility)) / currAnimation.projectileWeight, 250 * currAnimation.projectileWeight));
             projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
             projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
             projectileGeom.CollidesWith = geom.CollisionCategories;
+            projectileGeom.Body.Tag = 25;
             GameItem item = new GameItem();
             item.body = projectileGeom.Body;
             item.loc = projectileGeom.Body.Position;
@@ -551,7 +561,7 @@ namespace BountyBandits.Character
         }
         public float getAttackSpeed()
         {
-            return (100f + getStat(StatType.Speed) + getStat(StatType.Agility) / 3) / 100f;
+            return (100f + getStat(StatType.Speed) + getStat(StatType.Agility) / 3) / 150f;
         }
         public float getDefenseTotal()
         {

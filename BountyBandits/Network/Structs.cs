@@ -50,6 +50,7 @@ namespace BountyBandits.Network
         public Guid guid;
         public Vector2 position, velocity;
         public float rotation, angularVelocity;
+        public Int16 tag;
 
         public static void writeState(NetOutgoingMessage msg, GameItem gameItem)
         {
@@ -59,6 +60,7 @@ namespace BountyBandits.Network
             msg.Write(gameItem.body.LinearVelocity.Y);
             msg.Write(gameItem.body.Rotation);
             msg.Write(gameItem.body.AngularVelocity);
+            msg.Write(gameItem.body.Tag == null ? 0 : (Int16)gameItem.body.Tag);
             msg.Write(gameItem.guid.ToString());
         }
 
@@ -70,6 +72,7 @@ namespace BountyBandits.Network
             state.rotation = msg.ReadFloat();
             state.angularVelocity = msg.ReadFloat();
             state.guid = new Guid(msg.ReadString());
+            state.tag = msg.ReadInt16();
             return state;
         }
     }

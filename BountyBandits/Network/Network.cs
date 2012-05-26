@@ -413,6 +413,8 @@ namespace BountyBandits.Network
                     item.body.Position = item.body.Position + (positiondifference * .1f);
                     item.body.Rotation = state.rotation;
                     item.body.AngularVelocity = state.angularVelocity;
+                    if(state.tag > 1)
+                        item.body.Tag = state.tag;
                 }
             }
         }

@@ -31,7 +31,7 @@ namespace BountyBandits
     public class Game : Microsoft.Xna.Framework.Game
     {
         #region Fields
-        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 680, DROP_ITEM_MAX_DISTANCE = 10000f;
+        public const float DEPTH_MULTIPLE = 42, DEPTH_X_OFFSET = 12, FORCE_AMOUNT = 900, DROP_ITEM_MAX_DISTANCE = 10000f;
         DifficultyEnum difficulty = DifficultyEnum.Normal;
         GraphicsDeviceManager graphics;
         public SpriteBatch spriteBatch;
@@ -223,7 +223,7 @@ namespace BountyBandits
         }
         public void resetPhysics()
         {
-            physicsSimulator = new PhysicsSimulator(new Vector2(0, -10));
+            physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             const int GROUND_WIDTH = 20000, GROUND_HEIGHT = 100;
             Body ground = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, GROUND_WIDTH, GROUND_HEIGHT, 100);
             groundGeom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, ground, GROUND_WIDTH, GROUND_HEIGHT);
