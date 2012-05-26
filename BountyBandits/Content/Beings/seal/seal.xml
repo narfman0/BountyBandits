@@ -13,6 +13,10 @@
         <start>28</start>
         <end>55</end>
         <keyframe>41</keyframe>
+        <force frame='32'>
+          <x>500</x>
+          <y>250</y>
+        </force>
       </animation>
       <animation>
         <name>idle</name>

@@ -103,7 +103,7 @@ namespace BountyBandits.GameScreen
 #endif
 #if DEBUG
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
-                        Game.instance.spawnManager.spawnGroup("sumo", 1, 1);
+                        Game.instance.spawnManager.spawnGroup("seal", 1, 1);
                     if (Keyboard.GetState().IsKeyDown(Keys.F4))
                         foreach (Being player in Game.instance.players.Values)
                             player.giveXP(Game.instance.xpManager.getXPToLevelUp(player.level - 1));
