@@ -61,7 +61,7 @@ namespace BountyBandits.GameScreen
                         }
                         List<Guid> killGuids = new List<Guid>();
                         foreach (Being extraPlayer in Game.instance.players.Values)
-                            if (extraPlayer.input.getPlayerIndex() == input.getPlayerIndex())
+                            if (extraPlayer.input != null && extraPlayer.input.getPlayerIndex() == input.getPlayerIndex())
                                 killGuids.Add(extraPlayer.guid);
                         foreach (Guid kill in killGuids)
                             Game.instance.players.Remove(kill);

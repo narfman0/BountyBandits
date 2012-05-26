@@ -60,7 +60,7 @@ namespace BountyBandits.Network
             msg.Write(gameItem.body.LinearVelocity.Y);
             msg.Write(gameItem.body.Rotation);
             msg.Write(gameItem.body.AngularVelocity);
-            msg.Write((Int16)(gameItem.body.Tag == null ? 0 : (int)gameItem.body.Tag));
+            msg.Write((Int16)(gameItem.body.Tag == null ? (short)0 : gameItem.body.Tag));
             msg.Write(gameItem.guid.ToString());
         }
 

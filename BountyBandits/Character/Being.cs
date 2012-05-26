@@ -33,7 +33,7 @@ namespace BountyBandits.Character
         public Geom geom;
         public AnimationController controller;
         private float currFrame;
-        public AnimationInfo currAnimation; 
+        public AnimationInfo currAnimation;
         /// <summary>
         /// List to hold force frames. When the frame is hit, a force is applied.
         /// This is a mutable list, whereas the one in currAnimation is immutable.
@@ -50,7 +50,7 @@ namespace BountyBandits.Character
         public Menu menu = new Menu();
         #endregion
         #region Properties
-        public bool IsStunned {get { return stunDuration > 0; } }
+        public bool IsStunned { get { return stunDuration > 0; } }
         public float CurrentHealth
         {
             get { return currentHealth; }
@@ -62,9 +62,10 @@ namespace BountyBandits.Character
                     Game.instance.network.sendBeingCurrentHP(guid, CurrentHealth);
             }
         }
-        public float Weight {
+        public float Weight
+        {
             get { return weight + ((float)stats.getStatValue(StatType.Strength) / 2f); }
-            set { weight = value; } 
+            set { weight = value; }
         }
         #endregion
         public Being(string name, int level, AnimationController controller,
@@ -86,7 +87,8 @@ namespace BountyBandits.Character
                 stats.setStatValue(StatType.Speed, 10);
                 foreach (Stat stat in controller.statRatios.statsTable.Values)
                     stats.addStatValue(stat.getType(), stat.getValue() * (level - 1));
-            }else
+            }
+            else
                 foreach (Stat stat in controller.statRatios.statsTable.Values)
                     stats.setStatValue(stat.getType(), stat.getValue() * level);
             guid = Guid.NewGuid();
@@ -109,7 +111,7 @@ namespace BountyBandits.Character
         public float attackCompute(Being enemy)
         {
             float toHit = .95f, damage = 0; //TODO calculate ths, prob from agility;
-            toHit = Math.Max(.05f,Math.Min(.95f, toHit));
+            toHit = Math.Max(.05f, Math.Min(.95f, toHit));
 
             if ((toHit > (float)Game.instance.rand.NextDouble() * .1f) && !enemy.isDead &&
                 (enemy.geom.CollisionCategories & geom.CollisionCategories) != CollisionCategory.None &&
@@ -156,9 +158,9 @@ namespace BountyBandits.Character
         {
             Vector2 dimensions = new Vector2((currAnimation.aoe ? 2 : 1) * getRange(),
                 controller.getFrameDimensions(getCurrentFrame()).Y + getStat(StatType.Range));
-            Vector2 positionOffset = currAnimation.aoe ? Vector2.Zero : 
+            Vector2 positionOffset = currAnimation.aoe ? Vector2.Zero :
                 new Vector2(getFacingMultiplier() * controller.getFrameDimensions(getCurrentFrame()).X / 2, 0);
-            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(Game.instance.physicsSimulator, 
+            Geom collisionGeom = GeomFactory.Instance.CreateRectangleGeom(Game.instance.physicsSimulator,
                 body, dimensions.X, dimensions.Y, positionOffset, 0);
             collisionGeom.CollisionCategories = geom.CollisionCategories;
             collisionGeom.CollidesWith = geom.CollidesWith;
@@ -241,7 +243,7 @@ namespace BountyBandits.Character
         }
         public Vector2 getPos()
         {
-            if (!isSettled) 
+            if (!isSettled)
                 return body.Position;
             else return pos;
         }
@@ -285,13 +287,13 @@ namespace BountyBandits.Character
         }
         public bool lane(bool up)
         {
-            if (!currAnimation.name.Contains("attack") && 
+            if (!currAnimation.name.Contains("attack") &&
                 Environment.TickCount - timeOfLastDepthChange > TIME_TO_CHANGE_DEPTHS && !isDead &&
                 ((up && getDepth() != 0) || (!up && getDepth() != 3)))
             {
                 setDepth(getDepth() + (up ? -1 : 1));
                 if (isTouchingGeom(false) != null)
-                    setDepth(getDepth()  + (up ? 1 : -1));
+                    setDepth(getDepth() + (up ? 1 : -1));
                 else
                 {
                     timeOfLastDepthChange = Environment.TickCount;
@@ -314,7 +316,7 @@ namespace BountyBandits.Character
         public void newLevel()
         {
             combatText = new CombatTextManager();
-            Vector2 texDimensions = controller.frames.Count == 0 ? new Vector2(128, 128) : 
+            Vector2 texDimensions = controller.frames.Count == 0 ? new Vector2(128, 128) :
                 controller.getFrameDimensions(getCurrentFrame());
             body = BodyFactory.Instance.CreateRectangleBody(Game.instance.physicsSimulator, texDimensions.X / 2, texDimensions.Y, Weight);
             body.Position = new Vector2(10 + texDimensions.X, 10 + texDimensions.Y / 2);
@@ -349,9 +351,10 @@ namespace BountyBandits.Character
             #region Apply tag multipliers
             if (hit.Body.Tag != null)
             {
-                force *= (int)hit.Body.Tag;
-                hit.Body.Tag = (int)(hit.Body.Tag) / 10;
-                if ((int)hit.Body.Tag <= 1)
+                Int16 currentTag = (Int16)hit.Body.Tag;
+                force *= currentTag;
+                hit.Body.Tag = (Int16)(currentTag / 10);
+                if (currentTag <= 1)
                     hit.Body.Tag = null;
             }
             #endregion
@@ -373,7 +376,8 @@ namespace BountyBandits.Character
             if (!isDead)
             {
                 #region Animation forces
-                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame){
+                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame)
+                {
                     if (currAnimationForceFrames[0].isEnemy)
                     {
                         foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
@@ -414,7 +418,7 @@ namespace BountyBandits.Character
                 else if (!attackComputed && currAnimation.keyframe <= currFrame)
                 {
                     if (currAnimation.teleport != null)
-                        body.Position += currAnimation.teleport*getFacingMultiplier();
+                        body.Position += currAnimation.teleport * getFacingMultiplier();
                     attackComputed = true;
                     if (!IsStunned)
                     {
@@ -486,7 +490,7 @@ namespace BountyBandits.Character
             projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
             projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
             projectileGeom.CollidesWith = geom.CollisionCategories;
-            projectileGeom.Body.Tag = 25;
+            projectileGeom.Body.Tag = (Int16)25;
             GameItem item = new GameItem();
             item.body = projectileGeom.Body;
             item.loc = projectileGeom.Body.Position;
