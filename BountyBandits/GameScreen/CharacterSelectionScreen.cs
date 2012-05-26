@@ -41,7 +41,7 @@ namespace BountyBandits.GameScreen
                 {
                     bool isPlayerOneAdded = false;
                     foreach (Being player in Game.instance.players.Values)
-                        if (player.input.useKeyboard)
+                        if (player.input != null && player.input.useKeyboard)
                             isPlayerOneAdded = true;
 
                     if (selectedMenuIndex[input.getPlayerIndex()] == -1)

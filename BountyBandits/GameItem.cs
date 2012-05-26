@@ -82,6 +82,7 @@ namespace BountyBandits
                 widthNode = parentNode.OwnerDocument.CreateElement("width"),
                 immovableNode = parentNode.OwnerDocument.CreateElement("immovable"),
                 polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType");
+            XmlAttribute rotationAttribute = parentNode.OwnerDocument.CreateAttribute("rotation");
             element.SetAttribute("guid", guid.ToString());
             nameNode.InnerText = name;
             radiusNode.InnerText = radius.ToString();
@@ -91,6 +92,7 @@ namespace BountyBandits
             immovableNode.InnerText = immovable.ToString();
             polygonTypeNode.InnerText = polygonType.ToString();
             locationNode.InnerText = loc.X + "," + loc.Y;
+            rotationAttribute.Value = rotation.ToString();
             switch(polygonType)
             {
                 case PhysicsPolygonType.Rectangle:
@@ -106,7 +108,7 @@ namespace BountyBandits
             element.AppendChild(weightNode);
             element.AppendChild(widthNode);
             element.AppendChild(immovableNode);
-            element.Attributes.GetNamedItem("rotation").Value = rotation.ToString();
+            element.Attributes.SetNamedItem(rotationAttribute);
             return element;
         }
     }

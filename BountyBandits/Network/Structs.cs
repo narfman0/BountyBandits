@@ -12,7 +12,7 @@ namespace BountyBandits.Network
     {
         public Guid guid;
         public Vector2 position, velocity;
-        public bool isFacingLeft,isMovingUp;
+        public bool isFacingLeft, isMovingUp;
         public int depth;
         public float currentHP;
         public int stunDuration;
@@ -60,7 +60,7 @@ namespace BountyBandits.Network
             msg.Write(gameItem.body.LinearVelocity.Y);
             msg.Write(gameItem.body.Rotation);
             msg.Write(gameItem.body.AngularVelocity);
-            msg.Write(gameItem.body.Tag == null ? 0 : (Int16)gameItem.body.Tag);
+            msg.Write((Int16)(gameItem.body.Tag == null ? 0 : (int)gameItem.body.Tag));
             msg.Write(gameItem.guid.ToString());
         }
 
@@ -71,8 +71,8 @@ namespace BountyBandits.Network
             state.velocity = new Vector2(msg.ReadFloat(), msg.ReadFloat());
             state.rotation = msg.ReadFloat();
             state.angularVelocity = msg.ReadFloat();
-            state.guid = new Guid(msg.ReadString());
             state.tag = msg.ReadInt16();
+            state.guid = new Guid(msg.ReadString());
             return state;
         }
     }
