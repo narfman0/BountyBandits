@@ -58,6 +58,15 @@
         </force>
       </animation>
       <animation>
+        <name>attackRanged</name>
+        <start>229</start>
+        <end>255</end>
+        <keyframe>243</keyframe>
+        <dmgMultiplier>.7</dmgMultiplier>
+        <projectileTexture>ninjaStar</projectileTexture>
+        <projectileWeight>5</projectileWeight>
+      </animation>
+      <animation>
         <name>death1</name>
         <start>197</start>
         <end>228</end>
