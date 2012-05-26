@@ -108,6 +108,7 @@ namespace BountyBandits
             element.AppendChild(weightNode);
             element.AppendChild(widthNode);
             element.AppendChild(immovableNode);
+            element.AppendChild(polygonTypeNode);
             element.Attributes.SetNamedItem(rotationAttribute);
             return element;
         }
