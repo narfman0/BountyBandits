@@ -26,17 +26,187 @@
         </location>
       </graphic>
     </background>
+    <items>
+      <item rotation="0">
+        <sideLengths>
+          <x>377</x>
+          <y>200</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>0</startdepth>
+        <width>1</width>
+        <name>truckCovered</name>
+        <loc>1586,101</loc>
+        <weight>1000</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1442,38</loc>
+        <weight>10</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1401,33</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1779,34</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1817,34</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1856,33</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1796,98</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1835,98</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1351,34</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="45">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1300,33</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="45">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1353,31</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="45">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1391,38</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="45">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1795,44</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="45">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1835,37</loc>
+        <weight>40</weight>
+      </item>
+    </items>
     <spawns>
       <enemy>
         <count>2</count>
         <bosses>0</bosses>
         <type>panda</type>
         <name>panda</name>
-        <weight>10</weight>
-        <loc>1083,84</loc>
+        <weight>1</weight>
+        <loc>1700,84</loc>
       </enemy>
     </spawns>
-    <location>904,150</location>
+    <location>1024,505</location>
     <number>0</number>
     <prereq />
   </level>

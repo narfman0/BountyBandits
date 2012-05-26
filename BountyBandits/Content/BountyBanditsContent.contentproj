@@ -22166,13 +22166,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Campaigns\default\vietnam\Warehouse.png">
-      <Name>Warehouse</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Campaigns\default\vietnam\vietnam1.png">
       <Name>vietnam1</Name>
       <Importer>TextureImporter</Importer>
@@ -22187,6 +22180,25 @@
   <ItemGroup>
     <Compile Include="Campaigns\default\vietnam\vietnam0.png">
       <Name>vietnam0</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Campaigns\default\vietnam\truckCovered.png">
+      <Name>truckCovered</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Campaigns\default\vietnam\barrell.png">
+      <Name>barrell</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Campaigns\default\vietnam\truckTow.png">
+      <Name>truckTow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

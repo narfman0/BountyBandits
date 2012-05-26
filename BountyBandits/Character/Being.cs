@@ -22,12 +22,12 @@ namespace BountyBandits.Character
         public string name;
         private StatSet stats = new StatSet();
         private InventoryManager itemManager = new InventoryManager();
-        private const int TIME_TO_CHANGE_DEPTHS = 300;
-        int timeOfLastJump = 0, timeToNextHeal = 0;
+        private const int TIME_TO_CHANGE_DEPTHS = 300, SETTLE_TIME = 10000;
+        int timeOfLastJump = 0, timeToNextHeal = 0, timeToBeSettled;
         public int xp = 0, level, xpOfNextLevel = 100, unusedAttr = 0, timeOfLastDepthChange = 0, stunDuration = 0;
         public float currentspecial = 5;
         private float currentHealth = 5f, weight = 68f;//68kgs == 150lbs
-        public bool isFacingLeft = false, isDead = false, isMovingUp;
+        public bool isFacingLeft = false, isDead = false, isSettled, isMovingUp, isPlayer, isLocal;
         private bool attackComputed = true;
         public Body body; private Vector2 pos; //used to draw when dead
         public Geom geom;
@@ -42,7 +42,6 @@ namespace BountyBandits.Character
         /// </summary>
         private List<ForceFrame> currAnimationForceFrames = new List<ForceFrame>();
         public Input input;
-        public bool isPlayer, isLocal;
         public Guid guid;
         public CombatTextManager combatText;
 
@@ -242,7 +241,7 @@ namespace BountyBandits.Character
         }
         public Vector2 getPos()
         {
-            if (!isDead) 
+            if (!isSettled) 
                 return body.Position;
             else return pos;
         }
@@ -387,11 +386,10 @@ namespace BountyBandits.Character
                     CurrentHealth = 0f;
                     isDead = true;
                     changeAnimation("death1");
-                    pos = body.Position;
-                    Game.instance.physicsSimulator.Remove(body);
-                    Game.instance.physicsSimulator.Remove(geom);
                     if (!isPlayer && Game.instance.rand.Next(20) == 0 && !Game.instance.network.isClient())   //nodrop check. should query entity
                         Game.instance.dropItem(pos, this);
+                    timeToBeSettled = (int)gameTime.TotalGameTime.TotalMilliseconds + SETTLE_TIME;
+                    isSettled = false;
                 }
                 #endregion
                 #region Change animation to idle/walk
@@ -443,21 +441,31 @@ namespace BountyBandits.Character
                 }
                 #endregion
             }
-            #region Respawn
             else
             {
+                #region settle
+                if (!isSettled && (int)gameTime.TotalGameTime.TotalMilliseconds > timeToBeSettled)
+                {
+                    isSettled = true;
+                    pos = body.Position;
+                    Game.instance.physicsSimulator.Remove(body);
+                    Game.instance.physicsSimulator.Remove(geom);
+                }
+                #endregion
+                #region Respawn
                 bool enemiesAlive = false;
                 foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                     if (enemy == this || enemy.CurrentHealth > 0f)
                         enemiesAlive = true;
                 if (!enemiesAlive)
                 {
+                    newLevel();
                     CurrentHealth = (float)getStat(StatType.Life) / 3f;
                     changeAnimation("idle");
                     isDead = false;
                 }
+                #endregion
             }
-            #endregion
             combatText.update();
         }
         private void attackRanged()

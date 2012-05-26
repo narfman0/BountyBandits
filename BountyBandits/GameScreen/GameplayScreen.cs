@@ -176,7 +176,10 @@ namespace BountyBandits.GameScreen
                     dropItem.body.ApplyTorque((float)Game.instance.rand.NextDouble() * .25f - .125f);
                 }
                 else
+                {
                     Game.instance.activeItems.Remove(dropItem.guid);
+                    Game.instance.physicsSimulator.BodyList.Remove(dropItem.body);
+                }
             }
             else
                 return false;
