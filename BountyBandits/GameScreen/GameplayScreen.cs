@@ -103,7 +103,7 @@ namespace BountyBandits.GameScreen
 #endif
 #if DEBUG
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
-                        Game.instance.spawnManager.spawnGroup("seal", 1, 1);
+                        Game.instance.spawnManager.spawnGroup("hitler", 1, 1);
                     if (Keyboard.GetState().IsKeyDown(Keys.F4))
                         foreach (Being player in Game.instance.players.Values)
                             player.giveXP(Game.instance.xpManager.getXPToLevelUp(player.level - 1));
@@ -128,6 +128,12 @@ namespace BountyBandits.GameScreen
                         gameItem.startdepth = (uint)Game.instance.rand.Next(4);
                         Game.instance.addGameItem(gameItem);
                     }
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F8) && Keyboard.GetState().IsKeyDown(Keys.F8))
+                        Game.instance.spawnManager.spawnGroup("panda", 1, 1);
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F9) && Keyboard.GetState().IsKeyDown(Keys.F9))
+                        Game.instance.spawnManager.spawnGroup("sloth", 1, 1);
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F10) && Keyboard.GetState().IsKeyDown(Keys.F10))
+                        Game.instance.spawnManager.spawnGroup("seal", 1, 1);
 #endif
                 }
                 #endregion

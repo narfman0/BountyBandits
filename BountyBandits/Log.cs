@@ -18,6 +18,7 @@ namespace BountyBandits
             }
             catch (Exception e)
             {
+                Console.Out.WriteLine(e.Message);
             }
         }
     }

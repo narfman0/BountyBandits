@@ -340,6 +340,8 @@ namespace BountyBandits.Network
         }
         public void sendFullObjectsUpdate()
         {
+            if (!isServer() && !isClient())
+                return;
             List<GameItem> gameItems = new List<GameItem>();
             foreach (GameItem item in gameref.activeItems.Values)
                 if (!(item is DropItem))
