@@ -325,6 +325,11 @@ namespace BountyBandits.Network
             for (int i = 0; i < count; i++)
             {
                 Being being = Being.fromXML(XMLUtil.asXML(im.ReadString()));
+                int depth = being.getDepth();
+                Vector2 pos = being.getPos();
+                being.newLevel();
+                being.setDepth(depth);
+                being.body.Position = pos;
                 if(!gameref.players.ContainsKey(being.guid))
                     gameref.players.Add(being.guid,being);
             }
@@ -340,14 +345,12 @@ namespace BountyBandits.Network
         }
         public void sendFullObjectsUpdate()
         {
-            if (!isServer())
-                return;
             List<GameItem> gameItems = new List<GameItem>();
             foreach (GameItem item in gameref.activeItems.Values)
                 if (!(item is DropItem))
                     gameItems.Add(item);
 
-            NetOutgoingMessage msg = server.CreateMessage();
+            NetOutgoingMessage msg = isServer() ? server.CreateMessage() : client.CreateMessage();
             msg.Write((int)MessageType.ObjectsFullUpdate);
             msg.Write(gameItems.Count);
             foreach (GameItem item in gameItems)
@@ -360,7 +363,10 @@ namespace BountyBandits.Network
             msg.Write(dropItems.Count);
             foreach (DropItem item in dropItems)
                 msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
-            serverSendToAllUnordered(msg);
+            if (isClient())
+                client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
+            else
+                serverSendToAllUnordered(msg);
         }
         private void receiveFullObjectsUpdate(NetIncomingMessage im)
         {

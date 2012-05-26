@@ -517,6 +517,8 @@ namespace BountyBandits.Character
             beingElement.SetAttribute("xpOfNextLevel", xpOfNextLevel.ToString());
             beingElement.SetAttribute("animationControllerName", controller.name);
             beingElement.SetAttribute("guid", guid.ToString());
+            beingElement.SetAttribute("depth", getDepth().ToString());
+            beingElement.AppendChild(XMLUtil.asXMLVector2(beingElement, getPos(), "position"));
             beingElement.AppendChild(stats.asXML(beingElement));
             beingElement.AppendChild(itemManager.asXML(beingElement));
             beingElement.AppendChild(unlocked.asXML(beingElement));
@@ -537,6 +539,10 @@ namespace BountyBandits.Character
             unusedAttr = int.Parse(element.GetAttribute("unusedAttr"));
             xpOfNextLevel = int.Parse(element.GetAttribute("xpOfNextLevel"));
             guid = new Guid(element.GetAttribute("guid"));
+            if(element.HasAttribute("depth"))
+                setDepth(int.Parse(element.GetAttribute("depth")));
+            if (element.GetElementsByTagName("position").Count > 0)
+                body.Position = XMLUtil.fromXMLVector2(element.GetElementsByTagName("position").Item(0));
             unlocked = UnlockedManager.fromXML((XmlElement)element.GetElementsByTagName("levelsUnlocked").Item(0));
             foreach (Stat stat in stats.statsTable.Values)
                 this.stats.setStatValue(stat.getType(), stat.getValue());

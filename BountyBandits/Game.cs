@@ -261,7 +261,8 @@ namespace BountyBandits
             item.body.Position = item.loc;
             item.body.Rotation = item.rotation;
             activeItems.Add(item.guid, item);
-            network.sendFullObjectsUpdate();
+            if(network.isServer())
+                network.sendFullObjectsUpdate();
         }
     }
     static class Program
