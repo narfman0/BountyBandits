@@ -351,7 +351,7 @@ namespace BountyBandits.Character
             if (dmg > 0)
             {
                 CurrentHealth -= dmg;
-                combatText.add(guid, "Force dmg: " + dmg, CombatTextType.HealthTaken);
+                combatText.add(guid, "-" + dmg, CombatTextType.HealthTaken);
             }
             return true;
         }

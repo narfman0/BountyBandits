@@ -23,7 +23,7 @@ namespace BountyBandits.Character
 
     public class CombatTextManager
     {
-        private static long COMBAT_TEXT_DURATION = 2000;
+        private static readonly long COMBAT_TEXT_DURATION = 1500, FADE_DURATION = 1000;
         private List<CombatText> items = new List<CombatText>();
         
         public void update()
@@ -37,7 +37,7 @@ namespace BountyBandits.Character
             for(int i=0; i<items.Count; i++)
             {
                 CombatText text = items[i];
-                Color color = Color.Black;
+                Color color = Color.Black, borderColor = Color.Black;
                 switch (text.type)
                 {
                     case CombatTextType.HealthAdded:
@@ -50,8 +50,15 @@ namespace BountyBandits.Character
                         color = Color.LightGray;
                         break;
                 }
+                float timeTilTextRemoved = COMBAT_TEXT_DURATION - (Environment.TickCount - items[0].time);
+                if (timeTilTextRemoved < FADE_DURATION)
+                {
+                    byte alpha = (byte)((timeTilTextRemoved / (float)FADE_DURATION) * (float)byte.MaxValue);
+                    color.A = alpha;
+                    borderColor.A = alpha;
+                }
                 text.yOffset += (Environment.TickCount - text.time) / 20;
-                Game.instance.currentState.getScreen().drawTextBorder(Game.instance.vademecumFont12, text.text, drawPos + new Vector2(0, text.yOffset), color, Color.Black, depth);
+                Game.instance.currentState.getScreen().drawTextBorder(Game.instance.vademecumFont12, text.text, drawPos + new Vector2(0, text.yOffset), color, borderColor, depth);
             }
         }
 
