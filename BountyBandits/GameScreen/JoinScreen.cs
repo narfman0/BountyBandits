@@ -37,7 +37,7 @@ namespace BountyBandits.GameScreen
                     {
                         if (key == Keys.Back)
                             NetworkManager.joinString = NetworkManager.joinString.Substring(0, NetworkManager.joinString.Length - 1);
-                        else if (key >= Keys.A && key <= Keys.Z)
+                        else if ((key >= Keys.A && key <= Keys.Z) || (key >= Keys.D0 && key <= Keys.D9))
                             NetworkManager.joinString += Convert.ToChar(key);
                         else if (key == Keys.OemPeriod)
                             NetworkManager.joinString += ".";

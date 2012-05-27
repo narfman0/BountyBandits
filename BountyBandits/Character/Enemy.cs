@@ -25,24 +25,20 @@ namespace BountyBandits.Character
                 if (player.CurrentHealth > 0f)
                     someoneAlive = true;
             //and target that random alive person
-            while (someoneAlive && (targetPlayer == Guid.Empty || Game.instance.players[targetPlayer].CurrentHealth <= 0f))
+            while (someoneAlive && (targetPlayer == Guid.Empty || Game.instance.players[targetPlayer].isDead))
                 targetPlayer = Game.instance.players.Values.ElementAt(Game.instance.rand.Next(Game.instance.players.Count)).guid;
             if (targetPlayer == Guid.Empty)
                 return;
             Being targetBeing = Game.instance.players[targetPlayer];
-            if (targetBeing.getDepth() < getDepth()) lane(true);
-            else if (targetBeing.getDepth() > getDepth()) lane(false);
+            if (targetBeing.getDepth() != getDepth()) 
+                lane(targetBeing.getDepth() < getDepth());
             if (isTouchingGeom(false) != null &&
                 body.LinearVelocity.X < .01f &&
                 getPos().Y + 10 < targetBeing.getPos().Y)
                 jump();
             if (Math.Abs(targetBeing.getPos().X - getPos().X) >
                 targetBeing.controller.frames[0].Width / 3 + controller.frames[0].Width / 3)
-            {
-                bool isLeft = targetBeing.getPos().X < getPos().X;
-                move(new Vector2((isLeft ? -1 : 1) * Game.FORCE_AMOUNT, 0));
-            }
-            long attackWaitTime = getAttackWaitTime();
+                move(new Vector2((targetBeing.getPos().X < getPos().X ? -1 : 1) * Game.FORCE_AMOUNT, 0));
             if (Environment.TickCount - timeOfLastAttack > getAttackWaitTime() &&
                 Vector2.Distance(targetBeing.getPos(), getPos()) < getRange())
             {
