@@ -32,8 +32,8 @@
         <start>141</start>
         <end>189</end>
         <keyframe>150</keyframe>
-        <force frame='141'>
-          <x>250</x>
+        <force isSelf='true' frame='141'>
+          <x>350</x>
           <y>0</y>
         </force>
       </animation>

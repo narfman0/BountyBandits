@@ -38,7 +38,7 @@
         <end>163</end>
         <keyframe>151</keyframe>
         <teleport>
-          <x>200</x>
+          <x>250</x>
           <y>0</y>
         </teleport>
       </animation>
@@ -48,7 +48,7 @@
         <end>197</end>
         <keyframe>176</keyframe>
         <dmgMultiplier>.7</dmgMultiplier>
-        <force frame='175'>
+        <force isSelf='true' frame='175'>
           <x>0</x>
           <y>-100</y>
         </force>

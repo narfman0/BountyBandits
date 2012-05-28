@@ -131,6 +131,7 @@ namespace BountyBandits.Character
                 if (getCritChance(enemy) >= Game.instance.rand.NextDouble())
                     damage *= 2;
 
+                int xpAdded = Game.instance.xpManager.getKillXPPerLevel(enemy.level);
                 if (damage > 0)
                 {
                     float lifeSteal = getLifeSteal();
@@ -142,13 +143,19 @@ namespace BountyBandits.Character
                     enemy.CurrentHealth -= damage;
                     if (Game.instance.network != null && Game.instance.network.isServer())
                         Game.instance.network.sendBeingCurrentHP(enemy.guid, enemy.CurrentHealth);
-                    enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
+                    if (enemy.CurrentHealth <= 0)
+                        enemy.combatText.add(enemy.guid, xpAdded.ToString() + " XP", CombatTextType.XPAdded);
+                    else
+                        enemy.combatText.add(enemy.guid, "-" + (int)damage, CombatTextType.HealthTaken);
                 }
-                if (enemy.CurrentHealth <= 0f && isPlayer)
-                    foreach (Being being in Game.instance.players.Values)
-                        being.giveXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
-                if (Game.instance.network != null)
-                    Game.instance.network.sendAddXP(Game.instance.xpManager.getKillXPPerLevel(enemy.level));
+                if (enemy.CurrentHealth <= 0 && isPlayer && Game.instance.network != null)
+                {
+                    if (!Game.instance.network.isClient())
+                        foreach (Being being in Game.instance.players.Values)
+                            being.giveXP(xpAdded);
+                    if (Game.instance.network.isServer())
+                        Game.instance.network.sendAddXP(xpAdded);
+                }
                 if (getStat(StatType.Knockback) > 0)
                     enemy.move(new Vector2(getFacingMultiplier() * getStat(StatType.Knockback), 0));
             }
@@ -384,8 +391,25 @@ namespace BountyBandits.Character
                             if (isInRange(enemy))
                                 abilityForce(enemy);
                     }
-                    else
+                    else if (currAnimationForceFrames[0].isSelf)
                         abilityForce(this);
+                    else
+                    {
+                        Texture2D tex = controller.frames[getCurrentFrame()];
+                        float x = body.Position.X + (tex.Width * (isFacingLeft ? -.5f : .5f));
+                        float y = body.Position.Y - tex.Height * .25f;
+                        List<Geom> collide = Game.instance.physicsSimulator.CollideAll(x,y);
+                        foreach(Geom geom in collide){
+                            if (geom.CollidesWith == this.geom.CollidesWith)
+                            {
+                                Vector2 force = currAnimationForceFrames[0].force;
+                                force += 300 * new Vector2(getStat(StatType.Strength), getStat(StatType.Strength));
+                                force.X *= isFacingLeft ? -1 : 1;
+                                geom.Body.ApplyForceAtWorldPoint(force, new Vector2(x,y));
+                                geom.Body.Tag = (short)12;
+                            }
+                        }
+                    }
                     currAnimationForceFrames.RemoveAt(0);
                 }
                 #endregion
@@ -483,24 +507,27 @@ namespace BountyBandits.Character
         }
         private void attackRanged()
         {
-            Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
-            Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
-            projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
-            projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (9000 + 2000 * getStat(StatType.Agility)) / currAnimation.projectileWeight, 250 * currAnimation.projectileWeight));
-            projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
-            projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
-            projectileGeom.CollidesWith = geom.CollisionCategories;
-            projectileGeom.Body.Tag = (Int16)25;
-            GameItem item = new GameItem();
-            item.body = projectileGeom.Body;
-            item.loc = projectileGeom.Body.Position;
-            item.width = 1;
-            item.startdepth = (uint)getDepth();
-            item.rotation = projectileGeom.Body.Rotation;
-            item.name = currAnimation.projectileTexture;
-            item.polygonType = PhysicsPolygonType.Polygon;
-            Game.instance.activeItems.Add(item.guid, item);
-            Game.instance.network.sendFullObjectsUpdate();
+            if (currAnimation.projectileTexture != null)
+            {
+                Texture2D projectileTexture = Game.instance.texMan.getTex(currAnimation.projectileTexture);
+                Geom projectileGeom = PhysicsHelper.textureToGeom(Game.instance.physicsSimulator, projectileTexture, currAnimation.projectileWeight);
+                projectileGeom.Body.Position = getPos() + getFacingMultiplier() * new Vector2(controller.frames[(int)currFrame].Width / 2, 0);
+                projectileGeom.Body.ApplyForce(new Vector2(getFacingMultiplier() * (9000 + 2000 * getStat(StatType.Agility)) / currAnimation.projectileWeight, 250 * currAnimation.projectileWeight));
+                projectileGeom.Body.Rotation = getFacingMultiplier() * 1.57079633f;
+                projectileGeom.CollisionCategories = (CollisionCategory)PhysicsHelper.depthToCollisionCategory(getDepth());
+                projectileGeom.CollidesWith = geom.CollisionCategories;
+                projectileGeom.Body.Tag = (Int16)25;
+                GameItem item = new GameItem();
+                item.body = projectileGeom.Body;
+                item.loc = projectileGeom.Body.Position;
+                item.width = 1;
+                item.startdepth = (uint)getDepth();
+                item.rotation = projectileGeom.Body.Rotation;
+                item.name = currAnimation.projectileTexture;
+                item.polygonType = PhysicsPolygonType.Polygon;
+                Game.instance.activeItems.Add(item.guid, item);
+                Game.instance.network.sendFullObjectsUpdate();
+            }
         }
         public float getRange()
         {

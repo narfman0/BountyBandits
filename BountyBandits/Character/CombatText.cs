@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Character
 {
-    public enum CombatTextType { HealthTaken, HealthAdded, StatusChanged }
+    public enum CombatTextType { HealthTaken, HealthAdded, StatusChanged, XPAdded }
     public struct CombatText
     {
         public long time, yOffset;
@@ -48,6 +48,9 @@ namespace BountyBandits.Character
                         break;
                     case CombatTextType.StatusChanged:
                         color = Color.LightGray;
+                        break;
+                    case CombatTextType.XPAdded:
+                        color = Color.Blue;
                         break;
                 }
                 float timeTilTextRemoved = COMBAT_TEXT_DURATION - (Environment.TickCount - items[0].time);
