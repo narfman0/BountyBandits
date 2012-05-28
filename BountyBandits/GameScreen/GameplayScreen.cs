@@ -140,6 +140,8 @@ namespace BountyBandits.GameScreen
                         Game.instance.spawnManager.spawnGroup("sloth", 1, 1);
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F10) && Keyboard.GetState().IsKeyDown(Keys.F10))
                         Game.instance.spawnManager.spawnGroup("seal", 1, 1);
+                    if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F11) && Keyboard.GetState().IsKeyDown(Keys.F11))
+                        Game.instance.spawnManager.spawnGroup("pedobear", 1, 1);
 #endif
                 }
                 #endregion
