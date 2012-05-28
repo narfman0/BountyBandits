@@ -81,9 +81,10 @@ namespace BountyBandits.Animation
                                     XmlElement forceEle = (XmlElement)subnode;
                                     bool isEnemy = forceEle.HasAttribute("isEnemy") && bool.Parse(forceEle.GetAttribute("isEnemy"));
                                     bool isSelf = forceEle.HasAttribute("isSelf") && bool.Parse(forceEle.GetAttribute("isSelf"));
+                                    short tag = forceEle.HasAttribute("tag") ? short.Parse(forceEle.GetAttribute("tag")) : (short)1;
                                     anim.forces.Add(new ForceFrame(
                                         int.Parse(forceEle.GetAttribute("frame")),
-                                        XMLUtil.fromXMLVector2(subnode), isEnemy, isSelf));
+                                        XMLUtil.fromXMLVector2(subnode), isEnemy, isSelf, tag));
                                 }
                                 else if (subnode.Name.Equals("targets"))
                                     anim.targets = int.Parse(subnode.FirstChild.Value);
@@ -188,19 +189,21 @@ namespace BountyBandits.Animation
     public class ForceFrame
     {
         public readonly int frame;
+        public readonly short tag;
         public readonly Vector2 force;
         public readonly bool isEnemy, isSelf;
 
-        public ForceFrame(int frame, Vector2 force, bool isEnemy, bool isSelf)
+        public ForceFrame(int frame, Vector2 force, bool isEnemy, bool isSelf, short tag)
         {
             this.frame = frame;
             this.force = force;
             this.isEnemy = isEnemy;
             this.isSelf = isSelf;
+            this.tag = tag;
         }
         public ForceFrame clone()
         {
-            return new ForceFrame(frame, new Vector2(force.X, force.Y), isEnemy, isSelf);
+            return new ForceFrame(frame, new Vector2(force.X, force.Y), isEnemy, isSelf, tag);
         }
     }
 }

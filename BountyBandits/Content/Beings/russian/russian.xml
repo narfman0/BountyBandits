@@ -37,12 +37,12 @@
         <start>156</start>
         <end>185</end>
         <keyframe>163</keyframe>
-        <force isSelf='true' frame='163'>
+        <force isSelf='true' frame='163' tag='5'>
           <x>800</x>
           <y>0</y>
         </force>
-        <force isSelf='true' frame='178'>
-          <x>-800</x>
+        <force isSelf='true' frame='178' tag='1'>
+          <x>-400</x>
           <y>0</y>
         </force>
       </animation>
@@ -67,7 +67,7 @@
         <start>240</start>
         <end>270</end>
         <keyframe>249</keyframe>
-        <force frame='249'>
+        <force frame='249' tag='12'>
           <x>20000</x>
           <y>20000</y>
         </force>

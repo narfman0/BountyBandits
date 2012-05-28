@@ -383,30 +383,38 @@ namespace BountyBandits.Character
             if (!isDead)
             {
                 #region Animation forces
-                if (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame)
+                while (currAnimationForceFrames.Count > 0 && currAnimationForceFrames[0].frame <= currFrame)
                 {
-                    if (currAnimationForceFrames[0].isEnemy)
+                    ForceFrame forceFrame = currAnimationForceFrames[0];
+                    if (forceFrame.isEnemy)
                     {
                         foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                             if (isInRange(enemy))
+                            {
                                 abilityForce(enemy);
+                                enemy.body.Tag = forceFrame.tag;
+                            }
                     }
-                    else if (currAnimationForceFrames[0].isSelf)
+                    else if (forceFrame.isSelf)
+                    {
                         abilityForce(this);
+                        body.Tag = forceFrame.tag;
+                    }
                     else
                     {
                         Texture2D tex = controller.frames[getCurrentFrame()];
                         float x = body.Position.X + (tex.Width * (isFacingLeft ? -.5f : .5f));
                         float y = body.Position.Y - tex.Height * .25f;
-                        List<Geom> collide = Game.instance.physicsSimulator.CollideAll(x,y);
-                        foreach(Geom geom in collide){
+                        List<Geom> collide = Game.instance.physicsSimulator.CollideAll(x, y);
+                        foreach (Geom geom in collide)
+                        {
                             if (geom.CollidesWith == this.geom.CollidesWith)
                             {
-                                Vector2 force = currAnimationForceFrames[0].force;
+                                Vector2 force = forceFrame.force;
                                 force += 300 * new Vector2(getStat(StatType.Strength), getStat(StatType.Strength));
                                 force.X *= isFacingLeft ? -1 : 1;
-                                geom.Body.ApplyForceAtWorldPoint(force, new Vector2(x,y));
-                                geom.Body.Tag = (short)12;
+                                geom.Body.ApplyForceAtWorldPoint(force, new Vector2(x, y));
+                                geom.Body.Tag = forceFrame.tag;
                             }
                         }
                     }

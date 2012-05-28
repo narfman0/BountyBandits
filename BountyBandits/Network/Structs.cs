@@ -16,6 +16,7 @@ namespace BountyBandits.Network
         public int depth;
         public float currentHP;
         public int stunDuration;
+        public short tag;
 
         public static void writeState(NetOutgoingMessage msg, Being being)
         {
@@ -29,6 +30,7 @@ namespace BountyBandits.Network
             msg.Write(being.isMovingUp);
             msg.Write(being.CurrentHealth);
             msg.Write(being.stunDuration);
+            msg.Write((short)being.body.Tag);
         }
 
         public static BeingNetworkState readState(NetIncomingMessage msg)
@@ -42,6 +44,7 @@ namespace BountyBandits.Network
             state.isMovingUp = msg.ReadBoolean();
             state.currentHP = msg.ReadFloat();
             state.stunDuration = msg.ReadInt32();
+            state.tag = msg.ReadInt16();
             return state;
         }
     }
