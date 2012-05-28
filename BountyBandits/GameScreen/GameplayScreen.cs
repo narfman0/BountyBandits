@@ -87,12 +87,12 @@ namespace BountyBandits.GameScreen
                     #endregion
                     if (currentplayer.input.getButtonHit(Buttons.Back))
                         currentplayer.menu.toggleMenu();
-                    if (currentplayer.input.getButtonDown(Buttons.DPadDown))
+                    if (currentplayer.input.getButtonHit(Buttons.DPadDown))
                         if (currentplayer.menu.isMenuActive())
                             currentplayer.menu.changeMenuItem(false);
                         else
                             currentplayer.lane(false);
-                    if (currentplayer.input.getButtonDown(Buttons.DPadUp))
+                    if (currentplayer.input.getButtonHit(Buttons.DPadUp))
                         if (currentplayer.menu.isMenuActive())
                             currentplayer.menu.changeMenuItem(true);
                         else

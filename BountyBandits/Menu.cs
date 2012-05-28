@@ -14,44 +14,36 @@ namespace BountyBandits
         };
         #region Fields
         private bool menuActive = false;
-        private int activeMenuItem = 0, timeMenuItemChanged = 0, timeMenuScreenChanged = 0;
+        private int activeMenuItem = 0;
         MenuScreens activeMenuScreen = MenuScreens.Data;
         #endregion
         public void changeMenuItem(bool up)
         {
-            if (Environment.TickCount - timeMenuItemChanged > 300)
-            {
-                timeMenuItemChanged = Environment.TickCount;
-                if (up) activeMenuItem--;
-                else ++activeMenuItem;
+            if (up) activeMenuItem--;
+            else ++activeMenuItem;
 
-                if(activeMenuItem<0) activeMenuItem = 0;
-                if (activeMenuScreen == MenuScreens.Data)
-                    if (activeMenuItem > 4) activeMenuItem = 4;
-                if (activeMenuScreen == MenuScreens.Inv)
-                    if (activeMenuItem > 0) activeMenuItem = 0;
-                if (activeMenuScreen == MenuScreens.Stats)
-                    if (activeMenuItem > 0) activeMenuItem = 0;
-            }
+            if(activeMenuItem<0) activeMenuItem = 0;
+            if (activeMenuScreen == MenuScreens.Data)
+                if (activeMenuItem > 4) activeMenuItem = 4;
+            if (activeMenuScreen == MenuScreens.Inv)
+                if (activeMenuItem > 0) activeMenuItem = 0;
+            if (activeMenuScreen == MenuScreens.Stats)
+                if (activeMenuItem > 0) activeMenuItem = 0;
         }
         public void changeMenuScreen(bool right)
         {
-            if (Environment.TickCount - timeMenuScreenChanged > 300)
+            activeMenuItem = 0;
+            if (right)
             {
-                timeMenuScreenChanged = Environment.TickCount;
-                activeMenuItem = 0;
-                if (right)
-                {
-                    if (activeMenuScreen == MenuScreens.Data) activeMenuScreen = MenuScreens.Inv;
-                    else if (activeMenuScreen == MenuScreens.Inv) activeMenuScreen = MenuScreens.Stats;
-                    else if (activeMenuScreen == MenuScreens.Stats) activeMenuScreen = MenuScreens.Data;
-                }
-                else
-                {
-                    if (activeMenuScreen == MenuScreens.Data) activeMenuScreen = MenuScreens.Stats;
-                    else if (activeMenuScreen == MenuScreens.Inv) activeMenuScreen = MenuScreens.Data;
-                    else if (activeMenuScreen == MenuScreens.Stats) activeMenuScreen = MenuScreens.Inv;
-                }
+                if (activeMenuScreen == MenuScreens.Data) activeMenuScreen = MenuScreens.Inv;
+                else if (activeMenuScreen == MenuScreens.Inv) activeMenuScreen = MenuScreens.Stats;
+                else if (activeMenuScreen == MenuScreens.Stats) activeMenuScreen = MenuScreens.Data;
+            }
+            else
+            {
+                if (activeMenuScreen == MenuScreens.Data) activeMenuScreen = MenuScreens.Stats;
+                else if (activeMenuScreen == MenuScreens.Inv) activeMenuScreen = MenuScreens.Data;
+                else if (activeMenuScreen == MenuScreens.Stats) activeMenuScreen = MenuScreens.Inv;
             }
         }
         public bool isMenuActive() { return menuActive; }
