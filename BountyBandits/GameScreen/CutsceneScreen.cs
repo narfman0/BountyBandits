@@ -69,11 +69,11 @@ namespace BountyBandits.GameScreen
                 being.update(gameTime);
             #endregion
             #region quit cutscene
-            bool startPressed = false;
+            bool skip = false;
             foreach (Being player in Game.instance.players.Values)
-                if (player.isLocal && player.input.getButtonHit(Buttons.Start))
-                    startPressed = true;
-            if (startPressed || Game.instance.storyElement.cutsceneLength + 500 < Environment.TickCount - timeStoryElementStarted)
+                if (player.isLocal && (player.input.getButtonHit(Buttons.Start) || player.input.getButtonHit(Buttons.Back)))
+                    skip = true;
+            if (skip || Game.instance.storyElement.cutsceneLength + 500 < Environment.TickCount - timeStoryElementStarted)
             {
                 Game.instance.currentState.setState(GameState.Gameplay);
                 Game.instance.storyElement = null;

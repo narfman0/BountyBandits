@@ -34,17 +34,22 @@ namespace BountyBandits.GameScreen
                     if (currentplayer.input.getButtonHit(Buttons.A))
                     {
                         if (currentplayer.menu.isMenuActive() &&
-                            currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data &&
-                            currentplayer.unusedAttr > 0)
+                            currentplayer.menu.getMenuScreen() == Menu.MenuScreens.Data)
                         {
-                            if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
-                            else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
-                            else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
-                            else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
-                            currentplayer.unusedAttr--;
+                            if (currentplayer.menu.getMenuItem() == 4)
+                                Game.instance.currentState.setState(GameState.WorldMap);
+                            else if (currentplayer.unusedAttr > 0)
+                            {
+                                if (currentplayer.menu.getMenuItem() == 0) currentplayer.upgradeStat(StatType.Agility, 1);
+                                else if (currentplayer.menu.getMenuItem() == 1) currentplayer.upgradeStat(StatType.Magic, 1);
+                                else if (currentplayer.menu.getMenuItem() == 2) currentplayer.upgradeStat(StatType.Speed, 1);
+                                else if (currentplayer.menu.getMenuItem() == 3) currentplayer.upgradeStat(StatType.Strength, 1);
+                                currentplayer.unusedAttr--;
+                            }
                         }
                         currentplayer.jump();
                     }
+                    #region attacks
                     if (currentplayer.input.getButtonHit(Buttons.X))
                     {
                         if (currentplayer.input.getButtonDown(Buttons.RightTrigger))
@@ -79,6 +84,7 @@ namespace BountyBandits.GameScreen
                             currentplayer.attack("attackCC");
                     }
 #endif
+                    #endregion
                     if (currentplayer.input.getButtonHit(Buttons.Back))
                         currentplayer.menu.toggleMenu();
                     if (currentplayer.input.getButtonDown(Buttons.DPadDown))
@@ -91,12 +97,12 @@ namespace BountyBandits.GameScreen
                             currentplayer.menu.changeMenuItem(true);
                         else
                             currentplayer.lane(true);
-                    if (currentplayer.input.getButtonHit(Buttons.DPadRight))
-                        currentplayer.menu.changeMenuScreen(true);
-                    if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
-                        currentplayer.menu.changeMenuScreen(false);
-                    if (currentplayer.input.getButtonHit(Buttons.Start))
-                        Game.instance.endLevel(false);
+                    //if (currentplayer.input.getButtonHit(Buttons.DPadRight))
+                    //    if (currentplayer.menu.isMenuActive())
+                    //        currentplayer.menu.changeMenuScreen(true);
+                    //if (currentplayer.input.getButtonHit(Buttons.DPadLeft))
+                    //    if (currentplayer.menu.isMenuActive())
+                    //        currentplayer.menu.changeMenuScreen(false);
 #if WINDOWS
                     if (Keyboard.GetState().IsKeyDown(Keys.F2))
                         Game.instance.endLevel(false);

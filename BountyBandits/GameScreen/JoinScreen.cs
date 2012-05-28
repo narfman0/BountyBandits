@@ -30,6 +30,8 @@ namespace BountyBandits.GameScreen
                             break;
                     }
                 }
+                if (input.getButtonHit(Buttons.Back))
+                    Game.instance.currentState.setState(GameState.Multiplayer);
 #if WINDOWS
                 foreach (Keys key in input.getKeysHit())
                 {

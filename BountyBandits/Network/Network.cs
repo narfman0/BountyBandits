@@ -64,6 +64,13 @@ namespace BountyBandits.Network
             Log.write(LogType.NetworkClient, "Client connected");
             return true;
         }
+        public void shutdown()
+        {
+            if (isClient())
+                client.Shutdown("kbye");
+            else if (isServer())
+                server.Shutdown("serverkbye");
+        }
         public void update(GameTime gameTime)
         {
             if (isClient())

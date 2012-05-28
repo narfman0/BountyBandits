@@ -25,7 +25,7 @@ namespace BountyBandits
             xboxButtonToKeyboardKey.Add(Buttons.A, Keys.Space);
             xboxButtonToKeyboardKey.Add(Buttons.X, Keys.Q);
             xboxButtonToKeyboardKey.Add(Buttons.Y, Keys.A);
-            xboxButtonToKeyboardKey.Add(Buttons.Start, Keys.Escape);
+            xboxButtonToKeyboardKey.Add(Buttons.Start, Keys.Enter);
             xboxButtonToKeyboardKey.Add(Buttons.DPadLeft, Keys.Left);
             xboxButtonToKeyboardKey.Add(Buttons.DPadRight, Keys.Right);
             xboxButtonToKeyboardKey.Add(Buttons.DPadUp, Keys.Up);
@@ -38,6 +38,7 @@ namespace BountyBandits
             xboxButtonToKeyboardKey.Add(Buttons.LeftTrigger, Keys.LeftAlt);
             xboxButtonToKeyboardKey.Add(Buttons.Back, Keys.C);
             xboxButtonToKeyboardKeySecondary.Add(Buttons.A, Keys.Enter);
+            xboxButtonToKeyboardKeySecondary.Add(Buttons.Back, Keys.Escape);
             //xboxButtonToKeyboardKeySecondary.Add(Buttons.X, Keys.LeftControl);
             update();
         }

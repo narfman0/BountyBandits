@@ -27,7 +27,7 @@ namespace BountyBandits
 
                 if(activeMenuItem<0) activeMenuItem = 0;
                 if (activeMenuScreen == MenuScreens.Data)
-                    if (activeMenuItem > 3) activeMenuItem = 3;
+                    if (activeMenuItem > 4) activeMenuItem = 4;
                 if (activeMenuScreen == MenuScreens.Inv)
                     if (activeMenuItem > 0) activeMenuItem = 0;
                 if (activeMenuScreen == MenuScreens.Stats)

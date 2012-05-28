@@ -119,14 +119,13 @@ namespace BountyBandits.GameScreen
                         drawTextBorder(Game.instance.vademecumFont18, "Magic:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Magic), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 171), currPlayer.menu.getMenuColor(1), Color.White, 0);
                         drawTextBorder(Game.instance.vademecumFont18, "Speed:     " + currPlayer.getStat(BountyBandits.Stats.StatType.Speed), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 197), currPlayer.menu.getMenuColor(2), Color.White, 0);
                         drawTextBorder(Game.instance.vademecumFont18, "Strength:  " + currPlayer.getStat(BountyBandits.Stats.StatType.Strength), new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 223), currPlayer.menu.getMenuColor(3), Color.White, 0);
-                        drawTextBorder(Game.instance.vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 249), currPlayer.menu.getMenuColor(4), Color.White, 0);
+                        drawTextBorder(Game.instance.vademecumFont18, "Available: " + currPlayer.unusedAttr, new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 249), Color.Black, Color.White, 0);
+                        drawTextBorder(Game.instance.vademecumFont18, "Quit", new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 275), currPlayer.menu.getMenuColor(4), Color.White, 0);
                     }
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Inv)
                         drawTextBorder(Game.instance.vademecumFont18, "Inventory Screen", new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 67), Color.Black, Color.White, 0);
                     if (currPlayer.menu.getMenuScreen() == Menu.MenuScreens.Stats)
                         drawTextBorder(Game.instance.vademecumFont18, "Data Screen", new Vector2(48 + pIndex * 320, res.ScreenHeight - 128 - 67), Color.Black, Color.White, 0);
-
-
                 }
                 if (currPlayer.controller.portrait != null)
                 {
@@ -141,9 +140,9 @@ namespace BountyBandits.GameScreen
                 int currentHP = currPlayer.CurrentHealth > 0f && (int)currPlayer.CurrentHealth == 0 ? 1 : (int)currPlayer.CurrentHealth;
                 drawTextBorder(Game.instance.vademecumFont12, currentHP + "/" + currPlayer.getStat(BountyBandits.Stats.StatType.Life), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 140), Color.Black, Color.DarkGray, 0);
 
-                for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
-                    spriteBatch.Draw(Game.instance.texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
-                drawTextBorder(Game.instance.vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 164), Color.Black, Color.DarkGray, 0);
+                //for (int specialIndex = 0; specialIndex < (int)currPlayer.currentspecial; ++specialIndex)
+                //    spriteBatch.Draw(Game.instance.texMan.getTex("yellowBar"), new Vector2(66 + pIndex * 288 + 32 * pIndex + 8 * specialIndex, 40), Color.White);
+                //drawTextBorder(Game.instance.vademecumFont12, (int)currPlayer.currentspecial + "/" + currPlayer.getStat(StatType.Special), new Vector2(86 + pIndex * 288 + 32 * pIndex, res.ScreenHeight - 164), Color.Black, Color.DarkGray, 0);
 
                 pIndex++;
             }

@@ -32,6 +32,8 @@ namespace BountyBandits.GameScreen
                             break;
                     }
                 }
+                if (input.getButtonHit(Buttons.Back))
+                    Game.instance.currentState.setState(GameState.RootMenu);
             }
         }
 

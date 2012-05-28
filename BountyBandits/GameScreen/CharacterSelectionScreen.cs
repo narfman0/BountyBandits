@@ -130,6 +130,12 @@ namespace BountyBandits.GameScreen
                         newCharacterOption.Remove(input.getPlayerIndex());
                         newCharacterOption.Add(input.getPlayerIndex(), (newCharacterOptions.Count - 1 + currOption) % newCharacterOptions.Count);
                     }
+                if (input.getButtonHit(Buttons.Back))
+                {
+                    if (Game.instance.network != null)
+                        Game.instance.network.shutdown();
+                    Game.instance.currentState.setState(GameState.RootMenu);
+                }
             }
         }
 
