@@ -67,7 +67,7 @@ namespace BountyBandits
 #if XBOX
                 graphics.IsFullScreen = true;
 #endif
-            spawnManager = new SpawnManager(this);
+            spawnManager = new SpawnManager();
             foreach (PlayerIndex playerIndex in Enum.GetValues(typeof(PlayerIndex)))
                 inputs.Add(new Input(playerIndex));
             inputs[0].useKeyboard = true;

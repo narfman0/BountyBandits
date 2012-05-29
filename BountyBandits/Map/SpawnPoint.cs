@@ -11,10 +11,8 @@ namespace BountyBandits.Map
 {
     public class SpawnPoint
     {
-        public string name = "enemy";
-        public Vector2 loc = Vector2.Zero;
-        public uint count = 1;
-        public uint bosses = 0;
+        public Vector2 loc, triggerLocation;
+        public uint count = 1, bosses = 0, triggerWidth = 64;
         public string type;
         /// <summary>
         /// This can be weight of a box OR the level if it is an enemy
@@ -22,21 +20,26 @@ namespace BountyBandits.Map
         public uint weight = 1;
         public bool isSpawned = false;
         XmlNode fromNode;
+
         public SpawnPoint Clone()
         {
             return SpawnPoint.fromXML(fromNode);
         }
+
         public static SpawnPoint fromXML(XmlNode node)
         {
             SpawnPoint point = new SpawnPoint();
             point.fromNode = node;
             foreach (XmlNode itemChild in node)
-                if (itemChild.Name.Equals("name"))
-                    point.name = itemChild.FirstChild.Value;
-                else if (itemChild.Name.Equals("loc"))
+                if (itemChild.Name.Equals("loc"))
                 {
                     string[] locStr = itemChild.FirstChild.Value.Split(',');
                     point.loc = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
+                }
+                else if (itemChild.Name.Equals("triggerLocation"))
+                {
+                    string[] locStr = itemChild.FirstChild.Value.Split(',');
+                    point.triggerLocation = new Vector2(float.Parse(locStr[0]), float.Parse(locStr[1]));
                 }
                 else if (itemChild.Name.Equals("count"))
                     point.count = uint.Parse(itemChild.FirstChild.Value);
@@ -44,9 +47,17 @@ namespace BountyBandits.Map
                     point.bosses = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("weight"))
                     point.weight = uint.Parse(itemChild.FirstChild.Value);
+                else if (itemChild.Name.Equals("width"))
+                    point.triggerWidth = uint.Parse(itemChild.FirstChild.Value);
                 else if (itemChild.Name.Equals("type"))
                     point.type = itemChild.FirstChild.Value;
             return point;
+        }
+
+        public bool insideTrigger(Vector2 position)
+        {
+            return position.X < triggerLocation.X + triggerWidth && position.X > triggerLocation.X - triggerWidth &&
+                position.Y < triggerLocation.Y + triggerWidth && position.Y > triggerLocation.Y - triggerWidth;
         }
     }
 }

@@ -200,10 +200,18 @@
       <enemy>
         <count>2</count>
         <bosses>0</bosses>
-        <type>panda</type>
-        <name>panda</name>
+        <type>seal</type>
         <weight>1</weight>
-        <loc>1700,84</loc>
+        <loc>1300,85</loc>
+        <triggerLocation>1100,1</triggerLocation>
+      </enemy>
+      <enemy>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>panda</type>
+        <weight>1</weight>
+        <loc>1200,85</loc>
+        <triggerLocation>1400,1</triggerLocation>
       </enemy>
     </spawns>
     <location>1024,505</location>
@@ -974,6 +982,7 @@
         <name>nerd</name>
         <weight>10</weight>
         <loc>1083,84</loc>
+        <triggerLocation>1083,1</triggerLocation>
       </enemy>
     </spawns>
     <location>1024,150</location>
