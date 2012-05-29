@@ -27,8 +27,8 @@
       </animation>
       <animation>
         <name>death1</name>
-        <start>120</start>
-        <end>149</end>
+        <start>144</start>
+        <end>184</end>
       </animation>
     </animations>
     <colorPermutations />
