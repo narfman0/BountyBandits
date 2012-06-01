@@ -322,6 +322,8 @@ namespace BountyBandits.Character
         }
         public void newLevel()
         {
+            menu.setMenuActive(false);
+            menu.setMenuItem(0);
             combatText = new CombatTextManager();
             Vector2 texDimensions = controller.frames.Count == 0 ? new Vector2(128, 128) :
                 controller.getFrameDimensions(getCurrentFrame());

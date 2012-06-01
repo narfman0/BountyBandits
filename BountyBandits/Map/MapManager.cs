@@ -31,7 +31,8 @@ namespace BountyBandits.Map
             mapdoc.Load(fs);
             guid = new Guid(mapdoc.GetElementsByTagName("guid").Item(0).FirstChild.Value);
             foreach(XmlElement node in mapdoc.GetElementsByTagName("level"))
-                levels.Add(Level.fromXML(node, gameref, campaignPath));
+                if(node.HasAttribute("name"))	//use level, not enemy level
+                    levels.Add(Level.fromXML(node, gameref, campaignPath));
             worldBackground = gameref.Content.Load<Texture2D>(campaignPath + "worldBackground");
         }
         public List<Level> getLevels() { return levels; }

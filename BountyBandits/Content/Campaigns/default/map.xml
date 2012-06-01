@@ -120,18 +120,6 @@
         <startdepth>1</startdepth>
         <width>1</width>
         <name>barrell</name>
-        <loc>1835,98</loc>
-        <weight>40</weight>
-      </item>
-      <item rotation="0">
-        <sideLengths>
-          <x>37</x>
-          <y>64</y>
-        </sideLengths>
-        <immovable>False</immovable>
-        <startdepth>1</startdepth>
-        <width>1</width>
-        <name>barrell</name>
         <loc>1351,34</loc>
         <weight>40</weight>
       </item>
@@ -195,25 +183,128 @@
         <loc>1835,37</loc>
         <weight>40</weight>
       </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1837,101</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1895,33</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1876,99</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1935,33</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1914,98</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1804,165</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1845,166</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>1</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1890,164</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>2</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1910,32</loc>
+        <weight>40</weight>
+      </item>
+      <item rotation="0">
+        <sideLengths>
+          <x>37</x>
+          <y>64</y>
+        </sideLengths>
+        <immovable>False</immovable>
+        <startdepth>3</startdepth>
+        <width>1</width>
+        <name>barrell</name>
+        <loc>1839,37</loc>
+        <weight>40</weight>
+      </item>
     </items>
-    <spawns>
-      <enemy>
-        <count>2</count>
-        <bosses>0</bosses>
-        <type>seal</type>
-        <weight>1</weight>
-        <loc>1300,85</loc>
-        <triggerLocation>1100,1</triggerLocation>
-      </enemy>
-      <enemy>
-        <count>2</count>
-        <bosses>0</bosses>
-        <type>panda</type>
-        <weight>1</weight>
-        <loc>1200,85</loc>
-        <triggerLocation>1400,1</triggerLocation>
-      </enemy>
-    </spawns>
+    <spawns/>
     <location>1024,505</location>
     <number>0</number>
     <prereq />
@@ -979,10 +1070,28 @@
         <count>2</count>
         <bosses>0</bosses>
         <type>nerd</type>
-        <name>nerd</name>
-        <weight>10</weight>
+        <level>1</level>
         <loc>1083,84</loc>
         <triggerLocation>1083,1</triggerLocation>
+        <triggerWidth>64</triggerWidth>
+      </enemy>
+      <enemy>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>seal</type>
+        <level>1</level>
+        <loc>1300,85</loc>
+        <triggerLocation>1100,1</triggerLocation>
+        <triggerWidth>64</triggerWidth>
+      </enemy>
+      <enemy>
+        <count>2</count>
+        <bosses>0</bosses>
+        <type>panda</type>
+        <level>1</level>
+        <loc>1200,85</loc>
+        <triggerLocation>1400,1</triggerLocation>
+        <triggerWidth>64</triggerWidth>
       </enemy>
     </spawns>
     <location>1024,150</location>

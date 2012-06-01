@@ -30,6 +30,10 @@ namespace BountyBandits
             if (activeMenuScreen == MenuScreens.Stats)
                 if (activeMenuItem > 0) activeMenuItem = 0;
         }
+        public void setMenuItem(int item)
+        {
+            activeMenuItem = item;
+        }
         public void changeMenuScreen(bool right)
         {
             activeMenuItem = 0;
@@ -56,6 +60,10 @@ namespace BountyBandits
         public void toggleMenu()
         {
             menuActive = !menuActive;
+        }
+        public void setMenuActive(bool active)
+        {
+            menuActive = active;
         }
     }
 }
