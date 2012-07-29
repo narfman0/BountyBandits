@@ -1,0 +1,48 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<Root>
+  <monster>
+    <name>poe</name>
+    <animations>
+      <animation>
+        <name>walk</name>
+        <start>1</start>
+        <end>30</end>
+      </animation>
+      <animation>
+        <name>attackRanged</name>
+        <start>30</start>
+        <end>95</end>
+        <keyframe>56</keyframe>
+        <dmgMultiplier>3</dmgMultiplier>
+        <projectileTexture>crow</projectileTexture>
+        <projectileWeight>5</projectileWeight>
+      </animation>
+      <animation>
+        <name>attack1</name>
+        <start>95</start>
+        <end>120</end>
+        <keyframe>101</keyframe>
+      </animation>
+      <animation>
+        <name>idle</name>
+        <start>1</start>
+        <end>1</end>
+      </animation>
+      <animation>
+        <name>death1</name>
+        <start>120</start>
+        <end>195</end>
+      </animation>
+    </animations>
+    <colorPermutations />
+    <stats>
+      <stat type='Strength' value='1' />
+      <stat type='Magic' value='1' />
+      <stat type='Agility' value='1' />
+      <stat type='Speed' value='2' />
+      <stat type='Range' value='500' />
+      <stat type='Life' value='10' />
+      <stat type='Special' value='5' />
+    </stats>
+  </monster>
+</Root>

@@ -135,11 +135,11 @@ namespace BountyBandits.GameScreen
                         Game.instance.addGameItem(gameItem);
                     }
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F8) && Keyboard.GetState().IsKeyDown(Keys.F8))
-                        Game.instance.spawnManager.spawnGroup("panda", 1, 1);
+                        Game.instance.spawnManager.spawnGroup("poe", 1, 1);
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F9) && Keyboard.GetState().IsKeyDown(Keys.F9))
-                        Game.instance.spawnManager.spawnGroup("sloth", 1, 1);
+                        Game.instance.spawnManager.spawnGroup("cat", 1, 1);
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F10) && Keyboard.GetState().IsKeyDown(Keys.F10))
-                        Game.instance.spawnManager.spawnGroup("seal", 1, 1);
+                        Game.instance.spawnManager.spawnGroup("virgil", 1, 1);
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F11) && Keyboard.GetState().IsKeyDown(Keys.F11))
                         Game.instance.spawnManager.spawnGroup("pedobear", 1, 1);
 #endif
