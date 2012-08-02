@@ -27,8 +27,8 @@ namespace BountyBandits.Map
         public XmlNode asXML(XmlDocument doc)
         {
             XmlElement backgroundElement = doc.CreateElement("graphic");
-            XMLUtil.addAttributeValue(doc, backgroundElement, "rotation", rotation.ToString());
-            XMLUtil.addAttributeValue(doc, backgroundElement, "scale", scale.ToString());
+            backgroundElement.SetAttribute("rotation", rotation.ToString());
+            backgroundElement.SetAttribute("scale", scale.ToString());
             XMLUtil.addElementValue(doc, backgroundElement, "path", texturePath);
             backgroundElement.AppendChild(XMLUtil.asXMLVector2(doc, location, "location"));
             return backgroundElement;

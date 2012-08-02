@@ -107,9 +107,9 @@ namespace BountyBandits.GameScreen
                     if (Keyboard.GetState().IsKeyDown(Keys.F2))
                         Game.instance.endLevel(false);
 #endif
-#if DEBUG
                     if (Game.instance.inputs[0].keyPreviousState.IsKeyUp(Keys.F3) && Keyboard.GetState().IsKeyDown(Keys.F3))
-                        Game.instance.spawnManager.spawnGroup("hitler", 1, 1);
+                        Game.instance.currentState.setState(GameState.MapEditor);
+#if DEBUG
                     if (Keyboard.GetState().IsKeyDown(Keys.F4))
                         foreach (Being player in Game.instance.players.Values)
                             player.giveXP(Game.instance.xpManager.getXPToLevelUp(player.level - 1));
@@ -168,7 +168,7 @@ namespace BountyBandits.GameScreen
 
         public override void Draw(GameTime gameTime)
         {
-            drawGameplay(Game.instance.getAvePosition());
+            drawGameplay(Game.instance.getAvePosition(), Game.instance.mapManager.getCurrentLevel());
         }
 
         /// <summary>

@@ -93,9 +93,10 @@ namespace BountyBandits.GameScreen
         {
             try
             {
-                drawGameplay(Game.instance.getAvePosition() + new Vector2(Game.instance.storyElement.getCameraOffset(gameTime).X, 0f));
+                drawGameplay(Game.instance.getAvePosition() + new Vector2(Game.instance.storyElement.getCameraOffset(gameTime).X, 0f), 
+                    Game.instance.mapManager.getCurrentLevel());
                 foreach (Being storyBeing in storyBeings.Values)
-                    storyBeing.draw();
+                    storyBeing.draw(Game.instance.getAvePosition());
             }
             catch (Exception e) { System.Console.WriteLine(e.StackTrace); }
             drawTextBorder(Game.instance.vademecumFont18, "Press Start to skip cutscene", new Vector2(2, res.ScreenHeight - 40), Color.Black, Color.White, 0);

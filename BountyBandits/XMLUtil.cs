@@ -50,20 +50,11 @@ namespace BountyBandits
             return frag.FirstChild as XmlElement;
         }
 
-        public static XmlAttribute addAttributeValue(XmlDocument document, XmlNode parent,
-            String name, String value)
-        {
-            XmlAttribute attribute = document.CreateAttribute(name);
-            attribute.Value = value;
-            parent.AppendChild(attribute);
-            return attribute;
-        }
-
         public static XmlElement addElementValue(XmlDocument document, XmlNode parent,
             String name, String value)
         {
             XmlElement element = document.CreateElement(name);
-            element.Value = value;
+            element.InnerText = value;
             parent.AppendChild(element);
             return element;
         }

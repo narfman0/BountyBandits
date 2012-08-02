@@ -237,6 +237,11 @@ namespace BountyBandits
 
             graphics.ApplyChanges();
         }
+
+        public bool Contains(float x, float y)
+        {
+            return x >= 0 && y >= 0 && x <= ScreenWidth && y <= ScreenHeight;
+        }
     }
 }
 

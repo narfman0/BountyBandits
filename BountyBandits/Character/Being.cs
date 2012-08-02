@@ -189,7 +189,7 @@ namespace BountyBandits.Character
                     currAnimationForceFrames.Add(frame.clone());
             }
         }
-        public void draw()
+        public void draw(Vector2 avePosition)
         {
             Vector2 drawPoint = Vector2.Zero, frameDimensions = controller.getFrameDimensions(getCurrentFrame());
             currFrame += getAttackSpeed();
@@ -226,8 +226,7 @@ namespace BountyBandits.Character
                 drawPoint = new Vector2(getPos().X - (frameDimensions.X / 2f), getPos().Y + frameDimensions.Y / 2f);
 
             SpriteEffects effects = isFacingLeft ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 avePos = Game.instance.getAvePosition(),
-                drawPos = new Vector2(drawPoint.X - avePos.X + Game.instance.res.ScreenWidth / 2, drawPoint.Y - avePos.Y + Game.instance.res.ScreenHeight / 2);
+            Vector2 drawPos = new Vector2(drawPoint.X - avePosition.X + Game.instance.res.ScreenWidth / 2, drawPoint.Y - avePosition.Y + Game.instance.res.ScreenHeight / 2);
             combatText.draw(new Vector2(drawPos.X + frameDimensions.X / 2, drawPos.Y), getDepth());
             Game.instance.currentState.getScreen().drawGameItem(controller.frames[getCurrentFrame()], drawPos, 0, getDepth(), Vector2.One, effects, Vector2.Zero);
         }

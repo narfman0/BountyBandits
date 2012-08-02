@@ -92,8 +92,8 @@ namespace BountyBandits
             XMLUtil.addElementValue(doc, element, "weight", weight.ToString());
             XMLUtil.addElementValue(doc, element, "startdepth", startdepth.ToString());
             XMLUtil.addElementValue(doc, element, "immovable", immovable.ToString());
-            XMLUtil.addAttributeValue(doc, element, "guid", guid.ToString());
-            XMLUtil.addAttributeValue(doc, element, "rotation", rotation.ToString());
+            element.SetAttribute("guid", guid.ToString());
+            element.SetAttribute("rotation", rotation.ToString());
             return element;
         }
     }

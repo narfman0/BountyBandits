@@ -79,30 +79,31 @@ namespace BountyBandits.Map
 
         public XmlElement asXML(XmlDocument doc)
         {
-            XmlElement levelElement = doc.CreateElement("level");
-            XMLUtil.addAttributeValue(doc, levelElement, "length", levelLength.ToString());
-            XMLUtil.addAttributeValue(doc, levelElement, "name", name);
-            XMLUtil.addAttributeValue(doc, levelElement, "autoProgress", autoProgress.ToString());
-            XMLUtil.addElementValue(doc, levelElement, "horizonPath", horizon.Name);
-            XMLUtil.addElementValue(doc, levelElement, "adj", listToString(adjacent));
-            XMLUtil.addElementValue(doc, levelElement, "prereq", listToString(prereq));
+            XmlElement element = doc.CreateElement("level");
+            element.SetAttribute("length", levelLength.ToString());
+            element.SetAttribute("name", name);
+            element.SetAttribute("autoProgress", autoProgress.ToString());
+            if(horizon != null)
+                XMLUtil.addElementValue(doc, element, "horizonPath", horizon.Name);
+            XMLUtil.addElementValue(doc, element, "adj", listToString(adjacent));
+            XMLUtil.addElementValue(doc, element, "prereq", listToString(prereq));
             XMLUtil.asXMLVector2(doc, loc, "location");
             XmlElement backgroundElement = doc.CreateElement("graphic");
             foreach (BackgroundItemStruct backgroundItem in backgroundItems)
                 backgroundElement.AppendChild(backgroundItem.asXML(doc));
-            doc.AppendChild(backgroundElement);
+            element.AppendChild(backgroundElement);
             XmlElement itemsElement = doc.CreateElement("items");
             foreach (GameItem gameItem in items)
                 itemsElement.AppendChild(gameItem.asXML(doc));
             XmlElement spawnsElement = doc.CreateElement("spawns");
             foreach (SpawnPoint spawn in spawns)
                 spawnsElement.AppendChild(spawn.asXML(doc));
-            doc.AppendChild(spawnsElement);
+            element.AppendChild(spawnsElement);
             XmlElement storyElement = doc.CreateElement("story");
             foreach (StoryElement story in storyElements)
                 storyElement.AppendChild(story.asXML(doc));
-            doc.AppendChild(storyElement);
-            return levelElement;
+            element.AppendChild(storyElement);
+            return element;
         }
 
         private static String listToString(List<int> list)
@@ -110,7 +111,7 @@ namespace BountyBandits.Map
             String listString = "";
             foreach (int listItem in list)
                 listString += listItem + ",";
-            return listString.Substring(0, listString.Length - 1);
+            return listString.Length > 0 ? listString.Substring(0, listString.Length - 1) : listString;
         }
     }
 }

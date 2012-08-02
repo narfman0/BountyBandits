@@ -28,8 +28,21 @@ namespace BountyBandits.Map
             currentCampaignPath =  campaignPath;
             loadCampaign(campaignPath);
         }
+
         public List<Level> getLevels() { return levels; }
+
         public Level getCurrentLevel() { return getLevelByNumber(currentLevelIndex); }
+
+        public void addLevel(Level level)
+        {
+            levels.Add(level);
+        }
+
+        public void removeLevel(int index)
+        {
+            levels.RemoveAt(index);
+        }
+
         public void incrementCurrentLevel(bool up)
         {
             if(up && getLevelByNumber(currentLevelIndex+1) != null)
@@ -58,11 +71,9 @@ namespace BountyBandits.Map
         public void saveCampaign(String campaignPath)
         {
             XmlDocument doc = new XmlDocument();
-            XmlElement rootElement = doc.CreateElement("Root"),
-                guidElement = doc.CreateElement("guid");
-            guidElement.Value = guid.ToString();
+            XmlElement rootElement = doc.CreateElement("Root");
+            XMLUtil.addElementValue(doc, rootElement, "guid", guid.ToString());
             doc.AppendChild(rootElement);
-            rootElement.AppendChild(guidElement);
             foreach (Level level in levels)
                 rootElement.AppendChild(level.asXML(doc));
             doc.Save(new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.OpenOrCreate, FileAccess.Write));

@@ -43,18 +43,17 @@ namespace BountyBandits.GameScreen
             }
         }
 
-        protected void drawGameplay(Vector2 avePosition)
+        protected void drawGameplay(Vector2 avePosition, Level currentLevel)
         {
-            Level currentLevel = Game.instance.mapManager.getCurrentLevel();
             #region Gameworld
-            if (Game.instance.mapManager.getCurrentLevel().horizon != null)
+            if (currentLevel.horizon != null)
             {
                 Vector2 currentResolution = new Vector2(res.ScreenWidth, res.ScreenHeight),
-                    origin = new Vector2(Game.instance.mapManager.getCurrentLevel().horizon.Width / 2f, Game.instance.mapManager.getCurrentLevel().horizon.Height / 2f),
+                    origin = new Vector2(currentLevel.horizon.Width / 2f, currentLevel.horizon.Height / 2f),
                     position = currentResolution / 2f - new Vector2(0, avePosition.Y - res.ScreenHeight / 2);
-                spriteBatch.Draw(Game.instance.mapManager.getCurrentLevel().horizon, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
+                spriteBatch.Draw(currentLevel.horizon, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
             }
-            foreach (BackgroundItemStruct item in Game.instance.mapManager.getCurrentLevel().backgroundItems)
+            foreach (BackgroundItemStruct item in currentLevel.backgroundItems)
             {
                 Vector2 position = item.location - item.layer * new Vector2(avePosition.X - res.ScreenWidth / 2, avePosition.Y - res.ScreenHeight / 2);
                 Texture2D tex = Game.instance.texMan.getTex(item.texturePath);
@@ -92,11 +91,11 @@ namespace BountyBandits.GameScreen
                     }
                 foreach (Being enemy in Game.instance.spawnManager.enemies.Values)
                     if (currentDepth == enemy.getDepth())
-                        enemy.draw();
+                        enemy.draw(avePosition);
                 foreach (Being player in Game.instance.players.Values)
                     if (currentDepth == player.getDepth())
                     {
-                        player.draw();
+                        player.draw(avePosition);
                         DropItem item = Game.instance.getClosestDropItem(player);
                         if (item != null && Vector2.DistanceSquared(item.body.Position, player.body.Position) < Game.DROP_ITEM_MAX_DISTANCE)
                             drawItemDescription(item);

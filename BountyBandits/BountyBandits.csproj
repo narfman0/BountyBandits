@@ -108,6 +108,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -132,6 +134,13 @@
     <Compile Include="GameScreen\GameplayScreen.cs" />
     <Compile Include="GameScreen\JoinScreen.cs" />
     <Compile Include="GameScreen\MainScreen.cs" />
+    <Compile Include="GameScreen\MapEditorScreen.cs" />
+    <Compile Include="GameScreen\MapEditor\Control.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameScreen\MapEditor\Control.Designer.cs">
+      <DependentUpon>Control.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameScreen\MultiplayerScreen.cs" />
     <Compile Include="GameScreen\WorldMapScreen.cs" />
     <Compile Include="Input.cs" />
@@ -226,6 +235,11 @@
       <Name>BountyBanditsContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GameScreen\MapEditor\Control.resx">
+      <DependentUpon>Control.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

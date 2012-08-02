@@ -62,9 +62,9 @@ namespace BountyBandits.Story
         public XmlElement asXML(XmlDocument doc)
         {
             XmlElement element = doc.CreateElement("beingController");
-            XMLUtil.addAttributeValue(doc, element, "entranceMS", entranceMS.ToString());
-            XMLUtil.addAttributeValue(doc, element, "startDepth", startDepth.ToString());
-            XMLUtil.addAttributeValue(doc, element, "animationName", animationController.name);
+            element.SetAttribute("entranceMS", entranceMS.ToString());
+            element.SetAttribute("startDepth", startDepth.ToString());
+            element.SetAttribute("animationName", animationController.name);
             element.AppendChild(XMLUtil.asXMLVector2(doc, startLocation, "startLocation"));
             XmlElement timeAnimationStructsElement = doc.CreateElement("timeAnimationStructs");
             foreach (TimeAnimationStruct timeAnimation in animations)
