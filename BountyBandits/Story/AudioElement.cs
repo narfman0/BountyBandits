@@ -30,5 +30,13 @@ namespace BountyBandits.Story
                     element.startTime = int.Parse(subnode.FirstChild.Value);
             return element;
         }
+
+        public XmlElement asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("audio");
+            XMLUtil.addElementValue(doc, element, "audioPath", audioPath.ToString());
+            XMLUtil.addElementValue(doc, element, "startTime", startTime.ToString());
+            return element;
+        }
     }
 }

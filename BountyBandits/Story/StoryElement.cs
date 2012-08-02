@@ -94,5 +94,26 @@ namespace BountyBandits.Story
                     return segment.getCurrent(gameTime);
             return Vector2.Zero;
         }
+
+        public XmlElement asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("story");
+            XMLUtil.addElementValue(doc, element, "aveXTrigger", aveXTrigger.ToString());
+            XMLUtil.addElementValue(doc, element, "startX", startX.ToString());
+            XMLUtil.addElementValue(doc, element, "cutsceneLength", cutsceneLength.ToString());
+            XmlElement pathSegmentsElement = doc.CreateElement("pathSegments");
+            foreach(CameraPathSegment segment in pathSegments)
+                pathSegmentsElement.AppendChild(segment.asXML(doc));
+            element.AppendChild(pathSegmentsElement);
+            XmlElement audioElement = doc.CreateElement("audioElements");
+            foreach (AudioElement segment in audioElements)
+                audioElement.AppendChild(segment.asXML(doc));
+            element.AppendChild(audioElement);
+            XmlElement beingControllersElement = doc.CreateElement("animations");
+            foreach (BeingController segment in beingControllers)
+                beingControllersElement.AppendChild(segment.asXML(doc));
+            element.AppendChild(beingControllersElement);
+            return element;
+        }
     }
 }

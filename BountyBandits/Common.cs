@@ -30,7 +30,8 @@ namespace BountyBandits
     {
         amish, buddhistmonk, cow, cowboy, frenchman, godzilla, governator,
         hippie, hitler, kimjongil, mexican, mountie, nerd, obama, panda,
-        pedobear, seal, shakespeare, sloth, stalin, sumo, tikiSmile, tikiTeeth
+        pedobear, seal, shakespeare, sloth, stalin, sumo, tikiSmile, tikiTeeth,
+        poe, cat, virgil
     }
     public enum PlayerTypes
     {

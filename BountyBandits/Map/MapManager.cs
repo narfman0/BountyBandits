@@ -23,17 +23,10 @@ namespace BountyBandits.Map
         public String currentCampaignPath;
         public int getCurrentLevelIndex() { return currentLevelIndex; }
 
-        public MapManager(Game gameref, String campaignPath){
+        public MapManager(String campaignPath){
             levels = new List<Level>();
             currentCampaignPath =  campaignPath;
-            FileStream fs = new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.Open, FileAccess.Read);
-            XmlDocument mapdoc = new XmlDocument();
-            mapdoc.Load(fs);
-            guid = new Guid(mapdoc.GetElementsByTagName("guid").Item(0).FirstChild.Value);
-            foreach(XmlElement node in mapdoc.GetElementsByTagName("level"))
-                if(node.HasAttribute("name"))	//use level, not enemy level
-                    levels.Add(Level.fromXML(node, gameref, campaignPath));
-            worldBackground = gameref.Content.Load<Texture2D>(campaignPath + "worldBackground");
+            loadCampaign(campaignPath);
         }
         public List<Level> getLevels() { return levels; }
         public Level getCurrentLevel() { return getLevelByNumber(currentLevelIndex); }
@@ -50,6 +43,29 @@ namespace BountyBandits.Map
                 if (level.number.Equals(number))
                     return level;
             return null;
+        }
+        public void loadCampaign(String campaignPath)
+        {
+            levels.Clear();
+            XmlDocument mapdoc = new XmlDocument();
+            mapdoc.Load(new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.Open, FileAccess.Read));
+            guid = new Guid(mapdoc.GetElementsByTagName("guid").Item(0).FirstChild.Value);
+            foreach (XmlElement node in mapdoc.GetElementsByTagName("level"))
+                if (node.HasAttribute("name"))	//use level, not enemy level
+                    levels.Add(Level.fromXML(node, Game.instance, campaignPath));
+            worldBackground = Game.instance.Content.Load<Texture2D>(campaignPath + "worldBackground");
+        }
+        public void saveCampaign(String campaignPath)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlElement rootElement = doc.CreateElement("Root"),
+                guidElement = doc.CreateElement("guid");
+            guidElement.Value = guid.ToString();
+            doc.AppendChild(rootElement);
+            rootElement.AppendChild(guidElement);
+            foreach (Level level in levels)
+                rootElement.AppendChild(level.asXML(doc));
+            doc.Save(new FileStream(CONTENT_PATH + campaignPath + MAP_FILENAME, FileMode.OpenOrCreate, FileAccess.Write));
         }
     }
 }

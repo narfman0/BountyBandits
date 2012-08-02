@@ -59,5 +59,18 @@ namespace BountyBandits.Map
             return position.X < triggerLocation.X + triggerWidth && position.X > triggerLocation.X - triggerWidth &&
                 position.Y < triggerLocation.Y + triggerWidth && position.Y > triggerLocation.Y - triggerWidth;
         }
+
+        public XmlElement asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("spawn");
+            XMLUtil.addElementValue(doc, element, "loc", loc.X + "," + loc.Y);
+            XMLUtil.addElementValue(doc, element, "triggerLocation", triggerLocation.X + "," + triggerLocation.Y);
+            XMLUtil.addElementValue(doc, element, "count", count.ToString());
+            XMLUtil.addElementValue(doc, element, "weight", weight.ToString());
+            XMLUtil.addElementValue(doc, element, "bosses", bosses.ToString());
+            XMLUtil.addElementValue(doc, element, "triggerWidth", triggerWidth.ToString());
+            XMLUtil.addElementValue(doc, element, "type", type.ToString());
+            return element;
+        }
     }
 }

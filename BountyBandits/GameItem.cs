@@ -65,51 +65,35 @@ namespace BountyBandits
                 guid = Guid.NewGuid();
             }
         }
+
         public static GameItem fromXML(XmlElement itemnode)
         {
             GameItem gameItem = new GameItem();
             gameItem.copyValues(itemnode);
             return gameItem;
         }
-        public virtual XmlElement asXML(XmlNode parentNode)
+
+        public virtual XmlElement asXML(XmlDocument doc)
         {
-            XmlElement element = parentNode.OwnerDocument.CreateElement("gameItem"),
-                locationNode = parentNode.OwnerDocument.CreateElement("loc"),
-                nameNode = parentNode.OwnerDocument.CreateElement("name"),
-                radiusNode = parentNode.OwnerDocument.CreateElement("radius"),
-                startDepthNode = parentNode.OwnerDocument.CreateElement("startdepth"),
-                weightNode = parentNode.OwnerDocument.CreateElement("weight"),
-                widthNode = parentNode.OwnerDocument.CreateElement("width"),
-                immovableNode = parentNode.OwnerDocument.CreateElement("immovable"),
-                polygonTypeNode = parentNode.OwnerDocument.CreateElement("polygonType");
-            XmlAttribute rotationAttribute = parentNode.OwnerDocument.CreateAttribute("rotation");
-            element.SetAttribute("guid", guid.ToString());
-            nameNode.InnerText = name;
-            radiusNode.InnerText = radius.ToString();
-            startDepthNode.InnerText = startdepth.ToString();
-            weightNode.InnerText = weight.ToString();
-            widthNode.InnerText = width.ToString();
-            immovableNode.InnerText = immovable.ToString();
-            polygonTypeNode.InnerText = polygonType.ToString();
-            locationNode.InnerText = loc.X + "," + loc.Y;
-            rotationAttribute.Value = rotation.ToString();
+            XmlElement element = doc.CreateElement("gameItem");
             switch(polygonType)
             {
                 case PhysicsPolygonType.Rectangle:
-                    element.AppendChild(XMLUtil.asXMLVector2(element, sideLengths, "sideLengths"));
+                    element.AppendChild(XMLUtil.asXMLVector2(doc, sideLengths, "sideLengths"));
                 break;
                 case PhysicsPolygonType.Circle:
-                    element.AppendChild(radiusNode);
+                    XMLUtil.addElementValue(doc, element, "radius", radius.ToString());
                 break;
             }
-            element.AppendChild(locationNode);
-            element.AppendChild(nameNode);
-            element.AppendChild(startDepthNode);
-            element.AppendChild(weightNode);
-            element.AppendChild(widthNode);
-            element.AppendChild(immovableNode);
-            element.AppendChild(polygonTypeNode);
-            element.Attributes.SetNamedItem(rotationAttribute);
+            XMLUtil.addElementValue(doc, element, "name", name);
+            XMLUtil.addElementValue(doc, element, "location", loc.X + "," + loc.Y);
+            XMLUtil.addElementValue(doc, element, "polygonType", polygonType.ToString());
+            XMLUtil.addElementValue(doc, element, "width", width.ToString());
+            XMLUtil.addElementValue(doc, element, "weight", weight.ToString());
+            XMLUtil.addElementValue(doc, element, "startdepth", startdepth.ToString());
+            XMLUtil.addElementValue(doc, element, "immovable", immovable.ToString());
+            XMLUtil.addAttributeValue(doc, element, "guid", guid.ToString());
+            XMLUtil.addAttributeValue(doc, element, "rotation", rotation.ToString());
             return element;
         }
     }

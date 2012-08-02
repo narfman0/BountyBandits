@@ -58,6 +58,24 @@ namespace BountyBandits.Story
                     return actions[i];
             return null;
         }
+
+        public XmlElement asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("beingController");
+            XMLUtil.addAttributeValue(doc, element, "entranceMS", entranceMS.ToString());
+            XMLUtil.addAttributeValue(doc, element, "startDepth", startDepth.ToString());
+            XMLUtil.addAttributeValue(doc, element, "animationName", animationController.name);
+            element.AppendChild(XMLUtil.asXMLVector2(doc, startLocation, "startLocation"));
+            XmlElement timeAnimationStructsElement = doc.CreateElement("timeAnimationStructs");
+            foreach (TimeAnimationStruct timeAnimation in animations)
+                timeAnimationStructsElement.AppendChild(timeAnimation.asXML(doc));
+            element.AppendChild(timeAnimationStructsElement);
+            XmlElement actionElement = doc.CreateElement("action");
+            foreach (ActionStruct action in actions)
+                actionElement.AppendChild(action.asXML(doc));
+            element.AppendChild(actionElement);
+            return element;
+        }
     }
 
     public enum ActionEnum
@@ -90,6 +108,15 @@ namespace BountyBandits.Story
                     str.intensity = float.Parse(ele.FirstChild.Value);
             return str;
         }
+
+        public XmlNode asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("actionStruct");
+            XMLUtil.addElementValue(doc, element, "action", action.ToString());
+            XMLUtil.addElementValue(doc, element, "time", time.ToString());
+            XMLUtil.addElementValue(doc, element, "intensity", intensity.ToString());
+            return element;
+        }
     }
 
     public struct TimeAnimationStruct
@@ -109,6 +136,14 @@ namespace BountyBandits.Story
             str.animationName = animationElement.FirstChild.Value;
             str.time = int.Parse(animationElement.GetAttribute("time"));
             return str;
+        }
+
+        public XmlNode asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("timeAnimationStruct");
+            XMLUtil.addElementValue(doc, element, "name", animationName);
+            XMLUtil.addElementValue(doc, element, "time", time.ToString());
+            return element;
         }
     }
 }

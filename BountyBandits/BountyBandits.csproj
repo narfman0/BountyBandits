@@ -140,6 +140,7 @@
     <Compile Include="Inventory\Manager.cs" />
     <Compile Include="Inventory\ItemType.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Map\BackgroundItemStruct.cs" />
     <Compile Include="Map\Level.cs" />
     <Compile Include="Map\Unlocked.cs" />
     <Compile Include="Map\MapManager.cs" />

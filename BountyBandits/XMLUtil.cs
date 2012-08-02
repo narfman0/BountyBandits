@@ -22,9 +22,9 @@ namespace BountyBandits
             return vec;
         }
 
-        public static XmlElement asXMLVector2(XmlNode parentNode, Vector2 vector, String name)
+        public static XmlElement asXMLVector2(XmlDocument doc, Vector2 vector, String name)
         {
-            XmlElement vectorElement = parentNode.OwnerDocument.CreateElement(name);
+            XmlElement vectorElement = doc.CreateElement(name);
             vectorElement.InnerXml = "<x>" + vector.X.ToString() + "</x>" +
                 "<y>" + vector.Y.ToString() + "</y>";
             return vectorElement;
@@ -48,6 +48,24 @@ namespace BountyBandits
             XmlDocumentFragment frag = new XmlDocument().CreateDocumentFragment();
             frag.InnerXml = xml;
             return frag.FirstChild as XmlElement;
+        }
+
+        public static XmlAttribute addAttributeValue(XmlDocument document, XmlNode parent,
+            String name, String value)
+        {
+            XmlAttribute attribute = document.CreateAttribute(name);
+            attribute.Value = value;
+            parent.AppendChild(attribute);
+            return attribute;
+        }
+
+        public static XmlElement addElementValue(XmlDocument document, XmlNode parent,
+            String name, String value)
+        {
+            XmlElement element = document.CreateElement(name);
+            element.Value = value;
+            parent.AppendChild(element);
+            return element;
         }
     }
 }

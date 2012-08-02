@@ -23,11 +23,11 @@ namespace BountyBandits
             item.setItem(Item.fromXML((XmlElement)element.GetElementsByTagName("item")[0]));
             return item;
         }
-        public override XmlElement asXML(XmlNode parent)
+        public override XmlElement asXML(XmlDocument doc)
         {
-            XmlElement beingElement = parent.OwnerDocument.CreateElement("dropItem");
+            XmlElement beingElement = doc.CreateElement("dropItem");
             beingElement.AppendChild(item.asXML(beingElement));
-            beingElement.AppendChild(base.asXML(beingElement));
+            beingElement.AppendChild(base.asXML(doc));
             return beingElement;
         }
     }

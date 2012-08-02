@@ -44,5 +44,15 @@ namespace BountyBandits.Story
                     element.msStart = int.Parse(subnode.FirstChild.Value);
             return element;
         }
+
+        public XmlElement asXML(XmlDocument doc)
+        {
+            XmlElement element = doc.CreateElement("segment");
+            XMLUtil.addElementValue(doc, element, "begin", begin.ToString());
+            XMLUtil.addElementValue(doc, element, "end", end.ToString());
+            XMLUtil.addElementValue(doc, element, "msSpan", msSpan.ToString());
+            XMLUtil.addElementValue(doc, element, "msStart", msStart.ToString());
+            return element;
+        }
     }
 }

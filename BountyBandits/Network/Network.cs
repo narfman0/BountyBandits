@@ -359,7 +359,7 @@ namespace BountyBandits.Network
             msg.Write((int)MessageType.ObjectsFullUpdate);
             msg.Write(gameItems.Count);
             foreach (GameItem item in gameItems)
-                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+                msg.Write(item.asXML(new XmlDocument()).OuterXml);
 
             List<DropItem> dropItems = new List<DropItem>();
             foreach (GameItem item in gameref.activeItems.Values)
@@ -367,7 +367,7 @@ namespace BountyBandits.Network
                     dropItems.Add((DropItem)item);
             msg.Write(dropItems.Count);
             foreach (DropItem item in dropItems)
-                msg.Write(item.asXML(new XmlDocument().CreateDocumentFragment()).OuterXml);
+                msg.Write(item.asXML(new XmlDocument()).OuterXml);
             if (isClient())
                 client.SendMessage(msg, NetDeliveryMethod.ReliableUnordered);
             else

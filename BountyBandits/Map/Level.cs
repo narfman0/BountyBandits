@@ -51,6 +51,7 @@ namespace BountyBandits.Map
             if(node.HasAttribute("autoProgress"))
                 newLvl.autoProgress = bool.Parse(node.GetAttribute("autoProgress"));
             newLvl.name = node.GetAttribute("name");
+
             foreach (string singleAdj in node.GetElementsByTagName("adj")[0].FirstChild.Value.Split(','))
                 newLvl.adjacent.Add(Int32.Parse(singleAdj));
             XmlNodeList list = node.GetElementsByTagName("prereq");
@@ -75,22 +76,41 @@ namespace BountyBandits.Map
                 newLvl.backgroundItems.Add(BackgroundItemStruct.fromXML(graphic));
             return newLvl;
         }
-    }
 
-    public struct BackgroundItemStruct
-    {
-        public string texturePath;
-        public Vector2 location;
-        public float rotation, scale, layer;
-        public static BackgroundItemStruct fromXML(XmlElement element)
+        public XmlElement asXML(XmlDocument doc)
         {
-            BackgroundItemStruct str = new BackgroundItemStruct();
-            str.location = XMLUtil.fromXMLVector2(element.GetElementsByTagName("location")[0]);
-            str.texturePath = element.GetElementsByTagName("path")[0].FirstChild.Value;
-            str.rotation = element.HasAttribute("rotation") ? float.Parse(element.GetAttribute("rotation")) : 0f;
-            str.scale = element.HasAttribute("scale") ? float.Parse(element.GetAttribute("scale")) : 1f;
-            str.layer = element.HasAttribute("layer") ? float.Parse(element.GetAttribute("layer")) : 1f;
-            return str;
+            XmlElement levelElement = doc.CreateElement("level");
+            XMLUtil.addAttributeValue(doc, levelElement, "length", levelLength.ToString());
+            XMLUtil.addAttributeValue(doc, levelElement, "name", name);
+            XMLUtil.addAttributeValue(doc, levelElement, "autoProgress", autoProgress.ToString());
+            XMLUtil.addElementValue(doc, levelElement, "horizonPath", horizon.Name);
+            XMLUtil.addElementValue(doc, levelElement, "adj", listToString(adjacent));
+            XMLUtil.addElementValue(doc, levelElement, "prereq", listToString(prereq));
+            XMLUtil.asXMLVector2(doc, loc, "location");
+            XmlElement backgroundElement = doc.CreateElement("graphic");
+            foreach (BackgroundItemStruct backgroundItem in backgroundItems)
+                backgroundElement.AppendChild(backgroundItem.asXML(doc));
+            doc.AppendChild(backgroundElement);
+            XmlElement itemsElement = doc.CreateElement("items");
+            foreach (GameItem gameItem in items)
+                itemsElement.AppendChild(gameItem.asXML(doc));
+            XmlElement spawnsElement = doc.CreateElement("spawns");
+            foreach (SpawnPoint spawn in spawns)
+                spawnsElement.AppendChild(spawn.asXML(doc));
+            doc.AppendChild(spawnsElement);
+            XmlElement storyElement = doc.CreateElement("story");
+            foreach (StoryElement story in storyElements)
+                storyElement.AppendChild(story.asXML(doc));
+            doc.AppendChild(storyElement);
+            return levelElement;
+        }
+
+        private static String listToString(List<int> list)
+        {
+            String listString = "";
+            foreach (int listItem in list)
+                listString += listItem + ",";
+            return listString.Substring(0, listString.Length - 1);
         }
     }
 }

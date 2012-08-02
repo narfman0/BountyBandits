@@ -81,7 +81,7 @@ namespace BountyBandits
             vademecumFont18 = Content.Load<SpriteFont>(@"Fonts\vademecum18");
             vademecumFont24 = Content.Load<SpriteFont>(@"Fonts\vademecum24");
             animationManager = new AnimationManager(this);
-            mapManager = new MapManager(this, MapManager.DEFAULT_CAMPAIGN_PATH);
+            mapManager = new MapManager(MapManager.DEFAULT_CAMPAIGN_PATH);
             physicsSimulator = new PhysicsSimulator(new Vector2(0, -20));
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentState = new StateManager();
