@@ -21,6 +21,10 @@ namespace BountyBandits.GameScreen.MapEditor
             currentLocation = new Vector2();
             this.screen = screen;
             InitializeComponent();
+            itemTextureBox.Items.AddRange(Game.instance.texMan.getSortedTextureNames());
+            itemTextureBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            itemTextureBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            itemTextureBox.AutoCompleteCustomSource.AddRange(Game.instance.texMan.getSortedTextureNames());
             setLevelInfo(screen.level);
         }
 
@@ -117,7 +121,7 @@ namespace BountyBandits.GameScreen.MapEditor
             try
             {
                 GameItem item = new GameItem();
-                item.name = this.itemTextureText.Text;
+                item.name = this.itemTextureBox.Text;
                 item.polygonType = (PhysicsPolygonType)Enum.Parse(typeof(PhysicsPolygonType), this.itemPolygonType.Text);
                 if (item.polygonType == PhysicsPolygonType.Circle)
                     item.radius = uint.Parse(this.itemRadiusText.Text);
@@ -168,7 +172,7 @@ namespace BountyBandits.GameScreen.MapEditor
         public void setGuiControls(GameItem item)
         {
             itemPolygonType.SelectedItem = item.polygonType.ToString();
-            itemTextureText.Text = item.name;
+            itemTextureBox.Text = item.name;
             itemWeightBox.Text = item.weight.ToString();
             itemRadiusText.Text = item.polygonType == PhysicsPolygonType.Circle ? item.radius.ToString() : 
                 item.sideLengths.X.ToString() + "," + item.sideLengths.Y.ToString();
@@ -205,6 +209,16 @@ namespace BountyBandits.GameScreen.MapEditor
         public int getLevelLength()
         {
             return int.Parse(levelLengthBox.Text);
+        }
+
+        private void physicsEnabledBox_CheckedChanged(object sender, EventArgs e)
+        {
+            screen.physicsEnabled = physicsEnabledBox.Checked;
+        }
+
+        public void setPhysicsEnabled(bool enabled)
+        {
+            physicsEnabledBox.Checked = enabled;
         }
     }
 }

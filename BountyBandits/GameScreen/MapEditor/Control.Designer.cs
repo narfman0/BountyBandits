@@ -42,6 +42,7 @@
             this.levelNameBox = new System.Windows.Forms.TextBox();
             this.selectedLevelLabel = new System.Windows.Forms.Label();
             this.levelEditorPanel = new System.Windows.Forms.Panel();
+            this.physicsEnabledBox = new System.Windows.Forms.CheckBox();
             this.autoProgressCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.enemyTab = new System.Windows.Forms.TabPage();
@@ -57,13 +58,13 @@
             this.enemyLevelTextfield = new System.Windows.Forms.TextBox();
             this.enemyLevelLabel = new System.Windows.Forms.Label();
             this.itemTab = new System.Windows.Forms.TabPage();
+            this.itemTextureBox = new System.Windows.Forms.ComboBox();
             this.itemWidthLabel = new System.Windows.Forms.Label();
             this.itemWidthSlider = new System.Windows.Forms.TrackBar();
             this.rotationLabel = new System.Windows.Forms.Label();
             this.itemRotationTextBox = new System.Windows.Forms.TextBox();
             this.itemDepthSlider = new System.Windows.Forms.TrackBar();
             this.itemSpawnButton = new System.Windows.Forms.Button();
-            this.itemTextureText = new System.Windows.Forms.TextBox();
             this.itemSpawnLabel = new System.Windows.Forms.Label();
             this.depthLabel = new System.Windows.Forms.Label();
             this.weightLabel = new System.Windows.Forms.Label();
@@ -224,6 +225,7 @@
             // levelEditorPanel
             // 
             this.levelEditorPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.levelEditorPanel.Controls.Add(this.physicsEnabledBox);
             this.levelEditorPanel.Controls.Add(this.autoProgressCheckBox);
             this.levelEditorPanel.Controls.Add(this.tabControl1);
             this.levelEditorPanel.Controls.Add(this.levelLengthBox);
@@ -237,6 +239,17 @@
             this.levelEditorPanel.Name = "levelEditorPanel";
             this.levelEditorPanel.Size = new System.Drawing.Size(314, 451);
             this.levelEditorPanel.TabIndex = 3;
+            // 
+            // physicsEnabledBox
+            // 
+            this.physicsEnabledBox.AutoSize = true;
+            this.physicsEnabledBox.Location = new System.Drawing.Point(140, 84);
+            this.physicsEnabledBox.Name = "physicsEnabledBox";
+            this.physicsEnabledBox.Size = new System.Drawing.Size(104, 17);
+            this.physicsEnabledBox.TabIndex = 19;
+            this.physicsEnabledBox.Text = "Physics Enabled";
+            this.physicsEnabledBox.UseVisualStyleBackColor = true;
+            this.physicsEnabledBox.CheckedChanged += new System.EventHandler(this.physicsEnabledBox_CheckedChanged);
             // 
             // autoProgressCheckBox
             // 
@@ -253,7 +266,7 @@
             this.tabControl1.Controls.Add(this.enemyTab);
             this.tabControl1.Controls.Add(this.itemTab);
             this.tabControl1.Controls.Add(this.backgroundTab);
-            this.tabControl1.Location = new System.Drawing.Point(17, 83);
+            this.tabControl1.Location = new System.Drawing.Point(18, 108);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(279, 312);
@@ -377,13 +390,13 @@
             // 
             // itemTab
             // 
+            this.itemTab.Controls.Add(this.itemTextureBox);
             this.itemTab.Controls.Add(this.itemWidthLabel);
             this.itemTab.Controls.Add(this.itemWidthSlider);
             this.itemTab.Controls.Add(this.rotationLabel);
             this.itemTab.Controls.Add(this.itemRotationTextBox);
             this.itemTab.Controls.Add(this.itemDepthSlider);
             this.itemTab.Controls.Add(this.itemSpawnButton);
-            this.itemTab.Controls.Add(this.itemTextureText);
             this.itemTab.Controls.Add(this.itemSpawnLabel);
             this.itemTab.Controls.Add(this.depthLabel);
             this.itemTab.Controls.Add(this.weightLabel);
@@ -400,6 +413,16 @@
             this.itemTab.TabIndex = 1;
             this.itemTab.Text = "Items";
             this.itemTab.UseVisualStyleBackColor = true;
+            // 
+            // itemTextureBox
+            // 
+            this.itemTextureBox.FormattingEnabled = true;
+            this.itemTextureBox.Location = new System.Drawing.Point(142, 37);
+            this.itemTextureBox.Name = "itemTextureBox";
+            this.itemTextureBox.Size = new System.Drawing.Size(84, 21);
+            this.itemTextureBox.Sorted = true;
+            this.itemTextureBox.TabIndex = 46;
+            this.itemTextureBox.Text = "log";
             // 
             // itemWidthLabel
             // 
@@ -454,14 +477,6 @@
             this.itemSpawnButton.Text = "Spawn";
             this.itemSpawnButton.UseVisualStyleBackColor = true;
             this.itemSpawnButton.Click += new System.EventHandler(this.itemSpawnButton_Click);
-            // 
-            // itemTextureText
-            // 
-            this.itemTextureText.Location = new System.Drawing.Point(142, 37);
-            this.itemTextureText.Name = "itemTextureText";
-            this.itemTextureText.Size = new System.Drawing.Size(84, 20);
-            this.itemTextureText.TabIndex = 39;
-            this.itemTextureText.Text = "log";
             // 
             // itemSpawnLabel
             // 
@@ -627,7 +642,7 @@
             // 
             // levelLengthBox
             // 
-            this.levelLengthBox.Location = new System.Drawing.Point(46, 398);
+            this.levelLengthBox.Location = new System.Drawing.Point(48, 426);
             this.levelLengthBox.Name = "levelLengthBox";
             this.levelLengthBox.Size = new System.Drawing.Size(117, 20);
             this.levelLengthBox.TabIndex = 16;
@@ -636,7 +651,7 @@
             // levelLengthLabel
             // 
             this.levelLengthLabel.AutoSize = true;
-            this.levelLengthLabel.Location = new System.Drawing.Point(2, 401);
+            this.levelLengthLabel.Location = new System.Drawing.Point(-1, 429);
             this.levelLengthLabel.Name = "levelLengthLabel";
             this.levelLengthLabel.Size = new System.Drawing.Size(43, 13);
             this.levelLengthLabel.TabIndex = 14;
@@ -647,9 +662,9 @@
             this.currentPosTextLabel.AutoSize = true;
             this.currentPosTextLabel.Location = new System.Drawing.Point(137, 30);
             this.currentPosTextLabel.Name = "currentPosTextLabel";
-            this.currentPosTextLabel.Size = new System.Drawing.Size(105, 13);
+            this.currentPosTextLabel.Size = new System.Drawing.Size(163, 13);
             this.currentPosTextLabel.TabIndex = 9;
-            this.currentPosTextLabel.Text = "currentPosTextLabel";
+            this.currentPosTextLabel.Text = "<Right click on map to populate>";
             // 
             // backgroundPictureLabel
             // 
@@ -792,7 +807,6 @@
         private System.Windows.Forms.TabPage itemTab;
         private System.Windows.Forms.TrackBar itemDepthSlider;
         private System.Windows.Forms.Button itemSpawnButton;
-        private System.Windows.Forms.TextBox itemTextureText;
         private System.Windows.Forms.Label itemSpawnLabel;
         private System.Windows.Forms.Label depthLabel;
         private System.Windows.Forms.Label weightLabel;
@@ -826,5 +840,7 @@
         private System.Windows.Forms.TextBox enemyTriggerLocationTextbox;
         private System.Windows.Forms.Label enemyTriggerLocationLabel;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox physicsEnabledBox;
+        private System.Windows.Forms.ComboBox itemTextureBox;
     }
 }

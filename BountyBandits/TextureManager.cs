@@ -60,5 +60,12 @@ namespace BountyBandits
             textures.Add(name + primary.GetHashCode().ToString() + secondary.GetHashCode().ToString(), newTex);
             return newTex;
         }
+
+        public string[] getSortedTextureNames()
+        {
+            string[] names = new List<string>(textures.Keys).ToArray();
+            Array.Sort<string>(names);
+            return names;
+        }
     }
 }

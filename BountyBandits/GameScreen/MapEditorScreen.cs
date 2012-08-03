@@ -17,6 +17,7 @@ namespace BountyBandits.GameScreen
         private Control control;
         public Vector2 cameraOffset;
         private MouseState previousMouseState;
+        public bool physicsEnabled = false;
 
         public MapEditorScreen()
             : base()
@@ -51,6 +52,8 @@ namespace BountyBandits.GameScreen
                         cameraOffset.X--;
                     if (currentplayer.input.getButtonHit(Buttons.LeftThumbstickRight))
                         cameraOffset.X++;
+                    if (currentplayer.input.isKeyHit(Keys.P))
+                        control.setPhysicsEnabled(physicsEnabled = !physicsEnabled);
                     if (previousMouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && Game.instance.res.Contains(Mouse.GetState().X, Mouse.GetState().Y))
                         cameraOffset += new Vector2(Mouse.GetState().X, Game.instance.res.ScreenHeight - Mouse.GetState().Y) - screenResolution / 2;
                     if (Mouse.GetState().RightButton == ButtonState.Pressed && Game.instance.res.Contains(Mouse.GetState().X, Mouse.GetState().Y))
@@ -65,7 +68,8 @@ namespace BountyBandits.GameScreen
                 previousGameTime = gameTime;
             float timeElapsed = (float)gameTime.TotalGameTime.TotalMilliseconds - (float)previousGameTime.TotalGameTime.TotalMilliseconds;
             previousGameTime = gameTime;
-            Game.instance.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
+            if(physicsEnabled)
+                Game.instance.physicsSimulator.Update((timeElapsed > .1f) ? timeElapsed : .1f);
             #endregion
         }
 
