@@ -240,5 +240,22 @@ namespace BountyBandits.GameScreen
             drawTextBorder(Game.instance.vademecumFont12, stats, new Vector2(item.body.Position.X - 10f - avePosition.X, (item.body.Position.Y + -79f - (20f * (name.Length / 20)) + (Game.DEPTH_MULTIPLE * (3 - item.startdepth)) - avePosition.Y)), Color.White, Color.Black, 0);
             #endregion
         }
+
+        protected void drawWorldBackground()
+        {
+            spriteBatch.Draw(Game.instance.mapManager.worldBackground, new Rectangle(0, 0, res.ScreenWidth, res.ScreenHeight), Color.White);
+            foreach (Level level in Game.instance.mapManager.getLevels())
+                spriteBatch.Draw(Game.instance.texMan.getTex("easyLevel"), level.loc, Color.White);
+            const string chooseLevelStr = "Choose level, A to start game";
+            drawTextBorder(Game.instance.vademecumFont24, chooseLevelStr, new Vector2(res.ScreenWidth / 2 - Game.instance.vademecumFont24.MeasureString(chooseLevelStr).X / 2, 1f), Color.Black, Color.DarkGray, 0);
+            spriteBatch.Draw(Game.instance.texMan.getTex("mapInfo"), new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2), Color.White);
+            if (Game.instance.mapManager.getCurrentLevel() != null)
+            {
+                drawTextBorder(Game.instance.vademecumFont24, "Level name:", new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2 + 168), Color.Black, Color.DarkGray, 0);
+                drawTextBorder(Game.instance.vademecumFont24, Game.instance.mapManager.getCurrentLevel().name, new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2 + 168 - 32), Color.Black, Color.DarkGray, 0);
+                drawTextBorder(Game.instance.vademecumFont24, "Level length:", new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2 + 96), Color.Black, Color.DarkGray, 0);
+                drawTextBorder(Game.instance.vademecumFont24, Game.instance.mapManager.getCurrentLevel().levelLength.ToString(), new Vector2(res.ScreenWidth - Game.instance.texMan.getTex("mapInfo").Width + 64, res.ScreenHeight / 2 - Game.instance.texMan.getTex("mapInfo").Height / 2 + 96 - 32), Color.Black, Color.DarkGray, 0);
+            }
+        }
     }
 }

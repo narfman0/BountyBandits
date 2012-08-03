@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using BountyBandits.Character;
 using BountyBandits.Map;
-using BountyBandits.GameScreen.MapEditor;
+using BountyBandits.GameScreen.Controls;
 
 namespace BountyBandits.GameScreen
 {

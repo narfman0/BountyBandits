@@ -12,7 +12,7 @@ namespace BountyBandits
 
     public enum GameState
     {
-        RootMenu, Multiplayer, JoinScreen, CharacterSelection, WorldMap, Gameplay, Cutscene, MapEditor
+        RootMenu, Multiplayer, JoinScreen, CharacterSelection, WorldMap, Gameplay, Cutscene, MapEditor, WorldEditor
     }
     public enum RootMenuOptions
     {

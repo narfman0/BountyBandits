@@ -135,13 +135,26 @@
     <Compile Include="GameScreen\JoinScreen.cs" />
     <Compile Include="GameScreen\MainScreen.cs" />
     <Compile Include="GameScreen\MapEditorScreen.cs" />
-    <Compile Include="GameScreen\MapEditor\Control.cs">
+    <Compile Include="GameScreen\Controls\Control.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GameScreen\MapEditor\Control.Designer.cs">
+    <Compile Include="GameScreen\Controls\Control.Designer.cs">
       <DependentUpon>Control.cs</DependentUpon>
     </Compile>
     <Compile Include="GameScreen\MultiplayerScreen.cs" />
+    <Compile Include="GameScreen\WorldEditorScreen.cs" />
+    <Compile Include="GameScreen\Controls\LevelInfoPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameScreen\Controls\LevelInfoPanel.Designer.cs">
+      <DependentUpon>LevelInfoPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameScreen\Controls\WorldControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameScreen\Controls\WorldControl.Designer.cs">
+      <DependentUpon>WorldControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameScreen\WorldMapScreen.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Inventory\ItemClass.cs" />
@@ -237,8 +250,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GameScreen\MapEditor\Control.resx">
+    <EmbeddedResource Include="GameScreen\Controls\Control.resx">
       <DependentUpon>Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameScreen\Controls\LevelInfoPanel.resx">
+      <DependentUpon>LevelInfoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameScreen\Controls\WorldControl.resx">
+      <DependentUpon>WorldControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

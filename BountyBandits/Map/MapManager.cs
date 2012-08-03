@@ -57,6 +57,15 @@ namespace BountyBandits.Map
                     return level;
             return null;
         }
+
+        public int getNextUnusedLevelIndex()
+        {
+            for (int i = 0; i < int.MaxValue; i++)
+                if (Game.instance.mapManager.getLevelByNumber(i) == null)
+                    return i;
+            return -1;
+        }
+
         public void loadCampaign(String campaignPath)
         {
             levels.Clear();

@@ -46,6 +46,9 @@ namespace BountyBandits
                 case GameState.MapEditor:
                     screen = new MapEditorScreen();
                     break;
+                case GameState.WorldEditor:
+                    screen = new WorldEditorScreen();
+                    break;
             }
             if(!skip)
                 Game.instance.network.sendGameStateUpdate();

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using BountyBandits.Map;
 
-namespace BountyBandits.GameScreen.MapEditor
+namespace BountyBandits.GameScreen.Controls
 {
     public partial class Control : Form
     {
@@ -21,35 +21,12 @@ namespace BountyBandits.GameScreen.MapEditor
             currentLocation = new Vector2();
             this.screen = screen;
             InitializeComponent();
+            levelInfoPanel.setEnabled(true);
             itemTextureBox.Items.AddRange(Game.instance.texMan.getSortedTextureNames());
             itemTextureBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             itemTextureBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             itemTextureBox.AutoCompleteCustomSource.AddRange(Game.instance.texMan.getSortedTextureNames());
-            setLevelInfo(screen.level);
-        }
-
-        public void setLevelInfo(Level level)
-        {
-            this.levelIndexBox.Text = level.number.ToString();
-            this.locXBox.Text = level.loc.X.ToString();
-            this.locYBox.Text = level.loc.Y.ToString();
-            this.adjacentLevelsBox.Clear();
-            this.prereqLevelsBox.Clear();
-            this.levelNameBox.Text = level.name;
-            this.autoProgressCheckBox.Checked = level.autoProgress;
-            this.levelLengthBox.Text = screen.level.levelLength.ToString();
-            for (int index = 0; index < level.prereq.Count; index++)
-            {
-                this.prereqLevelsBox.Text = this.prereqLevelsBox.Text + level.prereq[index];
-                if (index + 1 != level.prereq.Count)
-                    this.prereqLevelsBox.Text = this.prereqLevelsBox.Text+",";
-            }
-            for (int index = 0; index < level.adjacent.Count; index++)
-            {
-                this.adjacentLevelsBox.Text = this.adjacentLevelsBox.Text + level.adjacent[index];
-                if (index + 1 != level.adjacent.Count)
-                    this.adjacentLevelsBox.Text = this.adjacentLevelsBox.Text + ",";
-            }
+            levelInfoPanel.setLevelInfo(screen.level);
         }
 
         public void setCurrentPosition(Vector2 currentLocation)
@@ -72,25 +49,8 @@ namespace BountyBandits.GameScreen.MapEditor
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            List<int> adjacent = new List<int>();
-            string[] adjStrings = this.adjacentLevelsBox.Text.Split(',');
-            foreach (string adjstr in adjStrings)
-                if (adjstr != "")
-                    adjacent.Add(int.Parse(adjstr));
-
-            List<int> prereq = new List<int>();
-            string[] prereqStrings = this.prereqLevelsBox.Text.Split(',');
-            foreach (string prereqstr in prereqStrings)
-                if (prereqstr != "")
-                    prereq.Add(int.Parse(prereqstr));
-
-            screen.level.adjacent = adjacent;
-            screen.level.loc = new Vector2(float.Parse(this.locXBox.Text), float.Parse(this.locYBox.Text));
-            screen.level.prereq = prereq;
-            screen.level.name = levelNameBox.Text;
-            screen.level.number = int.Parse(levelIndexBox.Text);
+            levelInfoPanel.setUIInfo(screen.level);
             screen.level.autoProgress = autoProgressCheckBox.Checked;
-
             Game.instance.mapManager.removeLevel(Game.instance.mapManager.currentLevelIndex);
             Game.instance.mapManager.addLevel(screen.level);
             Game.instance.mapManager.saveCampaign(Game.instance.mapManager.currentCampaignPath);

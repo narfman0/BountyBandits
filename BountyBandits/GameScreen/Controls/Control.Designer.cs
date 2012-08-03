@@ -1,4 +1,4 @@
-﻿namespace BountyBandits.GameScreen.MapEditor
+﻿namespace BountyBandits.GameScreen.Controls
 {
     partial class Control
     {
@@ -29,18 +29,6 @@
         private void InitializeComponent()
         {
             this.saveButton = new System.Windows.Forms.Button();
-            this.mapPanel = new System.Windows.Forms.Panel();
-            this.levelIndexLabel = new System.Windows.Forms.Label();
-            this.levelIndexBox = new System.Windows.Forms.TextBox();
-            this.locationLabel = new System.Windows.Forms.Label();
-            this.locXBox = new System.Windows.Forms.TextBox();
-            this.locYBox = new System.Windows.Forms.TextBox();
-            this.prereqLevelsLabel = new System.Windows.Forms.Label();
-            this.prereqLevelsBox = new System.Windows.Forms.TextBox();
-            this.adjacentLevelsBox = new System.Windows.Forms.TextBox();
-            this.adjacentLevelsLabel = new System.Windows.Forms.Label();
-            this.levelNameBox = new System.Windows.Forms.TextBox();
-            this.selectedLevelLabel = new System.Windows.Forms.Label();
             this.levelEditorPanel = new System.Windows.Forms.Panel();
             this.physicsEnabledBox = new System.Windows.Forms.CheckBox();
             this.autoProgressCheckBox = new System.Windows.Forms.CheckBox();
@@ -91,9 +79,9 @@
             this.leveEditorTitleLabel = new System.Windows.Forms.Label();
             this.mapLevelTabControl = new System.Windows.Forms.TabControl();
             this.mapTab = new System.Windows.Forms.TabPage();
+            this.levelInfoPanel = new BountyBandits.GameScreen.Controls.LevelInfoPanel();
             this.levelTab = new System.Windows.Forms.TabPage();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.mapPanel.SuspendLayout();
             this.levelEditorPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.enemyTab.SuspendLayout();
@@ -115,112 +103,6 @@
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // mapPanel
-            // 
-            this.mapPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mapPanel.Controls.Add(this.levelIndexLabel);
-            this.mapPanel.Controls.Add(this.levelIndexBox);
-            this.mapPanel.Controls.Add(this.locationLabel);
-            this.mapPanel.Controls.Add(this.locXBox);
-            this.mapPanel.Controls.Add(this.locYBox);
-            this.mapPanel.Controls.Add(this.prereqLevelsLabel);
-            this.mapPanel.Controls.Add(this.prereqLevelsBox);
-            this.mapPanel.Controls.Add(this.adjacentLevelsBox);
-            this.mapPanel.Controls.Add(this.adjacentLevelsLabel);
-            this.mapPanel.Controls.Add(this.levelNameBox);
-            this.mapPanel.Controls.Add(this.selectedLevelLabel);
-            this.mapPanel.Location = new System.Drawing.Point(3, 6);
-            this.mapPanel.Name = "mapPanel";
-            this.mapPanel.Size = new System.Drawing.Size(314, 137);
-            this.mapPanel.TabIndex = 2;
-            // 
-            // levelIndexLabel
-            // 
-            this.levelIndexLabel.AutoSize = true;
-            this.levelIndexLabel.Location = new System.Drawing.Point(4, 108);
-            this.levelIndexLabel.Name = "levelIndexLabel";
-            this.levelIndexLabel.Size = new System.Drawing.Size(65, 13);
-            this.levelIndexLabel.TabIndex = 11;
-            this.levelIndexLabel.Text = "Level Index:";
-            // 
-            // levelIndexBox
-            // 
-            this.levelIndexBox.Location = new System.Drawing.Point(140, 108);
-            this.levelIndexBox.Name = "levelIndexBox";
-            this.levelIndexBox.Size = new System.Drawing.Size(84, 20);
-            this.levelIndexBox.TabIndex = 10;
-            // 
-            // locationLabel
-            // 
-            this.locationLabel.AutoSize = true;
-            this.locationLabel.Location = new System.Drawing.Point(4, 82);
-            this.locationLabel.Name = "locationLabel";
-            this.locationLabel.Size = new System.Drawing.Size(51, 13);
-            this.locationLabel.TabIndex = 8;
-            this.locationLabel.Text = "Location:";
-            // 
-            // locXBox
-            // 
-            this.locXBox.Location = new System.Drawing.Point(140, 82);
-            this.locXBox.Name = "locXBox";
-            this.locXBox.Size = new System.Drawing.Size(84, 20);
-            this.locXBox.TabIndex = 7;
-            // 
-            // locYBox
-            // 
-            this.locYBox.Location = new System.Drawing.Point(230, 82);
-            this.locYBox.Name = "locYBox";
-            this.locYBox.Size = new System.Drawing.Size(79, 20);
-            this.locYBox.TabIndex = 6;
-            // 
-            // prereqLevelsLabel
-            // 
-            this.prereqLevelsLabel.AutoSize = true;
-            this.prereqLevelsLabel.Location = new System.Drawing.Point(4, 56);
-            this.prereqLevelsLabel.Name = "prereqLevelsLabel";
-            this.prereqLevelsLabel.Size = new System.Drawing.Size(75, 13);
-            this.prereqLevelsLabel.TabIndex = 5;
-            this.prereqLevelsLabel.Text = "Prereq Levels:";
-            // 
-            // prereqLevelsBox
-            // 
-            this.prereqLevelsBox.Location = new System.Drawing.Point(140, 56);
-            this.prereqLevelsBox.Name = "prereqLevelsBox";
-            this.prereqLevelsBox.Size = new System.Drawing.Size(169, 20);
-            this.prereqLevelsBox.TabIndex = 4;
-            // 
-            // adjacentLevelsBox
-            // 
-            this.adjacentLevelsBox.Location = new System.Drawing.Point(140, 30);
-            this.adjacentLevelsBox.Name = "adjacentLevelsBox";
-            this.adjacentLevelsBox.Size = new System.Drawing.Size(169, 20);
-            this.adjacentLevelsBox.TabIndex = 3;
-            // 
-            // adjacentLevelsLabel
-            // 
-            this.adjacentLevelsLabel.AutoSize = true;
-            this.adjacentLevelsLabel.Location = new System.Drawing.Point(4, 30);
-            this.adjacentLevelsLabel.Name = "adjacentLevelsLabel";
-            this.adjacentLevelsLabel.Size = new System.Drawing.Size(86, 13);
-            this.adjacentLevelsLabel.TabIndex = 2;
-            this.adjacentLevelsLabel.Text = "Adjacent Levels:";
-            // 
-            // levelNameBox
-            // 
-            this.levelNameBox.Location = new System.Drawing.Point(140, 4);
-            this.levelNameBox.Name = "levelNameBox";
-            this.levelNameBox.Size = new System.Drawing.Size(169, 20);
-            this.levelNameBox.TabIndex = 1;
-            // 
-            // selectedLevelLabel
-            // 
-            this.selectedLevelLabel.AutoSize = true;
-            this.selectedLevelLabel.Location = new System.Drawing.Point(4, 4);
-            this.selectedLevelLabel.Name = "selectedLevelLabel";
-            this.selectedLevelLabel.Size = new System.Drawing.Size(81, 13);
-            this.selectedLevelLabel.TabIndex = 0;
-            this.selectedLevelLabel.Text = "Selected Level:";
             // 
             // levelEditorPanel
             // 
@@ -419,7 +301,7 @@
             this.itemTextureBox.FormattingEnabled = true;
             this.itemTextureBox.Location = new System.Drawing.Point(142, 37);
             this.itemTextureBox.Name = "itemTextureBox";
-            this.itemTextureBox.Size = new System.Drawing.Size(84, 21);
+            this.itemTextureBox.Size = new System.Drawing.Size(123, 21);
             this.itemTextureBox.Sorted = true;
             this.itemTextureBox.TabIndex = 46;
             this.itemTextureBox.Text = "log";
@@ -439,7 +321,7 @@
             this.itemWidthSlider.Maximum = 4;
             this.itemWidthSlider.Minimum = 1;
             this.itemWidthSlider.Name = "itemWidthSlider";
-            this.itemWidthSlider.Size = new System.Drawing.Size(84, 45);
+            this.itemWidthSlider.Size = new System.Drawing.Size(123, 45);
             this.itemWidthSlider.TabIndex = 44;
             this.itemWidthSlider.Value = 1;
             // 
@@ -456,7 +338,7 @@
             // 
             this.itemRotationTextBox.Location = new System.Drawing.Point(142, 116);
             this.itemRotationTextBox.Name = "itemRotationTextBox";
-            this.itemRotationTextBox.Size = new System.Drawing.Size(84, 20);
+            this.itemRotationTextBox.Size = new System.Drawing.Size(123, 20);
             this.itemRotationTextBox.TabIndex = 42;
             this.itemRotationTextBox.Text = "0";
             // 
@@ -465,7 +347,7 @@
             this.itemDepthSlider.Location = new System.Drawing.Point(142, 151);
             this.itemDepthSlider.Maximum = 3;
             this.itemDepthSlider.Name = "itemDepthSlider";
-            this.itemDepthSlider.Size = new System.Drawing.Size(84, 45);
+            this.itemDepthSlider.Size = new System.Drawing.Size(123, 45);
             this.itemDepthSlider.TabIndex = 41;
             // 
             // itemSpawnButton
@@ -509,7 +391,7 @@
             // 
             this.itemWeightBox.Location = new System.Drawing.Point(142, 63);
             this.itemWeightBox.Name = "itemWeightBox";
-            this.itemWeightBox.Size = new System.Drawing.Size(84, 20);
+            this.itemWeightBox.Size = new System.Drawing.Size(123, 20);
             this.itemWeightBox.TabIndex = 33;
             this.itemWeightBox.Text = "10";
             // 
@@ -517,7 +399,7 @@
             // 
             this.itemRadiusText.Location = new System.Drawing.Point(142, 89);
             this.itemRadiusText.Name = "itemRadiusText";
-            this.itemRadiusText.Size = new System.Drawing.Size(84, 20);
+            this.itemRadiusText.Size = new System.Drawing.Size(123, 20);
             this.itemRadiusText.TabIndex = 26;
             this.itemRadiusText.Text = "30";
             // 
@@ -558,7 +440,7 @@
             "Polygon"});
             this.itemPolygonType.Location = new System.Drawing.Point(142, 10);
             this.itemPolygonType.Name = "itemPolygonType";
-            this.itemPolygonType.Size = new System.Drawing.Size(84, 21);
+            this.itemPolygonType.Size = new System.Drawing.Size(123, 21);
             this.itemPolygonType.TabIndex = 29;
             this.itemPolygonType.Text = "Circle";
             this.itemPolygonType.SelectedIndexChanged += new System.EventHandler(this.itemPolygonType_SelectedIndexChanged);
@@ -715,7 +597,7 @@
             // 
             // mapTab
             // 
-            this.mapTab.Controls.Add(this.mapPanel);
+            this.mapTab.Controls.Add(this.levelInfoPanel);
             this.mapTab.Location = new System.Drawing.Point(4, 22);
             this.mapTab.Name = "mapTab";
             this.mapTab.Padding = new System.Windows.Forms.Padding(3);
@@ -723,6 +605,13 @@
             this.mapTab.TabIndex = 1;
             this.mapTab.Text = "Map";
             this.mapTab.UseVisualStyleBackColor = true;
+            // 
+            // levelInfoPanel
+            // 
+            this.levelInfoPanel.Location = new System.Drawing.Point(24, 6);
+            this.levelInfoPanel.Name = "levelInfoPanel";
+            this.levelInfoPanel.Size = new System.Drawing.Size(274, 139);
+            this.levelInfoPanel.TabIndex = 0;
             // 
             // levelTab
             // 
@@ -755,8 +644,6 @@
             this.Controls.Add(this.saveButton);
             this.Name = "Control";
             this.Text = "Control";
-            this.mapPanel.ResumeLayout(false);
-            this.mapPanel.PerformLayout();
             this.levelEditorPanel.ResumeLayout(false);
             this.levelEditorPanel.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -778,18 +665,6 @@
         #endregion
 
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Panel mapPanel;
-        private System.Windows.Forms.Label prereqLevelsLabel;
-        private System.Windows.Forms.TextBox prereqLevelsBox;
-        private System.Windows.Forms.TextBox adjacentLevelsBox;
-        private System.Windows.Forms.Label adjacentLevelsLabel;
-        private System.Windows.Forms.TextBox levelNameBox;
-        private System.Windows.Forms.Label selectedLevelLabel;
-        private System.Windows.Forms.Label locationLabel;
-        private System.Windows.Forms.TextBox locXBox;
-        private System.Windows.Forms.TextBox locYBox;
-        private System.Windows.Forms.Label levelIndexLabel;
-        private System.Windows.Forms.TextBox levelIndexBox;
         private System.Windows.Forms.Panel levelEditorPanel;
         private System.Windows.Forms.Label leveEditorTitleLabel;
         private System.Windows.Forms.Label currentPosLabel;
@@ -842,5 +717,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox physicsEnabledBox;
         private System.Windows.Forms.ComboBox itemTextureBox;
+        private Controls.LevelInfoPanel levelInfoPanel;
     }
 }
