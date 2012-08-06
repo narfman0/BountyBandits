@@ -55,6 +55,12 @@ namespace BountyBandits.GameScreen
                         control.setPhysicsEnabled(physicsEnabled = !physicsEnabled);
                     if (previousMouseState.LeftButton == ButtonState.Released && Mouse.GetState().LeftButton == ButtonState.Pressed && Game.instance.res.Contains(Mouse.GetState().X, Mouse.GetState().Y))
                         cameraOffset += new Vector2(Mouse.GetState().X, Game.instance.res.ScreenHeight - Mouse.GetState().Y) - getResolution() / 2;
+                    if (currentplayer.input.isKeyHit(Keys.Delete) && movingItem != null)
+                    {
+                        level.remove(movingItem);
+                        control.setGuiControls(movingItem);
+                        movingItem = null;
+                    }
                     if (Mouse.GetState().RightButton == ButtonState.Pressed && Game.instance.res.Contains(Mouse.GetState().X, Mouse.GetState().Y))
                     {
                         Vector2 currentLocation = getCurrentLocation();

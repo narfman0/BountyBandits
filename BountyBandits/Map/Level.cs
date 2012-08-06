@@ -158,5 +158,19 @@ namespace BountyBandits.Map
             }
             return null;
         }
+
+        public void remove(IMovableItem movingItem)
+        {
+            if(movingItem is BackgroundItemStruct)
+                backgroundItems.Remove((BackgroundItemStruct)movingItem);
+            if (movingItem is GameItem)
+            {
+                GameItem item = (GameItem)movingItem;
+                items.Remove(item);
+                if (item.guid != null && Game.instance.activeItems.ContainsKey(item.guid))
+                    Game.instance.activeItems.Remove(item.guid);
+            } if (movingItem is SpawnPoint)
+                spawns.Remove((SpawnPoint)movingItem);
+        }
     }
 }

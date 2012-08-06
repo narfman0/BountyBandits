@@ -129,31 +129,35 @@ namespace BountyBandits.GameScreen.Controls
             screen.level.backgroundItems.Add(str);
         }
 
-        public void setGuiControls(GameItem item)
+        public void setGuiControls(IMovableItem movableItem)
         {
-            itemPolygonType.SelectedItem = item.polygonType.ToString();
-            itemTextureBox.Text = item.name;
-            itemWeightBox.Text = item.weight.ToString();
-            itemRadiusText.Text = item.polygonType == PhysicsPolygonType.Circle ? item.radius.ToString() : 
-                item.sideLengths.X.ToString() + "," + item.sideLengths.Y.ToString();
-            itemRotationTextBox.Text = item.rotation.ToString();
-            itemDepthSlider.Value = (int)item.startdepth;
-            itemWidthSlider.Value = (int)item.width;
-            itemImmovableBox.Checked = item.immovable;
-        }
-
-        public void setGuiControls(SpawnPoint spawn)
-        {
-            enemyCountBox.Text = spawn.count.ToString();
-            enemyTypeText.Text = spawn.type.ToString();
-            enemyLevelTextfield.Text = spawn.weight.ToString();
-        }
-
-        public void setGuiControls(BackgroundItemStruct backgroundItemStruct)
-        {
-            backgroundRotationText.Text = backgroundItemStruct.rotation.ToString();
-            backgroundScaleField.Text = backgroundItemStruct.scale.ToString();
-            backgroundTextureField.Text = backgroundItemStruct.texturePath;
+            if (movableItem is BackgroundItemStruct)
+            {
+                BackgroundItemStruct backgroundItemStruct = (BackgroundItemStruct)movableItem;
+                backgroundRotationText.Text = backgroundItemStruct.rotation.ToString();
+                backgroundScaleField.Text = backgroundItemStruct.scale.ToString();
+                backgroundTextureField.Text = backgroundItemStruct.texturePath;
+            }
+            if (movableItem is GameItem)
+            {
+                GameItem item = (GameItem)movableItem;
+                itemPolygonType.SelectedItem = item.polygonType.ToString();
+                itemTextureBox.Text = item.name;
+                itemWeightBox.Text = item.weight.ToString();
+                itemRadiusText.Text = item.polygonType == PhysicsPolygonType.Circle ? item.radius.ToString() :
+                    item.sideLengths.X.ToString() + "," + item.sideLengths.Y.ToString();
+                itemRotationTextBox.Text = item.rotation.ToString();
+                itemDepthSlider.Value = (int)item.startdepth;
+                itemWidthSlider.Value = (int)item.width;
+                itemImmovableBox.Checked = item.immovable;
+            }
+            if (movableItem is SpawnPoint)
+            {
+                SpawnPoint spawn = (SpawnPoint)movableItem;
+                enemyCountBox.Text = spawn.count.ToString();
+                enemyTypeText.Text = spawn.type.ToString();
+                enemyLevelTextfield.Text = spawn.weight.ToString();
+            }
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
