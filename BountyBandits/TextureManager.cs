@@ -13,6 +13,8 @@ namespace BountyBandits
     {
         readonly String[] textureDirectories = {@"Content\Textures\", @"Content\Campaigns\"};
         Dictionary<String, Texture2D> textures = new Dictionary<String, Texture2D>();
+        private const float DEFAULT_DIMENSION = 64f;
+
         public TextureManager(ContentManager content)
         {
             foreach(String textureDirectory in textureDirectories)
@@ -66,6 +68,12 @@ namespace BountyBandits
             string[] names = new List<string>(textures.Keys).ToArray();
             Array.Sort<string>(names);
             return names;
+        }
+
+        public static Vector2 getDimensions(string texName)
+        {
+            Texture2D tex = Game.instance.texMan.getTex(texName);
+            return new Vector2(tex != null ? tex.Width : DEFAULT_DIMENSION, tex != null ? tex.Height : DEFAULT_DIMENSION);
         }
     }
 }

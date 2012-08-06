@@ -113,5 +113,50 @@ namespace BountyBandits.Map
                 listString += listItem + ",";
             return listString.Length > 0 ? listString.Substring(0, listString.Length - 1) : listString;
         }
+
+        public GameItem getGameItemAtLocation(float x, float y)
+        {
+            foreach (GameItem item in items)
+            {
+                Vector2 itemLocationScreen = item.getPositionFromScreenCoords();
+                switch (item.polygonType)
+                {
+                    case PhysicsPolygonType.Circle:
+                        if (Math.Pow(x - itemLocationScreen.X, 2) + Math.Pow(y - itemLocationScreen.Y, 2) < Math.Pow(item.radius, 2))
+                            return item;
+                        break;
+                    default:
+                        if (x < itemLocationScreen.X + item.sideLengths.X / 2 && x > itemLocationScreen.X - item.sideLengths.X / 2 &&
+                            y < itemLocationScreen.Y + item.sideLengths.Y / 2 && y > itemLocationScreen.Y - item.sideLengths.Y / 2)
+                            return item;
+                        break;
+                }
+            }
+            return null;
+        }
+
+        public SpawnPoint getSpawnAtLocation(float x, float y)
+        {
+            foreach (SpawnPoint spawn in spawns)
+            {
+                Vector2 dimensions = TextureManager.getDimensions(spawn.type);
+                if (x < spawn.loc.X + dimensions.X && x > spawn.loc.X - dimensions.X &&
+                    y < spawn.loc.Y + dimensions.Y && y > spawn.loc.Y - dimensions.Y)
+                    return spawn;
+            }
+            return null;
+        }
+
+        public BackgroundItemStruct getBackgroundItemAtLocation(float x, float y)
+        {
+            foreach (BackgroundItemStruct str in backgroundItems)
+            {
+                Vector2 dimensions = TextureManager.getDimensions(str.texturePath);
+                if (x < str.location.X + dimensions.X && x > str.location.X - dimensions.X &&
+                    y < str.location.Y + dimensions.Y && y > str.location.Y - dimensions.Y)
+                    return str;
+            }
+            return null;
+        }
     }
 }

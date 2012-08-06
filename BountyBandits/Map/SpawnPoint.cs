@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace BountyBandits.Map
 {
-    public class SpawnPoint
+    public class SpawnPoint : IMovableItem
     {
         public Vector2 loc, triggerLocation;
         public uint count = 1, bosses = 0, triggerWidth = 64;
@@ -20,6 +20,11 @@ namespace BountyBandits.Map
         public uint weight = 1;
         public bool isSpawned = false;
         XmlNode fromNode;
+
+        public void setPosition(Vector2 positon)
+        {
+            this.loc = positon;
+        }
 
         public SpawnPoint Clone()
         {

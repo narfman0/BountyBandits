@@ -7,11 +7,16 @@ using System.Xml;
 
 namespace BountyBandits.Map
 {
-    public struct BackgroundItemStruct
+    public class BackgroundItemStruct : IMovableItem
     {
         public string texturePath;
         public Vector2 location;
         public float rotation, scale, layer;
+
+        public void setPosition(Vector2 positon)
+        {
+            this.location = positon;
+        }
 
         public static BackgroundItemStruct fromXML(XmlElement element)
         {
@@ -29,6 +34,7 @@ namespace BountyBandits.Map
             XmlElement backgroundElement = doc.CreateElement("graphic");
             backgroundElement.SetAttribute("rotation", rotation.ToString());
             backgroundElement.SetAttribute("scale", scale.ToString());
+            backgroundElement.SetAttribute("layer", layer.ToString());
             XMLUtil.addElementValue(doc, backgroundElement, "path", texturePath);
             backgroundElement.AppendChild(XMLUtil.asXMLVector2(doc, location, "location"));
             return backgroundElement;

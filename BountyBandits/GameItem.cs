@@ -7,6 +7,7 @@ using FarseerGames.FarseerPhysics.Collisions;
 using FarseerGames.FarseerPhysics.Dynamics;
 using FarseerGames.FarseerPhysics.Factories;
 using System.Xml;
+using BountyBandits.Map;
 
 namespace BountyBandits
 {
@@ -15,7 +16,7 @@ namespace BountyBandits
         Rectangle, Circle, Polygon
     }
 
-    public class GameItem
+    public class GameItem : IMovableItem
     {
         public string name;
         public uint weight = 1, radius = 10, startdepth = 0, width = 1;
@@ -64,6 +65,26 @@ namespace BountyBandits
                 Log.write(LogType.Debug, "Guid exception, trace=" + e.StackTrace);
                 guid = Guid.NewGuid();
             }
+        }
+
+        public void setPosition(Vector2 position)
+        {
+            this.loc = position - getScreenOffset();
+            if (body != null)
+            {
+                body.Position = this.loc;
+                body.LinearVelocity = Vector2.Zero;
+            }
+        }
+
+        public Vector2 getPositionFromScreenCoords()
+        {
+            return loc + getScreenOffset();
+        }
+
+        public Vector2 getScreenOffset()
+        {
+            return new Vector2(-startdepth * Game.DEPTH_X_OFFSET, (3 - startdepth) * Game.DEPTH_MULTIPLE);
         }
 
         public static GameItem fromXML(XmlElement itemnode)
