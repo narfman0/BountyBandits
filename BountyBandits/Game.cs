@@ -116,14 +116,13 @@ namespace BountyBandits
             item.body.AngularVelocity = (float)(rand.NextDouble() - .5f);
             item.body.LinearVelocity = 50f * new Vector2((float)rand.NextDouble() - .5f, 1);
             #region geometry setup
-            Geom geom = new Geom();
-            geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
-            geom.FrictionCoefficient = .6f;
-            geom.CollisionCategories = killedBeing.geom.CollisionCategories;
-            geom.CollidesWith = geom.CollisionCategories;
+            item.geom = new Geom();
+            item.geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.radius, item.radius);
+            item.geom.FrictionCoefficient = .6f;
+            item.geom.CollisionCategories = item.geom.CollidesWith = killedBeing.geom.CollisionCategories;
             #endregion
             item.setItem(DropManager.generateItem(killedBeing));
-            item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(geom.CollisionCategories);
+            item.startdepth = (uint)PhysicsHelper.collisionCategoryToDepth(item.geom.CollisionCategories);
             activeItems.Add(item.guid, item);
             network.sendFullObjectsUpdate();
         }
@@ -233,30 +232,30 @@ namespace BountyBandits
         }
         public void addGameItem(GameItem item)
         {
-            Geom geom = new Geom();
+            item.geom = new Geom();
             switch (item.polygonType)
             {
                 case PhysicsPolygonType.Circle:
                     item.body = BodyFactory.Instance.CreateCircleBody(physicsSimulator, item.radius, item.weight);
-                    geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
+                    item.geom = GeomFactory.Instance.CreateCircleGeom(physicsSimulator, item.body, item.radius, 12);
                     break;
                 case PhysicsPolygonType.Rectangle:
                     item.body = BodyFactory.Instance.CreateRectangleBody(physicsSimulator, item.sideLengths.X, item.sideLengths.Y, item.weight);
-                    geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
+                    item.geom = GeomFactory.Instance.CreateRectangleGeom(physicsSimulator, item.body, item.sideLengths.X, item.sideLengths.Y);
                     break;
                 case PhysicsPolygonType.Polygon:
-                    geom = PhysicsHelper.textureToGeom(physicsSimulator, texMan.getTex(item.name), item.weight);
-                    item.body = geom.Body;
+                    item.geom = PhysicsHelper.textureToGeom(physicsSimulator, texMan.getTex(item.name), item.weight);
+                    item.body = item.geom.Body;
                     break;
             }
             if (item.immovable)
                 item.body.IsStatic = item.immovable;
-            geom.FrictionCoefficient = .6f;
+            item.geom.FrictionCoefficient = .6f;
             #region Collision Categories
-            geom.CollisionCategories = CollisionCategory.None;
+            item.geom.CollisionCategories = CollisionCategory.None;
             for (int depth = (int)item.startdepth; depth < item.width + item.startdepth; depth++)
-                geom.CollisionCategories |= (CollisionCategory)PhysicsHelper.depthToCollisionCategory(depth);
-            geom.CollidesWith = geom.CollisionCategories;
+                item.geom.CollisionCategories |= (CollisionCategory)PhysicsHelper.depthToCollisionCategory(depth);
+            item.geom.CollidesWith = item.geom.CollisionCategories;
             #endregion
             item.body.Position = item.loc;
             item.body.Rotation = item.rotation;

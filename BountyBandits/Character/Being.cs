@@ -534,6 +534,7 @@ namespace BountyBandits.Character
                 item.rotation = projectileGeom.Body.Rotation;
                 item.name = currAnimation.projectileTexture;
                 item.polygonType = PhysicsPolygonType.Polygon;
+                item.geom = projectileGeom;
                 Game.instance.activeItems.Add(item.guid, item);
                 Game.instance.network.sendFullObjectsUpdate();
             }

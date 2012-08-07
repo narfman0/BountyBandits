@@ -69,7 +69,7 @@ namespace BountyBandits.GameScreen
                         if (previousMouseState.RightButton == ButtonState.Released)
                         {
                             if (Keyboard.GetState().IsKeyDown(Keys.LeftControl))
-                                movingItem = level.getGameItemAtLocation(currentLocation.X, currentLocation.Y);
+                                movingItem = level.getGameItemAtLocation(currentLocation);
                             else if (Keyboard.GetState().IsKeyDown(Keys.LeftAlt))
                                 movingItem = level.getSpawnAtLocation(currentLocation.X, currentLocation.Y);
                             else if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))

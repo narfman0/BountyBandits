@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using BountyBandits.Story;
 using System.Xml;
+using FarseerGames.FarseerPhysics.Collisions;
 
 namespace BountyBandits.Map
 {
@@ -114,24 +115,11 @@ namespace BountyBandits.Map
             return listString.Length > 0 ? listString.Substring(0, listString.Length - 1) : listString;
         }
 
-        public GameItem getGameItemAtLocation(float x, float y)
+        public GameItem getGameItemAtLocation(Vector2 position)
         {
             foreach (GameItem item in items)
-            {
-                Vector2 itemLocationScreen = item.getPositionFromScreenCoords();
-                switch (item.polygonType)
-                {
-                    case PhysicsPolygonType.Circle:
-                        if (Math.Pow(x - itemLocationScreen.X, 2) + Math.Pow(y - itemLocationScreen.Y, 2) < Math.Pow(item.radius, 2))
-                            return item;
-                        break;
-                    default:
-                        if (x < itemLocationScreen.X + item.sideLengths.X / 2 && x > itemLocationScreen.X - item.sideLengths.X / 2 &&
-                            y < itemLocationScreen.Y + item.sideLengths.Y / 2 && y > itemLocationScreen.Y - item.sideLengths.Y / 2)
-                            return item;
-                        break;
-                }
-            }
+                if (item.contains(position))
+                    return item;
             return null;
         }
 

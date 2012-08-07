@@ -23,6 +23,7 @@ namespace BountyBandits
         public Guid guid;
         public Vector2 loc, sideLengths = Vector2.One;
         public Body body;
+        public Geom geom;
         public float rotation = 0f;
         public bool immovable = false;
         public PhysicsPolygonType polygonType;
@@ -79,12 +80,20 @@ namespace BountyBandits
 
         public Vector2 getPositionFromScreenCoords()
         {
-            return loc + getScreenOffset();
+            return body != null ? body.Position : loc + getScreenOffset();
         }
 
         public Vector2 getScreenOffset()
         {
             return new Vector2(-startdepth * Game.DEPTH_X_OFFSET, (3 - startdepth) * Game.DEPTH_MULTIPLE);
+        }
+
+        public bool contains(Vector2 position)
+        {
+            if (geom != null)
+                return geom.AABB.Contains(position - getScreenOffset());
+            return (position.X < loc.X + sideLengths.X / 2 && position.X > loc.X - sideLengths.X / 2 &&
+                position.Y < loc.Y + sideLengths.Y / 2 && position.Y > loc.Y - sideLengths.Y / 2);
         }
 
         public static GameItem fromXML(XmlElement itemnode)
